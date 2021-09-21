@@ -7,4 +7,4 @@ We know many students are worried about the changes coming with the QuadEx resid
 - Jason Qiu
 - Daniel Kim
 - Isaac Fan
-- and Donghan Park
+-  Donghan Park
