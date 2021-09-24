@@ -8,3 +8,8 @@ We know many Duke students are worried about the changes coming with the QuadEx 
 - Daniel Kim
 - Isaac Fan
 - Donghan Park
+
+## Team Name
+JSON
+
+We choose the open project option.
