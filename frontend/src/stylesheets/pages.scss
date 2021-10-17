@@ -8,24 +8,68 @@
 
 // ! PROFILE PAGE
 .profile-page {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  //------------------VARIABLES------------------//
+  //leftside info container
+  $info-container-width: 25rem;
+  $info-container-offset: 3rem;
+
+  //profile picture
+  $profile-picture-border-radius: 40px;
+  $profile-picture-length: 300px;
+  $profile-picture-border-length: 30px;
+
+  //info sub container
+  $info-sub-top-length: 100px;
+
+  $main-containers-border-radius: 30px;
+  //---------------------------------------------//
+
+  display: grid;
+  grid-template-columns: $info-container-width auto;
+  grid-template-rows: 100%;
+  height: 100vh;
+  width: 100vw;
 
   .info-container {
-    background-color: #ffffff;
-    width: 30vw;
-    border-radius: 10px;
-    margin: 0;
-    padding: 0 2rem 0 2rem;
+    grid-column: 1 / span 1;
+    border: 2px dashed red;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
-    p {
+    .picture-container {
+      height: $profile-picture-length;
+      width: $profile-picture-length;
       background-color: #ffffff;
-      text-align: left;
-      border-radius: 10px;
-      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: $profile-picture-border-radius + 10px;
+      margin: 50px $info-container-offset 0 0;
+
+      .profile-picture {
+        border-radius: $profile-picture-border-radius;
+        background-color: #d8d8d8;
+        height: calc(100% - #{$profile-picture-border-length});
+        width: calc(100% - #{$profile-picture-border-length});
+      }
     }
+
+    .info-sub-container {
+      border-radius: $main-containers-border-radius;
+      background-color: #d8d8d8;
+
+      margin: -$info-sub-top-length 0 50px $info-container-offset;
+      z-index: -1;
+      width: $profile-picture-length;
+      height: calc(100vh - #{$profile-picture-length} + #{$info-sub-top-length} - 100px);
+    }
+  }
+
+  .events-container {
+    grid-column: 2 / span 1;
+    border: 2px dashed black;
+
   }
 
 

@@ -79,13 +79,28 @@ const Profile = () => {
 
     return (
         <div className='profile-page'>
-            <h1>temp profile page</h1>
+            <div className="info-container">
+                <div className="picture-container">
+                    <div className="profile-picture">
+                        
+                    </div>
+                </div>
+                <div className="info-sub-container">
+
+                </div>
+            </div>
+            <div className="events-container">
+
+            </div>
+
+
+            {/* <h1>temp profile page</h1>
             <div className="info-container">
                 {
                     Object.keys(userInfo.basic).map((key) => <p><strong>{key + colonSeparator}</strong>{userInfo.basic[key]}</p>)
                 }
             </div>
-            <button className="yese" onClick={() => updatePreferences("birthdayPrivate")}>hello</button>
+            <button className="yese" onClick={() => updatePreferences("birthdayPrivate")}>hello</button> */}
         </div>
     )
 }
