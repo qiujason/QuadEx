@@ -1,6 +1,7 @@
 import React from 'react'
 import '../stylesheets/pages.scss'
 import { useState } from 'react';
+import { convertDate } from '../helpers/Helpers';
 
 const Profile = () => {
     const tempUserInfo = {
@@ -8,7 +9,7 @@ const Profile = () => {
         firstName: 'john',
         lastName: 'doe',
         quadAffiliation: 'edens',
-        birthday: '03092001',
+        birthday: '01012001',
         year: '2021',
         program: 'pratt',
         pointBalance: '100',
@@ -17,20 +18,21 @@ const Profile = () => {
     const colonSeparator = ' : ';
 
     const [ userInfo, setUserInfo ] = useState({
+        UID: tempUserInfo.UID,
         basic: {
-            UID: tempUserInfo.UID,
             firstName: tempUserInfo.firstName,
             lastName: tempUserInfo.lastName,
             quadAffiliation: tempUserInfo.quadAffiliation,
-            birthday: tempUserInfo.birthday,
+            birthday: convertDate(tempUserInfo.birthday),
             year: tempUserInfo.year,
             program: tempUserInfo.program,
             pointBalance: tempUserInfo.pointBalance,
         },
         optional: {
-            hometown: '',
+            picture: '',
             bio: '',
-            profilePicture: '',
+            igHandle: '',
+            hometown: '',
         },
         events: {
             "example_title_1": {
@@ -41,11 +43,18 @@ const Profile = () => {
                     location: '',
                     date: '',
                     time: '',
-                    tags: '',
                 },
-                members: ['UID_1', 'UID_2'],
+                optional: {
+                    picture: '',
+                }
+                // event tag in profile page don't need members list
+                // members: ['UID_1', 'UID_2'],
             }
-        }
+        },
+        preferences: {
+            birthdayPrivate: false,
+        },
+        role: 'member',
     });
 
     return (
