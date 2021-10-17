@@ -1,0 +1,32 @@
+// ! LOGIN PAGE
+.login-page {
+  h1 {
+    color: black;
+  }
+}
+
+
+// ! PROFILE PAGE
+.profile-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .info-container {
+    background-color: #ffffff;
+    width: 30vw;
+    border-radius: 10px;
+    margin: 0;
+    padding: 0 2rem 0 2rem;
+
+    p {
+      background-color: #ffffff;
+      text-align: left;
+      border-radius: 10px;
+      font-size: 1rem;
+    }
+  }
+
+
+}
