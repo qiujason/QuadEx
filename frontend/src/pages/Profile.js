@@ -58,7 +58,12 @@ const Profile = () => {
     });
 
     const updateBasicInfo = (key, value) => {
-
+        // update preferences locally for now
+        // [!] settings for updating info should NOT be based on text (prevent inspect)
+        let newUserInfo = { ...userInfo };
+        if(!(key in newUserInfo.basic)) return;
+        newUserInfo.basic[key] = value;
+        setUserInfo(newUserInfo);
     }
 
     const updateOptionalInfo = (key, value) => {
