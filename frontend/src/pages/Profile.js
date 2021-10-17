@@ -32,7 +32,7 @@ const Profile = () => {
             picture: '',
             bio: '',
             igHandle: '',
-            hometown: '',
+            hometown: ['city/country', 'state'],
         },
         events: {
             "example_title_1": {
@@ -57,6 +57,21 @@ const Profile = () => {
         role: 'member',
     });
 
+    const updateBasicInfo = (key, value) => {
+
+    }
+
+    const updateOptionalInfo = (key, value) => {
+
+    }
+
+    const updatePreferences = (key) => {
+        let newUserInfo = { ...userInfo };
+        if(!(key in newUserInfo.preferences)) return;
+        newUserInfo.preferences[key] = !newUserInfo.preferences[key];
+        setUserInfo(newUserInfo);
+    }
+
     return (
         <div className='profile-page'>
             <h1>temp profile page</h1>
@@ -65,7 +80,7 @@ const Profile = () => {
                     Object.keys(userInfo.basic).map((key) => <p><strong>{key + colonSeparator}</strong>{userInfo.basic[key]}</p>)
                 }
             </div>
-
+            <button className="yese" onClick={() => updatePreferences("birthdayPrivate")}>hello</button>
         </div>
     )
 }
