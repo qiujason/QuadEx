@@ -11,7 +11,7 @@
   //------------------VARIABLES------------------//
   $primary-color: #eeeeee;
   $secondary-text-color: #808080;
-  $hover-color: #666666;
+  $hover-color: #0f93eb;
 
   //leftside info container
   $info-container-width: 25rem;
@@ -107,10 +107,12 @@
         width: 30px;
         border-radius: 50px;
         z-index: 1;
+        transition: all 0.3s;
 
         &:hover {
           color: $hover-color;
           cursor: pointer;
+          transform: rotate(90deg);
         }
       }
 
@@ -190,12 +192,27 @@
 
             transition: all 0.3s;
 
+            &:hover, &:focus {
+              border-color: $hover-color;
+            }
+
             &:focus {
-              border-color: $secondary-text-color;
+              padding-left: 0.5rem;
             }
           }
 
           .search-btn {
+            transition: all 0.3s;
+
+            &.hover {
+              color: $hover-color;
+              transform: rotate(15deg);
+            }
+
+            &.focused {
+              opacity: 0;
+            }
+
             position: absolute;
             color: $secondary-text-color;
             height: 1rem;
