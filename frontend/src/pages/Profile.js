@@ -79,17 +79,21 @@ const Profile = () => {
 
     return (
         <div className='profile-page'>
-            <div className="info-container">
+            <div className="info-page-container">
                 <div className="picture-container">
-                    <div className="profile-picture">
-                        
+                    <div className="profile-picture-container">
+                        <div className="profile-picture"/>
+                    </div>
+                    <div className="title-container">
+                        <h1>Hi, {userInfo.basic.firstName.toUpperCase()}.</h1>
+                        <p>300 Points</p>
                     </div>
                 </div>
                 <div className="info-sub-container">
 
                 </div>
             </div>
-            <div className="events-container">
+            <div className="events-page-container">
 
             </div>
 

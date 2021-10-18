@@ -9,6 +9,8 @@
 // ! PROFILE PAGE
 .profile-page {
   //------------------VARIABLES------------------//
+  $primary-color: #e2e2e2;
+
   //leftside info container
   $info-container-width: 25rem;
   $info-container-offset: 3rem;
@@ -16,10 +18,10 @@
   //profile picture
   $profile-picture-border-radius: 40px;
   $profile-picture-length: 300px;
-  $profile-picture-border-length: 30px;
+  $profile-picture-border-length: 40px;
 
   //info sub container
-  $info-sub-top-length: 100px;
+  $info-sub-top-length: 150px;
 
   $main-containers-border-radius: 30px;
   //---------------------------------------------//
@@ -30,46 +32,73 @@
   height: 100vh;
   width: 100vw;
 
-  .info-container {
+  .info-page-container {
     grid-column: 1 / span 1;
-    border: 2px dashed red;
     display: flex;
     flex-direction: column;
-    align-items: center;
 
     .picture-container {
       height: $profile-picture-length;
-      width: $profile-picture-length;
-      background-color: #ffffff;
+      width: $profile-picture-length + 400px;
+      background-color: transparent;
       display: flex;
-      align-items: center;
-      justify-content: center;
+      justify-content: left;
       border-radius: $profile-picture-border-radius + 10px;
       margin: 50px $info-container-offset 0 0;
 
-      .profile-picture {
-        border-radius: $profile-picture-border-radius;
-        background-color: #d8d8d8;
-        height: calc(100% - #{$profile-picture-border-length});
-        width: calc(100% - #{$profile-picture-border-length});
+      .profile-picture-container {
+        .profile-picture {
+          background-color: $primary-color;
+          height: calc(100% - #{$profile-picture-border-length});
+          width: calc(100% - #{$profile-picture-border-length});
+          border-radius: $profile-picture-border-radius;
+        }
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: $profile-picture-border-radius + 10px;
+        background-color: #ffffff;
+        height: 100%;
+        width: $profile-picture-length;
+      }
+
+      .title-container {
+        width: auto;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+
+        * {
+          margin: 0;
+          padding: 0;
+        }
+
+        h1 {
+          font-size: 4rem;
+        }
+
+        p {
+          font-size: 1.4rem;
+        }
       }
     }
 
+
     .info-sub-container {
       border-radius: $main-containers-border-radius;
-      background-color: #d8d8d8;
+      background-color: $primary-color;
 
-      margin: -$info-sub-top-length 0 50px $info-container-offset;
+      margin: -$info-sub-top-length 0 0 $info-container-offset;
       z-index: -1;
       width: $profile-picture-length;
       height: calc(100vh - #{$profile-picture-length} + #{$info-sub-top-length} - 100px);
     }
   }
 
-  .events-container {
+  .events-page-container {
     grid-column: 2 / span 1;
     border: 2px dashed black;
-
   }
 
 
