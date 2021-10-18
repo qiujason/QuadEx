@@ -120,10 +120,7 @@ const Profile = () => {
                     </div>
                     <div className="list-container">
                         <div className="event-tag">
-
-                        </div>
-                        <div className="event-tag">
-                            
+                            <div className="exit-button"/>
                         </div>
                     </div>
                 </div>

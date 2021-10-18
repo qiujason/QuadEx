@@ -46,7 +46,7 @@
       display: flex;
       justify-content: left;
       border-radius: $profile-picture-border-radius + 10px;
-      margin: 50px $info-container-offset 0 0;
+      margin: 30px $info-container-offset 0 0;
 
       .profile-picture-container {
         .profile-picture {
@@ -89,7 +89,7 @@
       margin: -$info-sub-top-length 0 $info-container-offset $info-container-offset;
       z-index: -1;
       width: calc(#{$info-container-width} - 2 * #{$info-container-offset});
-      height: calc(100vh - #{$profile-picture-length} + #{$info-sub-top-length} - 2 * #{$info-container-offset});
+      height: calc(100vh - #{$profile-picture-length} + #{$info-sub-top-length} - 80px);
 
       display: flex;
       flex-direction: column;
@@ -142,6 +142,7 @@
       .title-container {
         display: flex;
         align-items: center;
+        margin-left: 0.5rem;
         h1 {
           font-size: 2.6rem;
           vertical-align: top;
@@ -168,7 +169,17 @@
           background-color: $primary-color;
           border-radius: 20px;
           height: $event-tag-size;
-          width: 100%;
+          position: relative;
+
+          .exit-button {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background-color: #ffffff;
+            right: 10px;
+            top: 10px;
+            border-radius: 10px;
+          }
         }
       }
     }
