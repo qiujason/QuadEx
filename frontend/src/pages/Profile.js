@@ -1,7 +1,7 @@
 import React from 'react'
 import '../stylesheets/pages.scss'
 import { useState } from 'react';
-import { convertDate } from '../helpers/Helpers';
+import { convertDate, capitalize } from '../helpers/Helpers';
 
 const Profile = () => {
     const tempUserInfo = {
@@ -23,15 +23,15 @@ const Profile = () => {
             firstName: tempUserInfo.firstName,
             lastName: tempUserInfo.lastName,
             quadAffiliation: tempUserInfo.quadAffiliation,
-            birthday: convertDate(tempUserInfo.birthday),
+            birthday: tempUserInfo.birthday,
             year: tempUserInfo.year,
             program: tempUserInfo.program,
             pointBalance: tempUserInfo.pointBalance,
         },
         optional: {
             picture: '',
-            bio: '',
-            igHandle: '',
+            bio: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy',
+            igHandle: '@johndoe',
             hometown: ['city/country', 'state'],
         },
         events: {
@@ -86,11 +86,28 @@ const Profile = () => {
                     </div>
                     <div className="title-container">
                         <h1>Hi, {userInfo.basic.firstName.toUpperCase()}.</h1>
-                        <p>300 Points</p>
+                        <p>{userInfo.basic.pointBalance} Points</p>
                     </div>
                 </div>
                 <div className="info-sub-container">
-
+                    <div className="info-box first">
+                        <p className="title">BIO</p>
+                        <p>"{userInfo.optional.bio}"</p>
+                    </div>
+                    <div className="info-box">
+                        <p className="title">ABOUT</p>
+                        <p><strong>ID:</strong> {userInfo.UID}</p>
+                        <p><strong>Name:</strong> {capitalize(userInfo.basic.firstName) + ' ' + capitalize(userInfo.basic.lastName)}</p>
+                        <p><strong>Quad Affiliation:</strong> {capitalize(userInfo.basic.quadAffiliation)}</p>
+                        <p><strong>Birthday:</strong> {convertDate(userInfo.basic.birthday)}</p>
+                        <p><strong>Year:</strong> {userInfo.basic.year}</p>
+                        <p><strong>Degree Program:</strong> {capitalize(userInfo.basic.program)}</p>
+                    </div>
+                    <div className="info-box">
+                        <p className="title">CONTACT</p>
+                        <p><strong>Instagram:</strong> {userInfo.optional.igHandle}</p>
+                        <p><strong>Hometown:</strong> {capitalize(userInfo.optional.hometown[0]) + (userInfo.optional.hometown.length > 1 ? ', ' + userInfo.optional.hometown[1] : '')}</p>
+                    </div>
                 </div>
             </div>
             <div className="events-page-container">

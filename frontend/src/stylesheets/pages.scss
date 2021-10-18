@@ -10,6 +10,7 @@
 .profile-page {
   //------------------VARIABLES------------------//
   $primary-color: #e2e2e2;
+  $secondary-text-color: #606060;
 
   //leftside info container
   $info-container-width: 25rem;
@@ -69,17 +70,13 @@
         display: flex;
         flex-direction: column;
 
-        * {
-          margin: 0;
-          padding: 0;
-        }
-
         h1 {
           font-size: 4rem;
         }
 
         p {
           font-size: 1.4rem;
+          color: $secondary-text-color;
         }
       }
     }
@@ -89,10 +86,39 @@
       border-radius: $main-containers-border-radius;
       background-color: $primary-color;
 
-      margin: -$info-sub-top-length 0 0 $info-container-offset;
+      margin: -$info-sub-top-length 0 $info-container-offset $info-container-offset;
       z-index: -1;
-      width: $profile-picture-length;
-      height: calc(100vh - #{$profile-picture-length} + #{$info-sub-top-length} - 100px);
+      width: calc(#{$info-container-width} - 2 * #{$info-container-offset});
+      height: calc(100vh - #{$profile-picture-length} + #{$info-sub-top-length} - 2 * #{$info-container-offset});
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      .info-box {
+        &.first {
+          margin-top: calc(#{$info-sub-top-length} + 1rem);
+        }
+
+        .title {
+          color: #000000;
+          font-size: 1.4rem;
+          font-weight: bold;
+          margin-bottom: 0.4rem;
+        }
+
+        p {
+          font-size: 0.8rem;
+          color: $secondary-text-color;
+        }
+
+        margin: 0.5rem 0 0.5rem 0;
+        padding: 0.5rem 1rem 1rem 1rem;
+        background-color: #ffffff;
+        width: calc(100% - 2rem);
+        height: auto;
+        border-radius: 18px;
+      }
     }
   }
 

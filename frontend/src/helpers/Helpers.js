@@ -5,3 +5,7 @@ export function convertDate(num){
     var year = num.substring(4);
     return months[month] + ' ' + day + ', ' + year;
 }
+
+export function capitalize(str){
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
