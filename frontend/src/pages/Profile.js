@@ -3,6 +3,7 @@ import '../stylesheets/pages.scss'
 import EventTag from './EventTag';
 import { useState } from 'react';
 import { convertDate, capitalize } from '../helpers/Helpers';
+import { IoSettingsSharp } from 'react-icons/io5'
 
 const Profile = () => {
     const tempUserInfo = {
@@ -64,7 +65,7 @@ const Profile = () => {
                 optional: {
                     picture: '',
                 }
-            }
+            },
         },
         preferences: {
             birthdayPrivate: false,
@@ -123,6 +124,8 @@ const Profile = () => {
                         <p><strong>Instagram:</strong> {userInfo.optional.igHandle}</p>
                         <p><strong>Hometown:</strong> {capitalize(userInfo.optional.hometown[0]) + (userInfo.optional.hometown.length > 1 ? ', ' + userInfo.optional.hometown[1].toUpperCase() : '')}</p>
                     </div>
+                    
+                    <IoSettingsSharp className='settings-btn' onClick={() => console.log('yeyeyeye')}/>
                 </div>
             </div>
             <div className="events-page-container">
