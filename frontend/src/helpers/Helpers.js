@@ -6,6 +6,16 @@ export function convertDate(num){
     return months[month] + ' ' + day + ', ' + year;
 }
 
+export function convertTime(num){
+    const isPM = num >= 1200;
+    var hour = Number(num.substring(0, 2)) === 12 ? 12 : Number(num.substring(0, 2)) % 12;
+    var minute = num.substring(2);
+    return hour + ':' + minute + ' ' + (isPM ? 'PM' : 'AM');
+}
+
 export function capitalize(str){
-    return str.charAt(0).toUpperCase() + str.slice(1);
+    const words = str.split(' ');
+    return words.map((word) => { 
+        return word[0].toUpperCase() + word.substring(1); 
+    }).join(' ');
 }

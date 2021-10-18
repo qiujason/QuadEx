@@ -1,5 +1,6 @@
 import React from 'react'
 import '../stylesheets/pages.scss'
+import EventTag from './EventTag';
 import { useState } from 'react';
 import { convertDate, capitalize } from '../helpers/Helpers';
 
@@ -14,8 +15,6 @@ const Profile = () => {
         program: 'pratt',
         pointBalance: '100',
     };
-
-    const colonSeparator = ' : ';
 
     const [ userInfo, setUserInfo ] = useState({
         UID: tempUserInfo.UID,
@@ -32,17 +31,19 @@ const Profile = () => {
             picture: '',
             bio: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy',
             igHandle: '@johndoe',
-            hometown: ['city/country', 'state'],
+            hometown: ['city/country', '[state]'],
         },
         events: {
             "example_title_1": {
                 // events should have unique generated ID
                 basic: {
-                    title: '',
-                    description: '',
-                    location: '',
-                    date: '',
-                    time: '',
+                    title: 'edens halloween',
+                    startDate: '09312021',
+                    endDate: '09312021',
+                    startTime: '1200',
+                    endTime: '2000',
+                    location: 'page auditorium',
+                    description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummyLorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummyLorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy',
                 },
                 optional: {
                     picture: '',
@@ -97,7 +98,7 @@ const Profile = () => {
                     <div className="info-box">
                         <p className="title">ABOUT</p>
                         <p><strong>Net ID:</strong> {userInfo.UID}</p>
-                        <p><strong>Name:</strong> {capitalize(userInfo.basic.firstName) + ' ' + capitalize(userInfo.basic.lastName)}</p>
+                        <p><strong>Name:</strong> {capitalize(userInfo.basic.firstName + ' ' + userInfo.basic.lastName)}</p>
                         <p><strong>Quad Affiliation:</strong> {capitalize(userInfo.basic.quadAffiliation)}</p>
                         <p><strong>Birthday:</strong> {convertDate(userInfo.basic.birthday)}</p>
                         <p><strong>Year:</strong> {userInfo.basic.year}</p>
@@ -106,7 +107,7 @@ const Profile = () => {
                     <div className="info-box">
                         <p className="title">CONTACT</p>
                         <p><strong>Instagram:</strong> {userInfo.optional.igHandle}</p>
-                        <p><strong>Hometown:</strong> {capitalize(userInfo.optional.hometown[0]) + (userInfo.optional.hometown.length > 1 ? ', ' + userInfo.optional.hometown[1] : '')}</p>
+                        <p><strong>Hometown:</strong> {capitalize(userInfo.optional.hometown[0]) + (userInfo.optional.hometown.length > 1 ? ', ' + userInfo.optional.hometown[1].toUpperCase() : '')}</p>
                     </div>
                 </div>
             </div>
@@ -118,10 +119,21 @@ const Profile = () => {
                     <div className="filter-container">
 
                     </div>
+                    {/* { title, startDate, endDate, startTime, endTime, location, description, picture } */}
                     <div className="list-container">
-                        <div className="event-tag">
-                            <div className="exit-button"/>
-                        </div>
+                        {
+                            Object.keys(userInfo.events).map((eventID) => 
+                            <EventTag 
+                            key={eventID}
+                            title={userInfo.events[eventID].basic.title} 
+                            startDate={userInfo.events[eventID].basic.startDate} 
+                            endDate={userInfo.events[eventID].basic.endDate} 
+                            startTime={userInfo.events[eventID].basic.startTime} 
+                            endTime={userInfo.events[eventID].basic.endTime} 
+                            location={userInfo.events[eventID].basic.location}
+                            description={userInfo.events[eventID].basic.description} 
+                            />)
+                        }
                     </div>
                 </div>
             </div>

@@ -10,7 +10,7 @@
 .profile-page {
   //------------------VARIABLES------------------//
   $primary-color: #e2e2e2;
-  $secondary-text-color: #606060;
+  $secondary-text-color: #808080;
 
   //leftside info container
   $info-container-width: 25rem;
@@ -113,7 +113,7 @@
         }
 
         margin: 0.5rem 0 0.5rem 0;
-        padding: 0.5rem 1rem 1rem 1rem;
+        padding: 0.5rem 1rem 0.6rem 1rem;
         background-color: #ffffff;
         width: calc(100% - 2rem);
         height: auto;
@@ -124,13 +124,11 @@
 
   .events-page-container {
     grid-column: 2 / span 1;
-    display: flex;
-    justify-content: center;
 
     .events-container {
-      margin: calc(#{$profile-picture-length} - 5rem) 0 0 0;
+      margin: calc(#{$profile-picture-length} - 5.5rem) 4rem 0 4rem;
       border-radius: $main-containers-border-radius;
-      width: calc(100% - 14rem);
+      width: calc(100% - 8rem);
       height: calc(100% - #{$profile-picture-length});
       background-color: $primary-color;
 
@@ -167,9 +165,33 @@
 
           margin-bottom: 1rem;
           background-color: $primary-color;
+          padding: 1.4rem;
           border-radius: 20px;
           height: $event-tag-size;
           position: relative;
+
+          display: flex;
+
+          .picture {
+            background-color: white;
+            height: calc(#{$event-tag-size} - 2.8rem);
+            width: calc(#{$event-tag-size} - 2.8rem);
+            border-radius: 15px;
+          }
+
+          .info-container {
+            margin-left: 1.4rem;
+            height: calc(#{$event-tag-size} - 2.8rem);
+            width: calc(100% - #{$event-tag-size});
+
+            p {
+              &.subtitle {
+                margin-bottom: 1rem;
+              }
+              color: $secondary-text-color;
+              font-size: 0.8rem;
+            }
+          }
 
           .exit-button {
             position: absolute;
@@ -184,6 +206,4 @@
       }
     }
   }
-
-
 }
