@@ -2,10 +2,10 @@ import React from 'react'
 import { convertDate, convertTime, capitalize } from '../helpers/Helpers';
 
 const EventTag = ({ title, startDate, endDate, startTime, endTime, location, description, picture }) => {
-    var subText = '';
-    if(startDate === endDate){
-        subText = convertDate(startDate) + ' ~ ' + convertTime(startTime) + ' - ' + convertTime(endTime) + ' ~ ' + capitalize(location);
-    }
+    var subText = convertDate(startDate) + ', ' + convertTime(startTime) + ' - ';
+    subText += (startDate !== endDate ? convertDate(endDate) + ', ' : '');
+    subText += convertTime(endTime) + ' ~ @ ' + capitalize(location);
+    
     return (
         <div className="event-tag">
             <div className="picture"/>

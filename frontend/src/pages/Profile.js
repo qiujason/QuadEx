@@ -34,7 +34,7 @@ const Profile = () => {
             hometown: ['city/country', '[state]'],
         },
         events: {
-            "example_title_1": {
+            "eventID_1": {
                 // events should have unique generated ID
                 basic: {
                     title: 'edens halloween',
@@ -50,6 +50,20 @@ const Profile = () => {
                 }
                 // event tag in profile page don't need members list
                 // members: ['UID_1', 'UID_2'],
+            },
+            "eventID_2": {
+                basic: {
+                    title: 'hack duke 2021',
+                    startDate: '10232021',
+                    endDate: '10242021',
+                    startTime: '0900',
+                    endTime: '1800',
+                    location: 'bostock library',
+                    description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummyLorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummyLorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy',
+                },
+                optional: {
+                    picture: '',
+                }
             }
         },
         preferences: {
