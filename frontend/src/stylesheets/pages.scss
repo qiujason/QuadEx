@@ -33,6 +33,7 @@
   grid-template-rows: 100%;
   height: 100vh;
   width: 100vw;
+  position: relative;
 
   .info-page-container {
     grid-column: 1 / span 1;
@@ -167,8 +168,41 @@
       }
 
       .filter-container {
-        border: 1px dashed;
+        display: flex;
+        align-items: top;
 
+        .search-container {
+          $container-width: 40%;
+          $container-height: 2rem;
+          width: $container-width;
+          height: $container-height;
+          z-index: 1;
+          position: relative;
+
+          input {
+            width: 100%;
+            height: 100%;
+            border: 2px solid #ffffff;
+            outline: none;
+            padding-left: 2rem;
+            font-size: 0.8rem;
+            border-radius: 10px;
+
+            transition: all 0.3s;
+
+            &:focus {
+              border-color: $secondary-text-color;
+            }
+          }
+
+          .search-btn {
+            position: absolute;
+            color: $secondary-text-color;
+            height: 1rem;
+            left: 0.5rem;
+            top: 0.5rem;
+          }
+        }        
       }
 
       .list-container {
@@ -203,9 +237,14 @@
             height: calc(#{$event-tag-size} - 2.8rem);
             width: calc(100% - #{$event-tag-size});
 
+            h1 {
+              font-size: 1.4rem;
+              margin-bottom: 0.4rem;
+            }
+
             p {
               &.subtitle {
-                margin-bottom: 1rem;
+                margin-bottom: 1.4rem;
               }
               color: $secondary-text-color;
               font-size: 0.8rem;

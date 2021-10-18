@@ -4,6 +4,7 @@ import EventTag from './EventTag';
 import { useState } from 'react';
 import { convertDate, capitalize } from '../helpers/Helpers';
 import { IoSettingsSharp } from 'react-icons/io5'
+import { FaSearch } from 'react-icons/fa'
 
 const Profile = () => {
     const tempUserInfo = {
@@ -134,7 +135,10 @@ const Profile = () => {
                         <h1>EVENTS</h1>
                     </div>
                     <div className="filter-container">
-
+                        <div className="search-container">
+                            <input type="text" placeholder='Search for events'/>
+                            <FaSearch className='search-btn'/>
+                        </div>
                     </div>
                     {/* { title, startDate, endDate, startTime, endTime, location, description, picture } */}
                     <div className="list-container">
@@ -156,13 +160,11 @@ const Profile = () => {
             </div>
 
 
-            {/* <h1>temp profile page</h1>
-            <div className="info-container">
-                {
-                    Object.keys(userInfo.basic).map((key) => <p><strong>{key + colonSeparator}</strong>{userInfo.basic[key]}</p>)
-                }
+            <div className="settings-page-container">
+                <div className="settings-container">
+
+                </div>
             </div>
-            <button className="yese" onClick={() => updatePreferences("birthdayPrivate")}>hello</button> */}
         </div>
     )
 }
