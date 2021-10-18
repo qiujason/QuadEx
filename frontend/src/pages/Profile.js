@@ -5,7 +5,7 @@ import { convertDate, capitalize } from '../helpers/Helpers';
 
 const Profile = () => {
     const tempUserInfo = {
-        UID: '123',
+        UID: 'jd123',
         firstName: 'john',
         lastName: 'doe',
         quadAffiliation: 'edens',
@@ -96,7 +96,7 @@ const Profile = () => {
                     </div>
                     <div className="info-box">
                         <p className="title">ABOUT</p>
-                        <p><strong>ID:</strong> {userInfo.UID}</p>
+                        <p><strong>Net ID:</strong> {userInfo.UID}</p>
                         <p><strong>Name:</strong> {capitalize(userInfo.basic.firstName) + ' ' + capitalize(userInfo.basic.lastName)}</p>
                         <p><strong>Quad Affiliation:</strong> {capitalize(userInfo.basic.quadAffiliation)}</p>
                         <p><strong>Birthday:</strong> {convertDate(userInfo.basic.birthday)}</p>
@@ -111,7 +111,22 @@ const Profile = () => {
                 </div>
             </div>
             <div className="events-page-container">
+                <div className="events-container">
+                    <div className="title-container">
+                        <h1>EVENTS</h1>
+                    </div>
+                    <div className="filter-container">
 
+                    </div>
+                    <div className="list-container">
+                        <div className="event-tag">
+
+                        </div>
+                        <div className="event-tag">
+                            
+                        </div>
+                    </div>
+                </div>
             </div>
 
 

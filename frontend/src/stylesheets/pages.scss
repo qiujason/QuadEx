@@ -37,6 +37,7 @@
     grid-column: 1 / span 1;
     display: flex;
     flex-direction: column;
+    padding-left: 3rem;
 
     .picture-container {
       height: $profile-picture-length;
@@ -81,7 +82,6 @@
       }
     }
 
-
     .info-sub-container {
       border-radius: $main-containers-border-radius;
       background-color: $primary-color;
@@ -124,7 +124,54 @@
 
   .events-page-container {
     grid-column: 2 / span 1;
-    border: 2px dashed black;
+    display: flex;
+    justify-content: center;
+
+    .events-container {
+      margin: calc(#{$profile-picture-length} - 5rem) 0 0 0;
+      border-radius: $main-containers-border-radius;
+      width: calc(100% - 14rem);
+      height: calc(100% - #{$profile-picture-length});
+      background-color: $primary-color;
+
+      display: grid;
+      grid-template-rows: 5rem 3rem auto;
+      padding: 1rem;
+      padding-top: 0;
+
+      .title-container {
+        display: flex;
+        align-items: center;
+        h1 {
+          font-size: 2.6rem;
+          vertical-align: top;
+          font-weight: bold;
+        }
+      }
+
+      .filter-container {
+        border: 1px dashed;
+
+      }
+
+      .list-container {
+        background-color: #ffffff;
+        border-radius: $main-containers-border-radius - 5px;
+        padding: 1rem;
+        padding-bottom: 0;
+        overflow: auto;
+        
+        .event-tag {
+          $event-tag-size: 250px;
+
+          margin-bottom: 1rem;
+          background-color: $primary-color;
+          border-radius: 20px;
+          height: $event-tag-size;
+          width: 100%;
+        }
+      }
+    }
   }
 
 
