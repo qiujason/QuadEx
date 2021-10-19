@@ -5,3 +5,17 @@ export function convertDate(num){
     var year = num.substring(4);
     return months[month] + ' ' + day + ', ' + year;
 }
+
+export function convertTime(num){
+    const isPM = num >= 1200;
+    var hour = Number(num.substring(0, 2)) === 12 ? 12 : Number(num.substring(0, 2)) % 12;
+    var minute = num.substring(2);
+    return hour + ':' + minute + ' ' + (isPM ? 'PM' : 'AM');
+}
+
+export function capitalize(str){
+    const words = str.split(' ');
+    return words.map((word) => { 
+        return word[0].toUpperCase() + word.substring(1); 
+    }).join(' ');
+}
