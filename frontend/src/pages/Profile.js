@@ -85,7 +85,6 @@ const Profile = () => {
             return;
         }
 
-        console.log("YO");
         setRenderedEvents([]);
         for(let i = 0; i < userInfo.events.length; i++){
             if(userInfo.events[i].basic.title.toLowerCase().indexOf(str.toLowerCase()) !== -1){
@@ -156,7 +155,7 @@ const Profile = () => {
                         <h1>EVENTS</h1>
                     </div>
                     <div className="filter-container">
-                        <SearchField onChange={filterTitle}/>
+                        <SearchField placeholder='Search for events by title' onChange={filterTitle}/>
                     </div>
                     {/* { title, startDate, endDate, startTime, endTime, location, description, picture } */}
                     <div className="list-container">
