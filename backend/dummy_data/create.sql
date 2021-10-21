@@ -11,7 +11,7 @@ CREATE TABLE users(
     birthday TIMESTAMP NOT NULL,
     year INTEGER NOT NULL,
     hometown TEXT NOT NULL,
-    quad VARCHAR(30) REFERENCES quad(name),
+    quad VARCHAR(30) REFERENCES quads(name),
     degree TEXT,
     bio TEXT,
     insta TEXT,
@@ -21,8 +21,8 @@ CREATE TABLE users(
 CREATE TABLE admin(
     username VARCHAR(8) PRIMARY KEY REFERENCES users(netID),
     title VARCHAR(50) NOT NULL,
-    email VARCHAR(50),
-)
+    email VARCHAR(50)
+);
 
 CREATE TABLE points(
     id SERIAL PRIMARY KEY,
