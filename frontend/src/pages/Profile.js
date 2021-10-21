@@ -42,10 +42,10 @@ const Profile = () => {
                 basic: {
                     eventID: 'eventID1',
                     title: 'edens halloween',
-                    startDate: '09312021',
-                    endDate: '09312021',
-                    startTime: '1200',
-                    endTime: '2000',
+                    startDate: '10312021',
+                    endDate: '10312021',
+                    startTime: '0600',
+                    endTime: '2200',
                     location: 'page auditorium',
                     description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummyLorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummyLorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy',
                 },
@@ -78,6 +78,30 @@ const Profile = () => {
     });
 
     const [ renderedEvents, setRenderedEvents ] = useState(userInfo.events);
+
+    renderedEvents.sort(function (i1, i2){
+        var year1 = Number(i1.basic.startDate.substring(4));
+        var year2 = Number(i2.basic.startDate.substring(4));
+        if(year1 !== year2){
+            return year1 - year2;
+        } else {
+            var month1 = Number(i1.basic.startDate.substring(2, 4));
+            var month2 = Number(i2.basic.startDate.substring(2, 4));
+            if(month1 !== month2){
+                return month1 - month2;
+            } else {
+                var day1 = Number(i1.basic.startDate.substring(0, 2));
+                var day2 = Number(i2.basic.startDate.substring(0, 2));
+                if(day1 !== day2){
+                    return day1 - day2;
+                } else {
+                    var time1 = Number(i1.basic.startTime);
+                    var time2 = Number(i2.basic.startTime);
+                    return time1 - time2;
+                }
+            }
+        }
+    });
 
     const filterTitle = (str) => {
         if(str.length === 0){
