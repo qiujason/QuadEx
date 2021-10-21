@@ -23,7 +23,7 @@
   $profile-picture-border-length: 40px;
 
   //info sub container
-  $info-sub-top-length: 150px;
+  $info-sub-top-length: 100px;
 
   $main-containers-border-radius: 30px;
   //---------------------------------------------//
@@ -81,6 +81,13 @@
         p {
           font-size: 1.4rem;
           color: $secondary-text-color;
+        }
+
+        .bio-text {
+          font-size: 0.8rem;
+          margin-bottom: 0.5rem;
+          font-style: italic;
+          width: calc(100vw - 2 * #{$profile-picture-length});
         }
       }
     }
@@ -147,10 +154,10 @@
     grid-column: 2 / span 1;
 
     .events-container {
-      margin: calc(#{$profile-picture-length} - 5.5rem) 4rem 0 4rem;
+      margin: calc(#{$profile-picture-length} - 70px) 4rem 0 4rem;
       border-radius: $main-containers-border-radius;
       width: calc(100% - 8rem);
-      height: calc(100% - #{$profile-picture-length});
+      height: calc(100% - #{$profile-picture-length} + 20px);
       background-color: $primary-color;
 
       display: grid;

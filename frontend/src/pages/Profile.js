@@ -31,14 +31,16 @@ const Profile = () => {
         },
         optional: {
             picture: '',
-            bio: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy',
+            bio: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummyLorem Ipsum is simply dummy text of',
+            // 150 character limit
             igHandle: '@johndoe',
             hometown: ['city/country', '[state]'],
         },
-        events: {
-            "eventID_1": {
+        events: [
+            {
                 // events should have unique generated ID
                 basic: {
+                    eventID: 'eventID1',
                     title: 'edens halloween',
                     startDate: '09312021',
                     endDate: '09312021',
@@ -53,8 +55,9 @@ const Profile = () => {
                 // event tag in profile page don't need members list
                 // members: ['UID_1', 'UID_2'],
             },
-            "eventID_2": {
+            {
                 basic: {
+                    eventID: 'eventID2',
                     title: 'hack duke 2021',
                     startDate: '10232021',
                     endDate: '10242021',
@@ -67,12 +70,28 @@ const Profile = () => {
                     picture: '',
                 }
             },
-        },
+        ],
         preferences: {
             birthdayPrivate: false,
         },
         role: 'member',
     });
+
+    const [ renderedEvents, setRenderedEvents ] = useState(userInfo.events);
+
+    const filterTitle = (str) => {
+        if(str.length === 0){
+            setRenderedEvents(userInfo.events);
+            return;
+        }
+
+        setRenderedEvents([]);
+        for(let i = 0; i < userInfo.events.length; i++){
+            if(userInfo.events[i].basic.title.toLowerCase().indexOf(str.toLowerCase()) !== -1){
+                setRenderedEvents(renderedEvents => [...renderedEvents, userInfo.events[i]]);
+            }
+        }
+    }
 
     const updateBasicInfo = (key, value) => {
         // update preferences locally for now
@@ -103,15 +122,16 @@ const Profile = () => {
                     </div>
                     <div className="title-container">
                         <h1>Hi, {userInfo.basic.firstName.toUpperCase()}.</h1>
+                        <p className='bio-text'>"{userInfo.optional.bio}"</p>
                         <p>{userInfo.basic.pointBalance} Points</p>
                     </div>
                 </div>
                 <div className="info-sub-container">
-                    <div className="info-box first">
+                    {/* <div className="info-box first">
                         <p className="title">BIO</p>
                         <p>"{userInfo.optional.bio}"</p>
-                    </div>
-                    <div className="info-box">
+                    </div> */}
+                    <div className="info-box first">
                         <p className="title">ABOUT</p>
                         <p><strong>Net ID:</strong> {userInfo.UID}</p>
                         <p><strong>Name:</strong> {capitalize(userInfo.basic.firstName + ' ' + userInfo.basic.lastName)}</p>
@@ -135,21 +155,21 @@ const Profile = () => {
                         <h1>EVENTS</h1>
                     </div>
                     <div className="filter-container">
-                        <SearchField/>
+                        <SearchField placeholder='Search for events by title' onChange={filterTitle}/>
                     </div>
                     {/* { title, startDate, endDate, startTime, endTime, location, description, picture } */}
                     <div className="list-container">
                         {
-                            Object.keys(userInfo.events).map((eventID) => 
+                            renderedEvents.map((eventObj) => 
                             <EventTag 
-                            key={eventID}
-                            title={userInfo.events[eventID].basic.title} 
-                            startDate={userInfo.events[eventID].basic.startDate} 
-                            endDate={userInfo.events[eventID].basic.endDate} 
-                            startTime={userInfo.events[eventID].basic.startTime} 
-                            endTime={userInfo.events[eventID].basic.endTime} 
-                            location={userInfo.events[eventID].basic.location}
-                            description={userInfo.events[eventID].basic.description} 
+                            key={eventObj.basic.eventID}
+                            title={eventObj.basic.title} 
+                            startDate={eventObj.basic.startDate} 
+                            endDate={eventObj.basic.endDate} 
+                            startTime={eventObj.basic.startTime} 
+                            endTime={eventObj.basic.endTime} 
+                            location={eventObj.basic.location}
+                            description={eventObj.basic.description} 
                             />)
                         }
                     </div>
