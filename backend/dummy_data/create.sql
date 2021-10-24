@@ -4,7 +4,7 @@ CREATE TABLE quads(
 );
 
 CREATE TABLE users(
-    netID VARCHAR(8) PRIMARY KEY,
+    netID VARCHAR(30) PRIMARY KEY,
     password VARCHAR(30) NOT NULL,
     first_name VARCHAR(30) NOT NULL,
     last_name VARCHAR(30) NOT NULL,
@@ -19,14 +19,14 @@ CREATE TABLE users(
 );
 
 CREATE TABLE admin(
-    username VARCHAR(8) PRIMARY KEY REFERENCES users(netID),
+    username VARCHAR(30) PRIMARY KEY REFERENCES users(netID),
     title VARCHAR(50) NOT NULL,
     email VARCHAR(50)
 );
 
 CREATE TABLE points(
     id SERIAL PRIMARY KEY,
-    netID VARCHAR(8) references users(netID),
+    netID VARCHAR(30) references users(netID),
     time_stamp TIMESTAMP NOT NULL,
     point_value INTEGER NOT NULL,
     reason TEXT NOT NULL
@@ -42,7 +42,7 @@ CREATE TABLE events(
 );
 
 CREATE TABLE favorited_events(
-    netID VARCHAR(8) references users(netID),
+    netID VARCHAR(30) references users(netID),
     event_id SERIAL references events(id),
     PRIMARY KEY(netID, event_id)
 );
@@ -54,13 +54,13 @@ CREATE TABLE quad_events(
 );
 
 CREATE TABLE user_member_of(
-    netID VARCHAR(8) references users(netID),
+    netID VARCHAR(30) references users(netID),
     quad_name VARCHAR(30) references quads(name),
     PRIMARY KEY(netID, quad_name)
 );
 
 CREATE TABLE points_earned_by(
-    netID VARCHAR(8) references users(netID),
+    netID VARCHAR(30) references users(netID),
     points_id SERIAL references points(id),
     PRIMARY KEY(netID, points_id)
 );
