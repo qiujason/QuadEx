@@ -11,7 +11,7 @@ CREATE TABLE users(
     birthday TIMESTAMP NOT NULL,
     year INTEGER,
     hometown TEXT,
-    quad VARCHAR(30) REFERENCES quads(name),
+    quad VARCHAR(30) references quads(name),
     degree TEXT,
     bio TEXT,
     insta TEXT,
@@ -53,11 +53,11 @@ CREATE TABLE quad_events(
     PRIMARY KEY(quad_name, event_id)
 );
 
-CREATE TABLE user_member_of(
+/* CREATE TABLE user_member_of(
     netID VARCHAR(30) references users(netID),
     quad_name VARCHAR(30) references quads(name),
     PRIMARY KEY(netID, quad_name)
-);
+); */
 
 CREATE TABLE points_earned_by(
     netID VARCHAR(30) references users(netID),
