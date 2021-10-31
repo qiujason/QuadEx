@@ -37,7 +37,7 @@ const Profile = () => {
             bio: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummyLorem Ipsum is simply dummy text of',
             // 150 character limit
             igHandle: '@johndoe',
-            hometown: ['city/country', '[state]'],
+            hometown: ['[city/country]', '[state]'],
         },
         events: [
             {
@@ -213,33 +213,33 @@ const Profile = () => {
                     <div className='list-container'>
                         <p className='subheader'>Name</p>
                         <div className='inputs-container'>
-                            <InputBox placeholder='first' width='11rem'/>
-                            <InputBox placeholder='last' width='8rem'/>
+                            <InputBox placeholder={userInfo.basic.firstName} width='11rem'/>
+                            <InputBox placeholder={userInfo.basic.lastName} width='8rem'/>
                         </div>
 
                         <p className='subheader'>Quad Affiliation</p>
-                        <InputBox placeholder='e.g. edens' width='20rem'/>
+                        <InputBox placeholder={userInfo.basic.quadAffiliation} width='20rem'/>
 
                         <p className='subheader'>Birthday</p>
                         <div className='inputs-container'>
-                            <InputBox placeholder='MM' width='6rem'/>
-                            <InputBox placeholder='DD' width='6rem'/>
-                            <InputBox placeholder='YYYY' width='8rem'/>
+                            <InputBox placeholder={userInfo.basic.birthday.substring(0, 2)} width='6rem'/>
+                            <InputBox placeholder={userInfo.basic.birthday.substring(2, 4)} width='6rem'/>
+                            <InputBox placeholder={userInfo.basic.birthday.substring(4)} width='8rem'/>
                         </div>
                         
                         <p className='subheader'>School Year</p>
-                        <InputBox placeholder='YYYY' width='20rem'/>
+                        <InputBox placeholder={userInfo.basic.year} width='20rem'/>
 
                         <p className='subheader'>Degree Program</p>
-                        <InputBox placeholder='e.g. Pratt/Trinity' width='20rem'/>
+                        <InputBox placeholder={userInfo.basic.program} width='20rem'/>
 
                         <p className='subheader'>Instagram Handle</p>
-                        <InputBox placeholder='e.g. @optional' width='20rem'/>
+                        <InputBox placeholder={userInfo.optional.igHandle.length !== null ? userInfo.optional.igHandle : 'e.g. @optional'} width='20rem'/>
 
                         <p className='subheader'>Hometown</p>
                         <div className='inputs-container'>
-                            <InputBox placeholder='city/country' width='11rem'/>
-                            <InputBox placeholder='state' width='8rem'/>
+                            <InputBox placeholder={userInfo.optional.hometown[0] !== null ? userInfo.optional.hometown[0] : 'city/country'} width='11rem'/>
+                            <InputBox placeholder={userInfo.optional.hometown[1] !== null ? userInfo.optional.hometown[1] : 'state'} width='8rem'/>
                         </div>    
 
                         <p className='subheader'></p>
