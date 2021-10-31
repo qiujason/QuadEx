@@ -19,6 +19,8 @@ const Profile = () => {
         pointBalance: '100',
     };
 
+    const [ isSettingsOn, setIsSettingsOn ] = useState(false);
+
     const [ userInfo, setUserInfo ] = useState({
         UID: tempUserInfo.UID,
         basic: {
@@ -140,24 +142,24 @@ const Profile = () => {
 
     return (
         <div className='profile-page'>
-            <div className="info-page-container">
-                <div className="picture-container">
-                    <div className="profile-picture-container">
-                        <div className="profile-picture"/>
+            <div className='info-page-container'>
+                <div className='picture-container'>
+                    <div className='profile-picture-container'>
+                        <div className='profile-picture'/>
                     </div>
-                    <div className="title-container">
+                    <div className='title-container'>
                         <h1>Hi, {userInfo.basic.firstName.toUpperCase()}.</h1>
                         <p className='bio-text'>"{userInfo.optional.bio}"</p>
                         <p>{userInfo.basic.pointBalance} Points</p>
                     </div>
                 </div>
-                <div className="info-sub-container">
-                    {/* <div className="info-box first">
-                        <p className="title">BIO</p>
+                <div className='info-sub-container'>
+                    {/* <div className='info-box first'>
+                        <p className='title'>BIO</p>
                         <p>"{userInfo.optional.bio}"</p>
                     </div> */}
-                    <div className="info-box first">
-                        <p className="title">ABOUT</p>
+                    <div className='info-box first'>
+                        <p className='title'>ABOUT</p>
                         <p><strong>Net ID:</strong> {userInfo.UID}</p>
                         <p><strong>Name:</strong> {capitalize(userInfo.basic.firstName + ' ' + userInfo.basic.lastName)}</p>
                         <p><strong>Quad Affiliation:</strong> {capitalize(userInfo.basic.quadAffiliation)}</p>
@@ -165,24 +167,24 @@ const Profile = () => {
                         <p><strong>Year:</strong> {userInfo.basic.year}</p>
                         <p><strong>Degree Program:</strong> {capitalize(userInfo.basic.program)}</p>
                     </div>
-                    <div className="info-box">
-                        <p className="title">CONTACT</p>
+                    <div className='info-box'>
+                        <p className='title'>CONTACT</p>
                         <p><strong>Instagram:</strong> {userInfo.optional.igHandle}</p>
                         <p><strong>Hometown:</strong> {capitalize(userInfo.optional.hometown[0]) + (userInfo.optional.hometown.length > 1 ? ', ' + userInfo.optional.hometown[1].toUpperCase() : '')}</p>
                     </div>                    
-                    <IoSettingsSharp className='settings-btn' onClick={() => console.log('yeyeyeye')}/>
+                    <IoSettingsSharp className='settings-btn' onClick={() => setIsSettingsOn(true)}/>
                 </div>
             </div>
-            <div className="events-page-container">
-                <div className="events-container">
-                    <div className="title-container">
+            <div className='events-page-container'>
+                <div className='events-container'>
+                    <div className='title-container'>
                         <h1>EVENTS</h1>
                     </div>
-                    <div className="filter-container">
+                    <div className='filter-container'>
                         <SearchField placeholder='Search for events by title' onChange={filterTitle}/>
                     </div>
                     {/* { title, startDate, endDate, startTime, endTime, location, description, picture } */}
-                    <div className="list-container">
+                    <div className='list-container'>
                         {
                             renderedEvents.map((eventObj) => 
                             <EventTag 
@@ -201,19 +203,54 @@ const Profile = () => {
             </div>
 
 
-            <div className="settings-page-container">
-                <div className="background"/>
-                <div className="settings-container">
-                    <div className="title-container">
+            <div className={'settings-page-container' + (isSettingsOn ? ' active' : '')}>
+                <div className={'background' + (isSettingsOn ? ' active' : '')}/>
+                <div className={'settings-container' + (isSettingsOn ? ' active' : '')}>
+                    <div className='title-container'>
                         <h1>SETTINGS</h1>
                     </div>
 
-                    <p>Name</p>
-                    <div className="inputs-container">
-                        <InputBox placeholder='Name' width='10rem'/>
-                        <InputBox placeholder='Name' width='10rem'/>
+                    <div className='list-container'>
+                        <p className='subheader'>Name</p>
+                        <div className='inputs-container'>
+                            <InputBox placeholder='first' width='11rem'/>
+                            <InputBox placeholder='last' width='8rem'/>
+                        </div>
+
+                        <p className='subheader'>Quad Affiliation</p>
+                        <InputBox placeholder='e.g. edens' width='20rem'/>
+
+                        <p className='subheader'>Birthday</p>
+                        <div className='inputs-container'>
+                            <InputBox placeholder='MM' width='6rem'/>
+                            <InputBox placeholder='DD' width='6rem'/>
+                            <InputBox placeholder='YYYY' width='8rem'/>
+                        </div>
+                        
+                        <p className='subheader'>School Year</p>
+                        <InputBox placeholder='YYYY' width='20rem'/>
+
+                        <p className='subheader'>Degree Program</p>
+                        <InputBox placeholder='e.g. Pratt/Trinity' width='20rem'/>
+
+                        <p className='subheader'>Instagram Handle</p>
+                        <InputBox placeholder='e.g. @optional' width='20rem'/>
+
+                        <p className='subheader'>Hometown</p>
+                        <div className='inputs-container'>
+                            <InputBox placeholder='city/country' width='11rem'/>
+                            <InputBox placeholder='state' width='8rem'/>
+                        </div>    
+
+                        <p className='subheader'></p>
                     </div>
-                    
+
+                    <div className='btns-container'>
+                        <div className='btn apply' onClick={() => setIsSettingsOn(false)}>
+                            APPLY
+                        </div>
+                        <div className='btn cancel' onClick={() => setIsSettingsOn(false)}>CANCEL</div>
+                    </div>
                 </div>
             </div>
         </div>
