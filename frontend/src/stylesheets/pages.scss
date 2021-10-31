@@ -346,11 +346,11 @@
       }
 
       .list-container {
+        margin-top: 1rem;
         grid-row: 2 / span 1;
         overflow: auto;
         border-top: $secondary-text-color solid 2px;
         border-bottom: $secondary-text-color solid 2px;
-        border-radius: 5px;
 
         .inputs-container {
           display: flex;
