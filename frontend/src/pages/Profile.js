@@ -204,7 +204,7 @@ const Profile = () => {
 
 
             <div className={'settings-page-container' + (isSettingsOn ? ' active' : '')}>
-                <div className={'background' + (isSettingsOn ? ' active' : '')}/>
+                <div className={'background' + (isSettingsOn ? ' active' : '')} onClick={() => setIsSettingsOn(false)}/>
                 <div className={'settings-container' + (isSettingsOn ? ' active' : '')}>
                     <div className='title-container'>
                         <h1>SETTINGS</h1>
