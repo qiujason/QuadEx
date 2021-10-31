@@ -119,7 +119,7 @@
         &:hover {
           color: $hover-color;
           cursor: pointer;
-          transform: rotate(90deg);
+          transform: rotate(90deg) scale(1.2, 1.2);
         }
       }
 
@@ -213,7 +213,7 @@
 
             &.hover {
               color: $hover-color;
-              transform: rotate(15deg);
+              transform: scale(1.2, 1.2);
             }
 
             &.focused {
@@ -287,6 +287,113 @@
             &:hover {
               background-color: #d1d1d1;
             }
+          }
+        }
+      }
+    }
+  }
+
+  .settings-page-container {
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+
+    visibility: hidden;
+    &.active {
+      visibility: visible;
+    }
+
+    .background {
+      transition: all 0.3s;
+
+      &.active {
+        opacity: 0.5;
+      }
+
+      position: absolute;
+      background-color: #000000;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      z-index: 1;
+    }
+
+    .settings-container {
+      transition: all 0.3s;
+      &.active {
+        transform: translateX(0);
+      }
+      transform: translateX(-30rem); 
+
+      position: absolute;
+      width: 22rem;
+      height: calc(100% - 6rem);
+      margin: 3rem 0 0 3rem;
+      background-color: $primary-color;
+      z-index: 2;
+      border-radius: $main-containers-border-radius;
+      padding: 1rem;
+
+      display: grid;
+      grid-template-rows: 4rem auto 4rem;
+
+      .title-container {
+        grid-row: 1 / span 1;
+        margin-left: 0.5rem;
+        display: flex;
+        align-items: center;
+        font-size: 1.4rem;
+      }
+
+      .list-container {
+        margin-top: 1rem;
+        grid-row: 2 / span 1;
+        overflow: auto;
+        border-top: $secondary-text-color solid 2px;
+        border-bottom: $secondary-text-color solid 2px;
+
+        .inputs-container {
+          display: flex;
+          width: 100%;
+          gap: 1rem;
+        }
+  
+        .subheader {
+          font-weight: bold;
+          color: $secondary-text-color;
+          font-size: 0.8rem;
+          margin: 1rem 0 0.5rem 0.3rem;
+        }
+      }
+
+      .btns-container {
+        grid-row: 3 / span 1;
+        display: flex;
+        justify-content: end;
+        align-items: center;
+        gap: 0.5rem;
+        height: 3rem;
+        margin: 1rem 0;
+
+        .btn {
+          width: 3rem;
+          height: 100%;
+          font-size: 1rem;
+          cursor: pointer;
+          color: $secondary-text-color;
+
+          transition: all 0.3s;
+
+          &:hover {
+            &.apply {
+              color: $hover-color;
+            }
+
+            &.cancel {
+              color: #000000;
+            }
+
+            transform: scale(1.2, 1.2);
           }
         }
       }
