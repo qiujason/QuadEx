@@ -2,6 +2,7 @@ import React from 'react'
 import '../stylesheets/pages.scss'
 import EventTag from './EventTag'
 import SearchField from './SearchField'
+import InputBox from '../components/InputBox'
 import { useState } from 'react'
 import { convertDate, capitalize } from '../helpers/Helpers'
 import { IoSettingsSharp } from 'react-icons/io5'
@@ -117,25 +118,25 @@ const Profile = () => {
         }
     }
 
-    const updateBasicInfo = (key, value) => {
-        // update preferences locally for now
-        // [!] settings for updating info should NOT be based on text (prevent inspect)
-        let newUserInfo = { ...userInfo };
-        if(!(key in newUserInfo.basic)) return;
-        newUserInfo.basic[key] = value;
-        setUserInfo(newUserInfo);
-    }
+    // const updateBasicInfo = (key, value) => {
+    //     // update preferences locally for now
+    //     // [!] settings for updating info should NOT be based on text (prevent inspect)
+    //     let newUserInfo = { ...userInfo };
+    //     if(!(key in newUserInfo.basic)) return;
+    //     newUserInfo.basic[key] = value;
+    //     setUserInfo(newUserInfo);
+    // }
 
-    const updateOptionalInfo = (key, value) => {
+    // const updateOptionalInfo = (key, value) => {
 
-    }
+    // }
 
-    const updatePreferences = (key) => {
-        let newUserInfo = { ...userInfo };
-        if(!(key in newUserInfo.preferences)) return;
-        newUserInfo.preferences[key] = !newUserInfo.preferences[key];
-        setUserInfo(newUserInfo);
-    }
+    // const updatePreferences = (key) => {
+    //     let newUserInfo = { ...userInfo };
+    //     if(!(key in newUserInfo.preferences)) return;
+    //     newUserInfo.preferences[key] = !newUserInfo.preferences[key];
+    //     setUserInfo(newUserInfo);
+    // }
 
     return (
         <div className='profile-page'>
@@ -168,8 +169,7 @@ const Profile = () => {
                         <p className="title">CONTACT</p>
                         <p><strong>Instagram:</strong> {userInfo.optional.igHandle}</p>
                         <p><strong>Hometown:</strong> {capitalize(userInfo.optional.hometown[0]) + (userInfo.optional.hometown.length > 1 ? ', ' + userInfo.optional.hometown[1].toUpperCase() : '')}</p>
-                    </div>
-                    
+                    </div>                    
                     <IoSettingsSharp className='settings-btn' onClick={() => console.log('yeyeyeye')}/>
                 </div>
             </div>
@@ -202,8 +202,18 @@ const Profile = () => {
 
 
             <div className="settings-page-container">
+                <div className="background"/>
                 <div className="settings-container">
+                    <div className="title-container">
+                        <h1>SETTINGS</h1>
+                    </div>
 
+                    <p>Name</p>
+                    <div className="inputs-container">
+                        <InputBox placeholder='Name' width='10rem'/>
+                        <InputBox placeholder='Name' width='10rem'/>
+                    </div>
+                    
                 </div>
             </div>
         </div>
