@@ -119,7 +119,7 @@
         &:hover {
           color: $hover-color;
           cursor: pointer;
-          transform: rotate(90deg);
+          transform: rotate(90deg) scale(1.2, 1.2);
         }
       }
 
@@ -213,7 +213,7 @@
 
             &.hover {
               color: $hover-color;
-              transform: rotate(15deg);
+              transform: scale(1.2, 1.2);
             }
 
             &.focused {
@@ -371,20 +371,30 @@
         display: flex;
         justify-content: end;
         align-items: center;
-        gap: 1rem;
+        gap: 0.5rem;
         height: 3rem;
         margin: 1rem 0;
 
         .btn {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: 6rem;
-          height: 2rem;
-          background-color: $secondary-text-color;
-          border-radius: 10px;
+          width: 3rem;
+          height: 100%;
           font-size: 1rem;
           cursor: pointer;
+          color: $secondary-text-color;
+
+          transition: all 0.3s;
+
+          &:hover {
+            &.apply {
+              color: $hover-color;
+            }
+
+            &.cancel {
+              color: #000000;
+            }
+
+            transform: scale(1.2, 1.2);
+          }
         }
       }
     }

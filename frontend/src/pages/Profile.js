@@ -6,6 +6,7 @@ import InputBox from '../components/InputBox'
 import { useState } from 'react'
 import { convertDate, capitalize } from '../helpers/Helpers'
 import { IoSettingsSharp } from 'react-icons/io5'
+import { IoMdCheckmarkCircle, IoMdCloseCircle } from 'react-icons/io'
 
 const Profile = () => {
     const tempUserInfo = {
@@ -246,10 +247,8 @@ const Profile = () => {
                     </div>
 
                     <div className='btns-container'>
-                        <div className='btn apply' onClick={() => setIsSettingsOn(false)}>
-                            APPLY
-                        </div>
-                        <div className='btn cancel' onClick={() => setIsSettingsOn(false)}>CANCEL</div>
+                        <IoMdCheckmarkCircle className='btn apply' onClick={() => setIsSettingsOn(false)}/>
+                        <IoMdCloseCircle className='btn cancel' onClick={() => setIsSettingsOn(false)}/>
                     </div>
                 </div>
             </div>
