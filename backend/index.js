@@ -12,7 +12,21 @@ app.use(
   })
 )
 
-app.get('/users', db.getUsers)
+app.get('/users', (req, res) => {
+    db.getUsers(req, res)
+})
+
+app.post('/users', (req, res) => {
+    db.postUsers(req, res)
+})
+
+app.put('/users', (req, res) => {
+    db.putUsers(req, res)
+})
+
+app.delete('/users', (req, res) => {
+    db.deleteUsers(req, res)
+})
 
 app.get('/', (request, response) => {
     response.json({ info: 'Node.js, Express, and Postgres API' })
