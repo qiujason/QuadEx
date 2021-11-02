@@ -9,7 +9,7 @@ import { IoSettingsSharp } from 'react-icons/io5'
 import { IoMdCheckmarkCircle, IoMdCloseCircle } from 'react-icons/io'
 
 const Profile = () => {
-    fetch('http://localhost:3001').then(response => {
+    fetch('http://localhost:3001/users/?id=jq39').then(response => {
         return response.text();
     }).then(data => {
         console.log(data);
