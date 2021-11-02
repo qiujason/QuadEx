@@ -17,7 +17,7 @@ INSERT INTO admin VALUES
 ('Price', 'President', 'president@duke.edu'),
 ('rz97', 'RA', 'rz97@duke.edu');
 
-INSERT INTO points (netID, date, point_value, reason) VALUES
+INSERT INTO points (net_id, date, point_value, reason) VALUES
 ('jq39', '01012021', 5, 'Attended open house'),
 ('ajl88', '01012021', 10, 'Attended quad town hall'),
 ('rz97', '01012021', 50, 'Won best junior RA');

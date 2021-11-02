@@ -9,11 +9,64 @@ import { IoSettingsSharp } from 'react-icons/io5'
 import { IoMdCheckmarkCircle, IoMdCloseCircle } from 'react-icons/io'
 
 const Profile = () => {
-    fetch('http://localhost:3001/users/?id=jq39').then(response => {
+    fetch('http://localhost:3001/users/?id=rz97').then(response => {
         return response.text();
     }).then(data => {
-        console.log(data);
+        console.log(JSON.parse(data)[0]);
     });
+
+    const postTest = () => {
+        fetch('http://localhost:3001/users', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                net_id:'dp239', 
+                password:'pass',
+                first_name: 'donghan',
+                last_name: 'park',
+                birthday: '03092001',
+                year: '2023',
+                hometown: 'auburn, AL',
+                quad: null,
+                degree: 'pratt',
+                bio: null,
+                insta: null,
+                bday_cal: true
+            })
+        }).then(response => {
+            return response.text();
+        }).then(data => {
+            console.log(data);
+        });
+    }
+    const putTest = () => {
+        fetch('http://localhost:3001/users/?id=dp239', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                net_id:'dp239', 
+                password:'pass',
+                first_name: 'PAMPAM',
+                last_name: 'park',
+                birthday: '03092001',
+                year: '2023',
+                hometown: 'auburn, AL',
+                quad: null,
+                degree: 'pratt',
+                bio: null,
+                insta: null,
+                bday_cal: true
+            })
+        }).then(response => {
+            return response.text();
+        }).then(data => {
+            console.log(data);
+        });
+    }
 
     const tempUserInfo = {
         UID: 'jd123',
@@ -254,7 +307,7 @@ const Profile = () => {
 
                     <div className='btns-container'>
                         <IoMdCheckmarkCircle className='btn apply' onClick={() => setIsSettingsOn(false)}/>
-                        <IoMdCloseCircle className='btn cancel' onClick={() => setIsSettingsOn(false)}/>
+                        <IoMdCloseCircle className='btn cancel' onClick={() => {setIsSettingsOn(false); putTest();}}/>
                     </div>
                 </div>
             </div>
