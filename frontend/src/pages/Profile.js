@@ -9,13 +9,25 @@ import { IoSettingsSharp } from 'react-icons/io5'
 import { IoMdCheckmarkCircle, IoMdCloseCircle } from 'react-icons/io'
 
 const Profile = () => {
-    const getTest = () => {
-        fetch('http://localhost:3001/users/?id=foo').then(response => {
-            return response.text();
-        }).then(data => {
-            console.log(JSON.parse(data)[0]);
-        });
-    }
+    const [ userObj, setUserObj ] = useState({
+        net_id: '', 
+        password: '',
+        first_name: '',
+        last_name: '',
+        birthday: '',
+        year: null,
+        hometown: null,
+        quad: null,
+        degree: null,
+        bio: null,
+        insta: null,
+        bday_cal: true
+    });
+    fetch('http://localhost:3001/users/?id=jq39').then(response => {
+        return response.text();
+    }).then(data => {
+        setUserObj(JSON.parse(data)[0]);
+    });
 
     const postTest = () => {
         fetch('http://localhost:3001/users', {
@@ -70,36 +82,25 @@ const Profile = () => {
         });
     }
 
-    const tempUserInfo = {
-        UID: 'jd123',
-        firstName: 'john',
-        lastName: 'doe',
-        quadAffiliation: 'edens',
-        birthday: '01012001',
-        year: '2021',
-        program: 'pratt',
-        pointBalance: '100',
-    };
-
     const [ isSettingsOn, setIsSettingsOn ] = useState(false);
 
     const [ userInfo, setUserInfo ] = useState({
-        UID: tempUserInfo.UID,
+        UID: userObj.net_id,
         basic: {
-            firstName: tempUserInfo.firstName,
-            lastName: tempUserInfo.lastName,
-            quadAffiliation: tempUserInfo.quadAffiliation,
-            birthday: tempUserInfo.birthday,
-            year: tempUserInfo.year,
-            program: tempUserInfo.program,
-            pointBalance: tempUserInfo.pointBalance,
+            firstName: userObj.first_name,
+            lastName: userObj.last_name,
+            quadAffiliation: userObj.quad,
+            birthday: userObj.birthday,
+            year: userObj.year ? userObj.year : '',
+            program: userObj.degree ? userObj.degree : '',
+            pointBalance: '0',
         },
         optional: {
             picture: '',
-            bio: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummyLorem Ipsum is simply dummy text of',
+            bio: userObj.bio ? userObj.bio : '',
             // 150 character limit
-            igHandle: '@johndoe',
-            hometown: ['[city/country]', '[state]'],
+            igHandle: userObj.insta ? userObj.insta : '',
+            hometown: [userObj.hometown ? userObj.hometown : '', ''],
         },
         events: [
             {
