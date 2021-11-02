@@ -8,7 +8,7 @@ const pool = new Pool({
 })
 
 const getUsers = (req, res) => {
-    pool.query('SELECT * FROM users WHERE netid = $1', [req.query.id], (error, results) => {
+    pool.query('SELECT * FROM users WHERE net_id = $1', [req.query.id], (error, results) => {
       if (error) {
         throw error
       }
@@ -18,7 +18,7 @@ const getUsers = (req, res) => {
 
 const postUsers = (req, res) => {
     const {
-        netID,
+        net_id,
         password,
         first_name,
         last_name,
@@ -32,9 +32,9 @@ const postUsers = (req, res) => {
         bday_cal
     } = req.body
 
-    pool.query('INSERT INTO users (netID, password, first_name, last_name, birthday, year, hometown, quad, degree, bio, insta, bday_cal) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)', 
+    pool.query('INSERT INTO users (net_id, password, first_name, last_name, birthday, year, hometown, quad, degree, bio, insta, bday_cal) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)', 
         [
-            netID,
+            net_id,
             password,
             first_name,
             last_name,
@@ -51,7 +51,7 @@ const postUsers = (req, res) => {
       if (error) {
         throw error
       }
-      res.status(201).send(`User added with ID: ${netID}`)
+      res.status(201).send(`User added with ID: ${net_id}`)
     })
 }
 
@@ -70,7 +70,7 @@ const putUsers = (req, res) => {
         bday_cal
     } = req.body
 
-    pool.query('UPDATE users SET password = $2, first_name = $3, last_name = $4, birthday = $5, year = $6, hometown = $7, quad = $8, degree = $9, bio = $10, insta = $11, bday_cal = $12 WHERE netid = $1', 
+    pool.query('UPDATE users SET password = $2, first_name = $3, last_name = $4, birthday = $5, year = $6, hometown = $7, quad = $8, degree = $9, bio = $10, insta = $11, bday_cal = $12 WHERE net_id = $1', 
         [
             req.query.id,
             password,
@@ -94,7 +94,7 @@ const putUsers = (req, res) => {
 }
 
 const deleteUsers = (req, res) => {
-    pool.query('DELETE FROM users WHERE netid = $1', [req.query.id], (error, results) => {
+    pool.query('DELETE FROM users WHERE net_id = $1', [req.query.id], (error, results) => {
       if (error) {
         throw error
       }
