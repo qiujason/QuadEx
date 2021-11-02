@@ -9,11 +9,13 @@ import { IoSettingsSharp } from 'react-icons/io5'
 import { IoMdCheckmarkCircle, IoMdCloseCircle } from 'react-icons/io'
 
 const Profile = () => {
-    fetch('http://localhost:3001/users/?id=rz97').then(response => {
-        return response.text();
-    }).then(data => {
-        console.log(JSON.parse(data)[0]);
-    });
+    const getTest = () => {
+        fetch('http://localhost:3001/users/?id=foo').then(response => {
+            return response.text();
+        }).then(data => {
+            console.log(JSON.parse(data)[0]);
+        });
+    }
 
     const postTest = () => {
         fetch('http://localhost:3001/users', {
@@ -307,7 +309,7 @@ const Profile = () => {
 
                     <div className='btns-container'>
                         <IoMdCheckmarkCircle className='btn apply' onClick={() => setIsSettingsOn(false)}/>
-                        <IoMdCloseCircle className='btn cancel' onClick={() => {setIsSettingsOn(false); putTest();}}/>
+                        <IoMdCloseCircle className='btn cancel' onClick={() => setIsSettingsOn(false)}/>
                     </div>
                 </div>
             </div>
