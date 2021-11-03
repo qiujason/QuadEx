@@ -7,8 +7,8 @@ from faker import Faker
 from random import randrange
 from datetime import datetime
 
-event_org_list = ['Basketball', 'Soccer', 'Spikeball', 'Computer Science', 'Statistical Science']
-event_type = ['Mixer', 'Rager', 'Party', 'Tournament', 'Kickback']
+event_org_list = ['Basketball', 'Soccer', 'Spikeball', 'Computer Science', 'Statistical Science', 'AIV', 'DIIG', 'Simple Charity', 'DML']
+event_type = ['Mixer', 'Rager', 'Party', 'Tournament', 'Kickback', 'Hackathon', 'Large Group', 'GBM', 'Interest Meeting']
 num_events = 500
 fake = Faker()
 dict = {
