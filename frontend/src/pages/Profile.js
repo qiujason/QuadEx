@@ -191,31 +191,29 @@ const Profile = () => {
         setUserInfo(prevUserInfo);
 
         async function putUserInfo(){
-            try{
-            let response = await fetch('http://localhost:3001/users/?id=' + prevUserInfo.net_id, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    'net_id': prevUserInfo.net_id, 
-                    'password': prevUserInfo.password,
-                    'first_name': prevUserInfo.first_name,
-                    'last_name': prevUserInfo.last_name,
-                    'birthday': prevUserInfo.birthday,
-                    'year': prevUserInfo.year ?? '',
-                    'hometown': prevUserInfo.hometown ?? '',
-                    'quad': prevUserInfo.quad ?? '',
-                    'degree': prevUserInfo.degree ?? '',
-                    'bio': prevUserInfo.bio ?? '',
-                    'insta': prevUserInfo.insta ?? '',
-                    'bday_cal': prevUserInfo.bday_cal
-                })
-            });
-            let data = await response.json();
-            } catch(error){
-                console.error(error);
-            }
+            
+            await fetch('http://localhost:3001/users/?id=' + prevUserInfo.net_id, 
+                {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        net_id: prevUserInfo.net_id, 
+                        password: prevUserInfo.password,
+                        first_name: prevUserInfo.first_name,
+                        last_name: prevUserInfo.last_name,
+                        birthday: prevUserInfo.birthday,
+                        year: prevUserInfo.year ?? null,
+                        hometown: prevUserInfo.hometown ?? null,
+                        quad: prevUserInfo.quad ?? null,
+                        degree: prevUserInfo.degree ?? null,
+                        bio: prevUserInfo.bio ?? null,
+                        insta: prevUserInfo.insta ?? null,
+                        bday_cal: prevUserInfo.bday_cal
+                    })
+                }
+            );
             //console.log(data);
         }
         putUserInfo();
