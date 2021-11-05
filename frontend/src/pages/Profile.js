@@ -175,8 +175,8 @@ const Profile = () => {
                     </div>
                     <div className='title-container'>
                         <h1>Hi, {userInfo.first_name.toUpperCase()}.</h1>
-                        <p className='bio-text'>"{userInfo.bio}"</p>
-                        <p>[hard-coded: 100] Points</p>
+                        <p className='bio-text'>"{userInfo.bio ?? 'Add a bio!'}"</p>
+                        <p>[temp: 100] Points</p>
                     </div>
                 </div>
                 <div className='info-sub-container'>
@@ -184,15 +184,15 @@ const Profile = () => {
                         <p className='title'>ABOUT</p>
                         <p><strong>Net ID:</strong> {userInfo.net_id}</p>
                         <p><strong>Name:</strong> {capitalize(userInfo.first_name + ' ' + userInfo.last_name)}</p>
-                        <p><strong>Quad Affiliation:</strong> {capitalize(userInfo.quad)}</p>
+                        <p><strong>Quad Affiliation:</strong> {capitalize(userInfo.quad ?? '?')}</p>
                         <p><strong>Birthday:</strong> {convertDate(userInfo.birthday)}</p>
-                        <p><strong>Year:</strong> {userInfo.year}</p>
-                        <p><strong>Degree Program:</strong> {capitalize(userInfo.degree)}</p>
+                        <p><strong>Year:</strong> {userInfo.year ?? '?'}</p>
+                        <p><strong>Degree Program:</strong> {capitalize(userInfo.degree ?? '?')}</p>
                     </div>
                     <div className='info-box'>
                         <p className='title'>CONTACT</p>
-                        <p><strong>Instagram:</strong> {userInfo.insta}</p>
-                        <p><strong>Hometown:</strong> {userInfo.hometown}</p>
+                        <p><strong>Instagram:</strong> {userInfo.insta ?? '?'}</p>
+                        <p><strong>Hometown:</strong> {userInfo.hometown ?? '?'}</p>
                     </div>                    
                     <IoSettingsSharp className='settings-btn' onClick={() => setIsSettingsOn(true)}/>
                 </div>
@@ -240,7 +240,7 @@ const Profile = () => {
                         </div>
 
                         <p className='subheader'>Quad Affiliation</p>
-                        <InputBox placeholder={userInfo.quad !== null ? userInfo.quad : 'e.g. Cardinals'} width='20rem'/>
+                        <InputBox placeholder={userInfo.quad ?? 'e.g. Cardinals'} width='20rem'/>
 
                         <p className='subheader'>Birthday</p>
                         <div className='inputs-container'>
@@ -250,16 +250,16 @@ const Profile = () => {
                         </div>
                         
                         <p className='subheader'>School Year</p>
-                        <InputBox placeholder={userInfo.year !== null ? userInfo.year : 'e.g. 1, 2, 3, 4'} width='20rem'/>
+                        <InputBox placeholder={userInfo.year ?? 'e.g. 1, 2, 3, 4'} width='20rem'/>
 
                         <p className='subheader'>Degree Program</p>
-                        <InputBox placeholder={userInfo.degree !== null ? userInfo.degree : 'e.g. Economimcs'} width='20rem'/>
+                        <InputBox placeholder={userInfo.degree ?? 'e.g. Economimcs'} width='20rem'/>
 
                         <p className='subheader'>Instagram Handle</p>
-                        <InputBox placeholder={userInfo.insta !== null ? userInfo.insta : 'e.g. @optional'} width='20rem'/>
+                        <InputBox placeholder={userInfo.insta ?? 'e.g. @optional'} width='20rem'/>
 
                         <p className='subheader'>Hometown</p>
-                        <InputBox placeholder={userInfo.hometown !== null ? userInfo.hometown : 'e.g. City, State'} width='20rem'/>
+                        <InputBox placeholder={userInfo.hometown ?? 'e.g. City, State'} width='20rem'/>
 
                         <p className='subheader'></p>
                     </div>
