@@ -8,15 +8,7 @@ import { convertDate, capitalize } from '../helpers/Helpers'
 import { IoSettingsSharp } from 'react-icons/io5'
 import { IoMdCheckmarkCircle, IoMdCloseCircle } from 'react-icons/io'
 
-const Profile = () => {
-    useEffect(() => {
-        fetch('http://localhost:3001/users/?id=dp239')
-        .then(response => response.json())
-        .then(data => {
-            setUserInfo(data[0]);
-        });
-    }, []);
-
+/*
     const postTest = () => {
         fetch('http://localhost:3001/users', {
             method: 'POST',
@@ -70,6 +62,18 @@ const Profile = () => {
             console.log(data);
         });
     }
+*/
+
+const Profile = () => {
+    useEffect(() => {
+        fetch('http://localhost:3001/users/?id=dp239')
+        .then(response => response.json())
+        .then(data => {
+            const prevData = { ...userInfo };
+            Object.keys(data[0]).forEach(key => prevData[key] = data[0][key]);
+            setUserInfo(prevData);
+        });
+    }, []);
 
     const [ isSettingsOn, setIsSettingsOn ] = useState(false);
 
@@ -89,36 +93,28 @@ const Profile = () => {
         events: [
             {
                 // events should have unique generated ID
-                basic: {
-                    eventID: 'eventID1',
-                    title: 'edens halloween',
-                    startDate: '10312021',
-                    endDate: '10312021',
-                    startTime: '0600',
-                    endTime: '2200',
-                    location: 'page auditorium',
-                    description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummyLorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummyLorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy',
-                },
-                optional: {
-                    picture: '',
-                }
+                eventID: 'eventID1',
+                title: 'edens halloween',
+                startDate: '10312021',
+                endDate: '10312021',
+                startTime: '0600',
+                endTime: '2200',
+                location: 'page auditorium',
+                description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummyLorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummyLorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy',
+                picture: null,
                 // event tag in profile page don't need members list
                 // members: ['UID_1', 'UID_2'],
             },
             {
-                basic: {
-                    eventID: 'eventID2',
-                    title: 'hack duke 2021',
-                    startDate: '10232021',
-                    endDate: '10242021',
-                    startTime: '0900',
-                    endTime: '1800',
-                    location: 'bostock library',
-                    description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummyLorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummyLorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy',
-                },
-                optional: {
-                    picture: '',
-                }
+                eventID: 'eventID2',
+                title: 'hack duke 2021',
+                startDate: '10232021',
+                endDate: '10242021',
+                startTime: '0900',
+                endTime: '1800',
+                location: 'bostock library',
+                description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummyLorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummyLorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy',
+                picture: null,
             },
         ]
     });
@@ -127,8 +123,8 @@ const Profile = () => {
 
     //sort events list chronologically
     renderedEvents.sort(function (i1, i2){
-        var year1 = Number(i1.basic.startDate.substring(4) + i1.basic.startDate.substring(2, 4) + i1.basic.startDate.substring(0, 2));
-        var year2 = Number(i2.basic.startDate.substring(4) + i2.basic.startDate.substring(2, 4) + i2.basic.startDate.substring(0, 2));
+        var year1 = Number(i1.startDate.substring(4) + i1.startDate.substring(2, 4) + i1.startDate.substring(0, 2));
+        var year2 = Number(i2.startDate.substring(4) + i2.startDate.substring(2, 4) + i2.startDate.substring(0, 2));
         return year1 - year2;
     });
 
@@ -140,7 +136,7 @@ const Profile = () => {
 
         setRenderedEvents([]);
         for(let i = 0; i < userInfo.events.length; i++){
-            if(userInfo.events[i].basic.title.toLowerCase().indexOf(str.toLowerCase()) !== -1){
+            if(userInfo.events[i].title.toLowerCase().indexOf(str.toLowerCase()) !== -1){
                 setRenderedEvents(renderedEvents => [...renderedEvents, userInfo.events[i]]);
             }
         }
@@ -191,7 +187,7 @@ const Profile = () => {
                     </div>
                     <div className='info-box'>
                         <p className='title'>CONTACT</p>
-                        <p><strong>Instagram:</strong> {userInfo.insta ?? '?'}</p>
+                        <p><strong>Instagram:</strong> {userInfo.insta ? '@' : ''}{userInfo.insta ?? '?'}</p>
                         <p><strong>Hometown:</strong> {userInfo.hometown ?? '?'}</p>
                     </div>                    
                     <IoSettingsSharp className='settings-btn' onClick={() => setIsSettingsOn(true)}/>
@@ -210,14 +206,14 @@ const Profile = () => {
                         {
                             renderedEvents.map((eventObj) => 
                             <EventTag 
-                            key={eventObj.basic.eventID}
-                            title={eventObj.basic.title} 
-                            startDate={eventObj.basic.startDate} 
-                            endDate={eventObj.basic.endDate} 
-                            startTime={eventObj.basic.startTime} 
-                            endTime={eventObj.basic.endTime} 
-                            location={eventObj.basic.location}
-                            description={eventObj.basic.description} 
+                            key={eventObj.eventID}
+                            title={eventObj.title} 
+                            startDate={eventObj.startDate} 
+                            endDate={eventObj.endDate} 
+                            startTime={eventObj.startTime} 
+                            endTime={eventObj.endTime} 
+                            location={eventObj.location}
+                            description={eventObj.description} 
                             />)
                         }
                     </div>
@@ -265,7 +261,7 @@ const Profile = () => {
                     </div>
 
                     <div className='btns-container'>
-                        <IoMdCheckmarkCircle className='btn apply' onClick={() => {setIsSettingsOn(false); postTest()}}/>
+                        <IoMdCheckmarkCircle className='btn apply' onClick={() => setIsSettingsOn(false)}/>
                         <IoMdCloseCircle className='btn cancel' onClick={() => setIsSettingsOn(false)}/>
                     </div>
                 </div>
