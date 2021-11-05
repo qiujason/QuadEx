@@ -109,7 +109,7 @@ const Profile = () => {
 
     useEffect(() => {
         async function getUserInfo(){
-            let response = await fetch('http://localhost:3001/users/?id=dp239');
+            let response = await fetch('http://localhost:3001/users/?id=jq39');
             let data = await response.json();
 
             const prevUserInfo = { ...userInfo };
@@ -189,6 +189,36 @@ const Profile = () => {
         });
         prevUserInfo['birthday'] = prefValues['birthday_M'] + prefValues['birthday_D'] + prefValues['birthday_Y'];
         setUserInfo(prevUserInfo);
+
+        async function putUserInfo(){
+            try{
+            let response = await fetch('http://localhost:3001/users/?id=' + prevUserInfo.net_id, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    'net_id': prevUserInfo.net_id, 
+                    'password': prevUserInfo.password,
+                    'first_name': prevUserInfo.first_name,
+                    'last_name': prevUserInfo.last_name,
+                    'birthday': prevUserInfo.birthday,
+                    'year': prevUserInfo.year ?? '',
+                    'hometown': prevUserInfo.hometown ?? '',
+                    'quad': prevUserInfo.quad ?? '',
+                    'degree': prevUserInfo.degree ?? '',
+                    'bio': prevUserInfo.bio ?? '',
+                    'insta': prevUserInfo.insta ?? '',
+                    'bday_cal': prevUserInfo.bday_cal
+                })
+            });
+            let data = await response.json();
+            } catch(error){
+                console.error(error);
+            }
+            //console.log(data);
+        }
+        putUserInfo();
     }
 
     const resetPrefValues = () => {
@@ -203,7 +233,7 @@ const Profile = () => {
             birthday_Y: userInfo.birthday.substring(4),
             year: userInfo.year,
             degree: userInfo.degree,
-            insta: userInfo.degree,
+            insta: userInfo.insta,
             hometown: userInfo.hometown,
         });
     }
