@@ -59,6 +59,6 @@ for i in range(num_events):
 
 print(df)
 
-#from sqlalchemy import create_engine
-#engine = create_engine('postgresql://username:password@localhost:5432/mydatabase')
-#df.to_sql('table_name', engine)
+from sqlalchemy import create_engine
+engine = create_engine('postgresql://username:password@localhost:5432/mydatabase')
+df.to_sql('events', engine)
