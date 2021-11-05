@@ -1,23 +1,19 @@
 import React from 'react'
 import '../stylesheets/components.scss'
-import { useState } from 'react';
 
-const InputBox = ({ placeholder, width = '10rem', onChange, limit }) => {
-    const [ value, setValue ] = useState('');
-
+const InputBox = ({ placeholder, value, onChange, width = '10rem', limit, isNumeric = false }) => {
     const widthStyle = {
         width: width
     }
 
     const handleChange = (e) => {
-        if(e.target.value.length > limit) return;
-        setValue(e.target.value);
-        onChange(e);
+        if(isNumeric && !(/^[0-9\b]+$/.test(e.target.value) || e.target.value === '')) return;
+        onChange(e.target.value.substring(0, limit));
     }
 
     const handleBlur = (e) => {
         if(limit === null || limit < 1) return;
-        setValue(e.target.value !== '' ? e.target.value.padStart(limit, '0') : '');
+        onChange(e.target.value !== '' ? e.target.value.padStart(limit, '0') : '');
     }
 
     return (
