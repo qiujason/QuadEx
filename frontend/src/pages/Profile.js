@@ -69,9 +69,15 @@ const Profile = () => {
         fetch('http://localhost:3001/users/?id=dp239')
         .then(response => response.json())
         .then(data => {
-            const prevData = { ...userInfo };
-            Object.keys(data[0]).forEach(key => prevData[key] = data[0][key]);
-            setUserInfo(prevData);
+            const prevUserInfo = { ...userInfo };
+            const prevPrefValues = { ...prefValues };
+            Object.keys(data[0]).forEach(key => {
+                prevUserInfo[key] = data[0][key];
+                if(key in prevPrefValues) prevPrefValues[key] = data[0][key];
+            });
+            prevPrefValues.birthday_D = 
+            setUserInfo(prevUserInfo);
+            setPrefValues(prevPrefValues);
         });
     }, []);
 
@@ -128,6 +134,7 @@ const Profile = () => {
         return year1 - year2;
     });
 
+    //filter rendered events by title
     const filterTitle = (str) => {
         if(str.length === 0){
             setRenderedEvents(userInfo.events);
@@ -135,11 +142,11 @@ const Profile = () => {
         }
 
         setRenderedEvents([]);
-        for(let i = 0; i < userInfo.events.length; i++){
-            if(userInfo.events[i].title.toLowerCase().indexOf(str.toLowerCase()) !== -1){
-                setRenderedEvents(renderedEvents => [...renderedEvents, userInfo.events[i]]);
+        userInfo.events.forEach(eventObj => {
+            if(eventObj.title.toLowerCase().indexOf(str.toLowerCase()) !== -1){
+                setRenderedEvents(renderedEvents => [...renderedEvents, eventObj]);
             }
-        }
+        });
     }
 
     // const updateBasicInfo = (key, value) => {
@@ -161,6 +168,28 @@ const Profile = () => {
     //     newUserInfo.preferences[key] = !newUserInfo.preferences[key];
     //     setUserInfo(newUserInfo);
     // }
+
+    const [ prefValues, setPrefValues ] = useState({
+        state_id: 'prefValues',
+        first_name: '',
+        last_name: '',
+        quad: '',
+        birthday: '',
+        year: '',
+        degree: '',
+        insta: '',
+        hometown: '',
+    });
+    const updatePrefValue = (key, value) => {
+        const prevObj = { ...prefValues };
+        if(!(key in prevObj)) return;
+        prevObj[key] = value;
+        setPrefValues(prevObj);
+    }
+
+    const keyTest = (element) => {
+        console.log(element.value);
+    }
 
     return (
         <div className='profile-page'>
@@ -193,6 +222,7 @@ const Profile = () => {
                     <IoSettingsSharp className='settings-btn' onClick={() => setIsSettingsOn(true)}/>
                 </div>
             </div>
+
             <div className='events-page-container'>
                 <div className='events-container'>
                     <div className='title-container'>
@@ -220,7 +250,6 @@ const Profile = () => {
                 </div>
             </div>
 
-
             <div className={'settings-page-container' + (isSettingsOn ? ' active' : '')}>
                 <div className={'background' + (isSettingsOn ? ' active' : '')} onClick={() => setIsSettingsOn(false)}/>
                 <div className={'settings-container' + (isSettingsOn ? ' active' : '')}>
@@ -231,8 +260,8 @@ const Profile = () => {
                     <div className='list-container'>
                         <p className='subheader'>Name</p>
                         <div className='inputs-container'>
-                            <InputBox placeholder={userInfo.first_name} width='11rem'/>
-                            <InputBox placeholder={userInfo.last_name} width='8rem'/>
+                            <InputBox placeholder={userInfo.first_name} width='11rem' onChange={e => updatePrefValue('first_name', e.target.value)} onKeyDown={() => keyTest(this)}/>
+                            <InputBox placeholder={userInfo.last_name} width='8rem' onChange={e => updatePrefValue('last_name', e.target.value)}/>
                         </div>
 
                         <p className='subheader'>Quad Affiliation</p>
@@ -240,22 +269,22 @@ const Profile = () => {
 
                         <p className='subheader'>Birthday</p>
                         <div className='inputs-container'>
-                            <InputBox placeholder={userInfo.birthday.substring(0, 2)} width='6rem'/>
-                            <InputBox placeholder={userInfo.birthday.substring(2, 4)} width='6rem'/>
-                            <InputBox placeholder={userInfo.birthday.substring(4)} width='8rem'/>
+                            <InputBox placeholder={userInfo.birthday.substring(0, 2)} width='6rem' limit={2} onChange={e => updatePrefValue('birthday_M', e.target.value)}/>
+                            <InputBox placeholder={userInfo.birthday.substring(2, 4)} width='6rem' limit={2} onChange={e => updatePrefValue('birthday_D', e.target.value)}/>
+                            <InputBox placeholder={userInfo.birthday.substring(4)} width='8rem' limit={4} onChange={e => updatePrefValue('birthday_Y', e.target.value)}/>
                         </div>
                         
                         <p className='subheader'>School Year</p>
-                        <InputBox placeholder={userInfo.year ?? 'e.g. 1, 2, 3, 4'} width='20rem'/>
+                        <InputBox placeholder={userInfo.year ?? 'e.g. 1, 2, 3, 4'} width='20rem' limit={1} onChange={e => updatePrefValue('year', e.target.value)}/>
 
                         <p className='subheader'>Degree Program</p>
-                        <InputBox placeholder={userInfo.degree ?? 'e.g. Economimcs'} width='20rem'/>
+                        <InputBox placeholder={userInfo.degree ?? 'e.g. Computer Science'} width='20rem' onChange={e => updatePrefValue('degree', e.target.value)}/>
 
                         <p className='subheader'>Instagram Handle</p>
-                        <InputBox placeholder={userInfo.insta ?? 'e.g. @optional'} width='20rem'/>
+                        <InputBox placeholder={userInfo.insta ?? 'e.g. @optional'} width='20rem' onChange={e => updatePrefValue('insta', e.target.value)}/>
 
                         <p className='subheader'>Hometown</p>
-                        <InputBox placeholder={userInfo.hometown ?? 'e.g. City, State'} width='20rem'/>
+                        <InputBox placeholder={userInfo.hometown ?? 'e.g. City, State'} width='20rem' onChange={e => updatePrefValue('hometown', e.target.value)}/>
 
                         <p className='subheader'></p>
                     </div>
