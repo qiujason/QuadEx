@@ -182,6 +182,15 @@ const Profile = () => {
         setPrefValues(prevObj);
     }
 
+    const updateUserInfo = () => {
+        const prevUserInfo = { ...userInfo };
+        Object.keys(prefValues).forEach(key => {
+            if(key in prevUserInfo) prevUserInfo[key] = prefValues[key];
+        });
+        prevUserInfo['birthday'] = prefValues['birthday_M'] + prefValues['birthday_D'] + prefValues['birthday_Y'];
+        setUserInfo(prevUserInfo);
+    }
+
     const resetPrefValues = () => {
         //while(userInfo.net_id === 'net_id') setTimeout(() => {}, 100);
         setPrefValues({
@@ -308,7 +317,7 @@ const Profile = () => {
                     <div className='btns-container'>
                         <IoMdCheckmarkCircle className='btn apply' onClick={() => {
                             setIsSettingsOn(false);
-
+                            updateUserInfo();
                         }}/>
                         <IoMdCloseCircle className='btn cancel' onClick={() => {
                             setIsSettingsOn(false);
