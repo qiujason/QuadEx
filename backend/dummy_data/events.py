@@ -60,5 +60,7 @@ for i in range(num_events):
 print(df)
 
 from sqlalchemy import create_engine
-engine = create_engine('postgresql://username:password@localhost:5432/mydatabase')
-df.to_sql('events', engine)
+#i'm guessing username: me, password: cs316, mydatabase: quadex
+#engine = create_engine('postgresql://username:password@localhost:5432/mydatabase')
+engine = create_engine('postgresql://me:cs316@localhost:5432/quadex')
+df.to_sql('events_dummy', engine)
