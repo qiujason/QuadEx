@@ -35,33 +35,6 @@ import { IoMdCheckmarkCircle, IoMdCloseCircle } from 'react-icons/io'
             console.log(data);
         });
     }
-
-    const putTest = () => {
-        fetch('http://localhost:3001/users/?id=dp239', {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                net_id:'dp239', 
-                password:'pass',
-                first_name: 'PAMPAM',
-                last_name: 'park',
-                birthday: '03092001',
-                year: '2023',
-                hometown: 'auburn, AL',
-                quad: null,
-                degree: 'pratt',
-                bio: null,
-                insta: null,
-                bday_cal: true
-            })
-        }).then(response => {
-            return response.text();
-        }).then(data => {
-            console.log(data);
-        });
-    }
 */
 
 const Profile = () => {
@@ -271,6 +244,7 @@ const Profile = () => {
                             endTime={eventObj.endTime} 
                             location={eventObj.location}
                             description={eventObj.description} 
+                            onUnfavorite={() => alert('implement events plz. how sad :c')}
                             />)
                         }
                     </div>

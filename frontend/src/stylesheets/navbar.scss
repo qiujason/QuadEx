@@ -1,0 +1,82 @@
+@import './colors.scss';
+
+$navbar-height: 50px;
+
+.navbar-page {
+  background-color: $secondary-color;
+  height: calc(#{$navbar-height} + 5px);
+  width: 100vw;
+
+  .navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+    height: $navbar-height;
+    background-color: $primary-color;
+    box-shadow: 0 1px 5px 0px $shadow-color;
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: $hover-color;
+      font-weight: bold;
+      font-size: 1.4rem;
+    }
+
+    .links-container {
+      display: flex;
+      align-items: center;
+      gap: 4rem;
+
+      li {
+        list-style-type: none;
+        font-weight: bold;
+        color: $primary-text-color;
+        cursor: pointer;
+        border-radius: 10px;
+
+        border: 2px solid transparent;
+
+        transition: all $transition-duration;
+
+        &:hover {
+          color: $hover-color;
+          border-bottom: 2px solid $hover-color;
+          border-top: 2px solid $hover-color;
+          padding: 0.3rem 0;
+        }
+      }
+
+      .profile-container {
+        display: flex;
+        height: 100%;
+        align-items: center;
+  
+        .name-container {
+          text-align: right;
+          margin-right: 1rem;
+  
+          .header {
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: $hover-color;
+          }
+          .subheader {
+            font-size: 0.7rem;
+            color: $primary-text-color;
+          }
+        }
+  
+        .profile-icon {
+          height: calc(#{$navbar-height} - 16px);
+          width: calc(#{$navbar-height} - 16px);
+          background-color: $input-color;
+          box-shadow: 0 1px 5px 0px $shadow-color;
+          border-radius: 50%;
+        }
+      }
+    }
+  }
+}
