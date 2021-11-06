@@ -7,11 +7,11 @@
   }
 }
 
-
 // ! PROFILE PAGE
 .profile-page {
   //------------------VARIABLES------------------//
 
+  $navbar-height: 55px;
   //leftside info container
   $info-container-width: 25rem;
   $info-container-offset: 3rem;
@@ -30,7 +30,7 @@
   display: grid;
   grid-template-columns: $info-container-width auto;
   grid-template-rows: 100%;
-  height: 100vh;
+  max-height: calc(100vh - #{$navbar-height});
   width: 100vw;
   position: relative;
   background-color: $secondary-color;
@@ -75,7 +75,7 @@
         height: 100%;
         display: flex;
         flex-direction: column;
-        margin-left: 2rem;
+        margin-left: 1rem;
 
         h1 {
           font-size: 4rem;
@@ -102,7 +102,7 @@
 
       margin: -$info-sub-top-length 0 $info-container-offset calc(#{$info-container-offset} + 1rem);
       width: calc(#{$info-container-width} - 2 * #{$info-container-offset});
-      height: calc(100vh - #{$profile-picture-length} + #{$info-sub-top-length} - 80px);
+      height: calc(100vh - #{$navbar-height} - #{$profile-picture-length} + #{$info-sub-top-length} - 80px);
 
       display: flex;
       flex-direction: column;
@@ -119,7 +119,7 @@
         width: 30px;
         border-radius: 50px;
         z-index: 1;
-        transition: all 0.3s;
+        transition: all $transition-duration;
 
         &:hover {
           color: $hover-color;
@@ -147,7 +147,7 @@
 
         margin: 0.5rem 0 0.5rem 0;
         padding: 0.5rem 1rem 0.6rem 1rem;
-        background-color: $secondary-color;
+        background-color: $input-color;
         width: calc(100% - 2rem);
         height: auto;
         border-radius: 18px;
@@ -179,6 +179,7 @@
           font-size: 2.6rem;
           vertical-align: top;
           font-weight: bold;
+          color: $primary-text-color;
         }
       }
 
@@ -204,7 +205,7 @@
             font-size: 0.8rem;
             border-radius: 10px;
 
-            transition: all 0.3s;
+            transition: all $transition-duration;
 
             &:hover, &:focus {
               border-color: $hover-color;
@@ -216,7 +217,7 @@
           }
 
           .search-btn {
-            transition: all 0.3s;
+            transition: all $transition-duration;
 
             &.hover {
               color: $hover-color;
@@ -253,12 +254,20 @@
           border-radius: 20px;
           height: $event-tag-size;
           position: relative;
+          border: 2px solid transparent;
+
+          transition: all $transition-duration;
+          cursor: pointer;
 
           display: flex;
           box-shadow: 0 1px 5px 0px $shadow-color;
 
+          &:hover {
+            border: 2px solid $hover-color;
+          }
+
           .picture {
-            background-color: $secondary-color;
+            background-color: $input-color;
             height: calc(#{$event-tag-size} - 2.8rem);
             width: calc(#{$event-tag-size} - 2.8rem);
             border-radius: 15px;
@@ -270,8 +279,14 @@
             width: calc(100% - #{$event-tag-size});
 
             h1 {
+              transition: all $transition-duration;
+              &.hovering {
+                color: $hover-color;
+                letter-spacing: 0.5px;
+              }
               font-size: 1.4rem;
               margin-bottom: 0.4rem;
+              color: $primary-text-color;
             }
 
             p {
@@ -304,6 +319,7 @@
   .settings-page-container {
     width: 100vw;
     height: 100vh;
+    margin-top: calc(-1 * #{$navbar-height});
     position: absolute;
 
     visibility: hidden;
@@ -312,7 +328,7 @@
     }
 
     .background {
-      transition: all 0.3s;
+      transition: all $transition-duration;
 
       &.active {
         opacity: 0.5;
@@ -327,7 +343,7 @@
     }
 
     .settings-container {
-      transition: all 0.3s;
+      transition: all $transition-duration;
       &.active {
         transform: translateX(0);
       }
@@ -390,7 +406,7 @@
           cursor: pointer;
           color: $secondary-text-color;
 
-          transition: all 0.3s;
+          transition: all $transition-duration;
 
           &:hover {
             &.apply {
