@@ -8,10 +8,10 @@ INSERT INTO quads VALUES
 ('Dove', '{Wannamaker, East House, West House}');
 
 INSERT INTO users VALUES
-('jq39', 'password', 'Jason', 'Qiu', '12262000', 3, 'Philadelphia, PA', 'Cardinal', 'Computer Science', NULL, '@jsonqiu', DEFAULT),
+('jq39', 'password', 'Jason', 'Qiu', '12262000', 3, 'Philadelphia, PA', 'Cardinal', 'Computer Science', NULL, 'jsonqiu', DEFAULT),
 ('Price', 'p1', 'Vince', 'Price', '01012001', NULL, NULL, NULL, NULL, NULL, NULL, FALSE),
-('ajl88', 'psswrd', 'Andrew', 'Lee', '12241999', 4, 'Centreville, VA', 'Blue Jay', 'Economics', NULL, '@andrewandylee', DEFAULT),
-('rz97', 'word', 'Ray', 'Zhang', '10102001', 3, 'Beijing, China', 'Dove', 'Biophysics', NULL, '@roastyraybaybay', DEFAULT);
+('ajl88', 'psswrd', 'Andrew', 'Lee', '12241999', 4, 'Centreville, VA', 'Blue Jay', 'Economics', NULL, 'andrewandylee', DEFAULT),
+('rz97', 'word', 'Ray', 'Zhang', '10102001', 3, 'Beijing, China', 'Dove', 'Biophysics', NULL, 'roastyraybaybay', DEFAULT);
 
 INSERT INTO admin VALUES
 ('Price', 'President', 'president@duke.edu'),

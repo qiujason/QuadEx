@@ -8,7 +8,7 @@ CREATE TABLE users(
     password VARCHAR(30) NOT NULL,
     first_name VARCHAR(30) NOT NULL,
     last_name VARCHAR(30) NOT NULL,
-    birthday VARCHAR(30) NOT NULL,
+    birthday VARCHAR(8) NOT NULL,
     year INTEGER,
     hometown TEXT,
     quad VARCHAR(30) references quads(name),
@@ -35,8 +35,8 @@ CREATE TABLE points(
 CREATE TABLE events(
     id SERIAL PRIMARY KEY,
     title VARCHAR(150) NOT NULL,
-    time VARCHAR(30) NOT NULL,
-    date VARCHAR(30) NOT NULL,
+    time VARCHAR(4) NOT NULL,
+    date VARCHAR(8) NOT NULL,
     description TEXT,
     location VARCHAR(30),
     tags VARCHAR(30) []

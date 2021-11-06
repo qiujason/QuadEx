@@ -1,3 +1,5 @@
+@import './colors.scss';
+
 // ! LOGIN PAGE
 .login-page {
   h1 {
@@ -9,9 +11,6 @@
 // ! PROFILE PAGE
 .profile-page {
   //------------------VARIABLES------------------//
-  $primary-color: #eeeeee;
-  $secondary-text-color: #808080;
-  $hover-color: #0f93eb;
 
   //leftside info container
   $info-container-width: 25rem;
@@ -20,7 +19,7 @@
   //profile picture
   $profile-picture-border-radius: 40px;
   $profile-picture-length: 300px;
-  $profile-picture-border-length: 40px;
+  $profile-picture-border-length: 30px;
 
   //info sub container
   $info-sub-top-length: 100px;
@@ -34,6 +33,7 @@
   height: 100vh;
   width: 100vw;
   position: relative;
+  background-color: $secondary-color;
 
   .info-page-container {
     grid-column: 1 / span 1;
@@ -57,13 +57,15 @@
           height: calc(100% - #{$profile-picture-border-length});
           width: calc(100% - #{$profile-picture-border-length});
           border-radius: $profile-picture-border-radius;
+          box-shadow: 0 1px 5px 0px $shadow-color;
         }
 
         display: flex;
         align-items: center;
         justify-content: center;
         border-radius: $profile-picture-border-radius + 10px;
-        background-color: #ffffff;
+        background-color: $secondary-color;
+        box-shadow: 0 0 5px 1px $secondary-color;
         height: 100%;
         width: $profile-picture-length;
       }
@@ -73,6 +75,7 @@
         height: 100%;
         display: flex;
         flex-direction: column;
+        margin-left: 2rem;
 
         h1 {
           font-size: 4rem;
@@ -104,6 +107,8 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      
+      box-shadow: 0 1px 5px 0px $shadow-color;
 
       .settings-btn {
         position: absolute;
@@ -129,7 +134,7 @@
         }
 
         .title {
-          color: #000000;
+          color: $primary-text-color;
           font-size: 1.4rem;
           font-weight: bold;
           margin-bottom: 0.4rem;
@@ -142,7 +147,7 @@
 
         margin: 0.5rem 0 0.5rem 0;
         padding: 0.5rem 1rem 0.6rem 1rem;
-        background-color: #ffffff;
+        background-color: $secondary-color;
         width: calc(100% - 2rem);
         height: auto;
         border-radius: 18px;
@@ -159,6 +164,7 @@
       width: calc(100% - 8rem);
       height: calc(100% - #{$profile-picture-length} + 20px);
       background-color: $primary-color;
+      box-shadow: 0 1px 5px 0px $shadow-color;
 
       display: grid;
       grid-template-rows: 5rem 3rem auto;
@@ -191,7 +197,8 @@
           input {
             width: 100%;
             height: 100%;
-            border: 2px solid #ffffff;
+            border: 2px solid $input-color;
+            background-color: $input-color;
             outline: none;
             padding-left: 2rem;
             font-size: 0.8rem;
@@ -230,8 +237,8 @@
       }
 
       .list-container {
-        background-color: #ffffff;
-        border: 4px solid white;
+        background-color: $secondary-color;
+        border: 4px solid $secondary-color;
         border-radius: $main-containers-border-radius - 5px;
         padding: 1rem;
         padding-bottom: 0;
@@ -248,9 +255,10 @@
           position: relative;
 
           display: flex;
+          box-shadow: 0 1px 5px 0px $shadow-color;
 
           .picture {
-            background-color: white;
+            background-color: $secondary-color;
             height: calc(#{$event-tag-size} - 2.8rem);
             width: calc(#{$event-tag-size} - 2.8rem);
             border-radius: 15px;
@@ -279,13 +287,13 @@
             position: absolute;
             width: 50px;
             height: 50px;
-            background-color: #ffffff;
+            background-color: $secondary-color;
             right: 10px;
             top: 10px;
             border-radius: 10px;
 
             &:hover {
-              background-color: #d1d1d1;
+              background-color: $hover-color;
             }
           }
         }
@@ -369,7 +377,7 @@
       .btns-container {
         grid-row: 3 / span 1;
         display: flex;
-        justify-content: end;
+        justify-content: flex-end;
         align-items: center;
         gap: 0.5rem;
         height: 3rem;
@@ -390,7 +398,7 @@
             }
 
             &.cancel {
-              color: #000000;
+              color: $primary-text-color;
             }
 
             transform: scale(1.2, 1.2);
