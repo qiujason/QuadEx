@@ -16,7 +16,7 @@ const EventTag = ({ title, startDate, endDate, startTime, endTime, location, des
             <div className="picture"/>
             <div className="info-container">
                 <h1 className={hovering ? 'hovering' : ''}>{title.toUpperCase()}</h1>
-                <p className='subtitle'>{subText}</p>
+                <p className={'subtitle' + (hovering ? ' hovering' : '')}>{subText}</p>
                 <p>{description}</p>
             </div>
             <p className={"unfavorite-btn" + (exitHovering ? ' hovering' : '')}>Unfavorite</p>

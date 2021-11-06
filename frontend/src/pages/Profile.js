@@ -82,7 +82,7 @@ const Profile = () => {
 
     useEffect(() => {
         async function getUserInfo(){
-            let response = await fetch('http://localhost:3001/users/?id=jq39');
+            let response = await fetch('http://localhost:3001/users/?id=ajl88');
             let data = await response.json();
 
             const prevUserInfo = { ...userInfo };
@@ -207,17 +207,17 @@ const Profile = () => {
                 <div className='info-sub-container'>
                     <div className='info-box first'>
                         <p className='title'>ABOUT</p>
-                        <p><strong>Net ID:</strong> {userInfo.net_id}</p>
-                        <p><strong>Name:</strong> {capitalize(userInfo.first_name + ' ' + userInfo.last_name)}</p>
-                        <p><strong>Quad Affiliation:</strong> {capitalize(userInfo.quad ?? '?')}</p>
-                        <p><strong>Birthday:</strong> {convertDate(userInfo.birthday)}</p>
-                        <p><strong>Year:</strong> {userInfo.year ?? '?'}</p>
-                        <p><strong>Degree Program:</strong> {capitalize(userInfo.degree ?? '?')}</p>
+                        <p><strong>Net ID :</strong> {userInfo.net_id}</p>
+                        <p><strong>Name :</strong> {capitalize(userInfo.first_name + ' ' + userInfo.last_name)}</p>
+                        <p><strong>Quad Affiliation :</strong> {capitalize(userInfo.quad ?? '?')}</p>
+                        <p><strong>Birthday :</strong> {convertDate(userInfo.birthday)}</p>
+                        <p><strong>Year :</strong> {userInfo.year ?? '?'}</p>
+                        <p><strong>Degree Program :</strong> {capitalize(userInfo.degree ?? '?')}</p>
                     </div>
                     <div className='info-box'>
                         <p className='title'>CONTACT</p>
-                        <p><strong>Instagram:</strong> {userInfo.insta ? '@' : ''}{userInfo.insta ?? '?'}</p>
-                        <p><strong>Hometown:</strong> {userInfo.hometown ?? '?'}</p>
+                        <p><strong>Instagram :</strong> {userInfo.insta ? '@' : ''}{userInfo.insta ?? '?'}</p>
+                        <p><strong>Hometown :</strong> {userInfo.hometown ?? '?'}</p>
                     </div>                    
                     <IoSettingsSharp className='settings-btn' onClick={() => setIsSettingsOn(true)}/>
                 </div>

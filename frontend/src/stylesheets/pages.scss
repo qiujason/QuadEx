@@ -279,7 +279,6 @@
             width: calc(100% - #{$event-tag-size});
 
             h1 {
-              transition: all $transition-duration;
               &.hovering {
                 color: $hover-color;
               }
@@ -290,6 +289,10 @@
 
             p {
               &.subtitle {
+                &.hovering {
+                  color: $primary-text-color;
+                  font-weight: bold;
+                }
                 margin-bottom: 1.4rem;
               }
               color: $secondary-text-color;
