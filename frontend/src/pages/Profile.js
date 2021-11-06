@@ -131,14 +131,14 @@ const Profile = () => {
 
     const [ renderedEvents, setRenderedEvents ] = useState(userInfo.events);
 
-    //sort events list chronologically
+    // sort events list chronologically
     renderedEvents.sort(function (i1, i2){
         var year1 = Number(i1.startDate.substring(4) + i1.startDate.substring(2, 4) + i1.startDate.substring(0, 2));
         var year2 = Number(i2.startDate.substring(4) + i2.startDate.substring(2, 4) + i2.startDate.substring(0, 2));
         return year1 - year2;
     });
 
-    //filter rendered events by title
+    // filter rendered events by title
     const filterTitle = (str) => {
         if(str.length === 0){
             setRenderedEvents(userInfo.events);
@@ -153,25 +153,8 @@ const Profile = () => {
         });
     }
 
-    // const updateBasicInfo = (key, value) => {
-    //     // update preferences locally for now
-    //     // [!] settings for updating info should NOT be based on text (prevent inspect)
-    //     let newUserInfo = { ...userInfo };
-    //     if(!(key in newUserInfo.basic)) return;
-    //     newUserInfo.basic[key] = value;
-    //     setUserInfo(newUserInfo);
-    // }
 
-    // const updateOptionalInfo = (key, value) => {
-
-    // }
-
-    // const updatePreferences = (key) => {
-    //     let newUserInfo = { ...userInfo };
-    //     if(!(key in newUserInfo.preferences)) return;
-    //     newUserInfo.preferences[key] = !newUserInfo.preferences[key];
-    //     setUserInfo(newUserInfo);
-    // }
+    // == SETTINGS & PREFERENCES == //
 
     const [ prefValues, setPrefValues ] = useState({});
 
@@ -183,6 +166,7 @@ const Profile = () => {
     }
 
     const updateUserInfo = () => {
+        // update userInfo object
         const prevUserInfo = { ...userInfo };
         Object.keys(prefValues).forEach(key => {
             if(key in prevUserInfo) prevUserInfo[key] = prefValues[key];
@@ -190,8 +174,8 @@ const Profile = () => {
         prevUserInfo['birthday'] = prefValues['birthday_M'] + prefValues['birthday_D'] + prefValues['birthday_Y'];
         setUserInfo(prevUserInfo);
 
+        // update database
         async function putUserInfo(){
-            
             await fetch('http://localhost:3001/users/?id=' + prevUserInfo.net_id, 
                 {
                     method: 'PUT',
@@ -214,13 +198,11 @@ const Profile = () => {
                     })
                 }
             );
-            //console.log(data);
         }
         putUserInfo();
     }
 
     const resetPrefValues = () => {
-        //while(userInfo.net_id === 'net_id') setTimeout(() => {}, 100);
         setPrefValues({
             state_id: 'prefValues',
             first_name: userInfo.first_name,
