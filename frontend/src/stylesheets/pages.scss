@@ -282,7 +282,6 @@
               transition: all $transition-duration;
               &.hovering {
                 color: $hover-color;
-                letter-spacing: 0.5px;
               }
               font-size: 1.4rem;
               margin-bottom: 0.4rem;
@@ -298,17 +297,36 @@
             }
           }
 
-          .exit-button {
+          .unfavorite-btn {
+            transition: all $transition-duration;
+            font-size: 0.8rem;
+            color: $secondary-text-color;
             position: absolute;
-            width: 50px;
-            height: 50px;
-            background-color: $secondary-color;
-            right: 10px;
-            top: 10px;
-            border-radius: 10px;
+            right: 40px;
+            top: 22px;
+            font-weight: bold;
+            opacity: 0;
+
+            &.hovering {
+              opacity: 1;
+              right: 50px;
+            }
+          }
+
+          .exit-button {
+            transition: all $transition-duration;
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background-color: transparent;
+            color: $hover-color;
+            right: 15px;
+            top: 15px;
+            border-radius: 50%;
 
             &:hover {
-              background-color: $hover-color;
+              color: $secondary-text-color;
+              transform: scale(1.1, 1.1);
             }
           }
         }

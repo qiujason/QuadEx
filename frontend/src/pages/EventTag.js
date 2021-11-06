@@ -1,9 +1,11 @@
 import React from 'react'
 import { convertDate, convertTime, capitalize } from '../helpers/Helpers'
 import { useState } from 'react'
+import { GiRoundStar } from 'react-icons/gi'
 
-const EventTag = ({ title, startDate, endDate, startTime, endTime, location, description, picture }) => {
+const EventTag = ({ title, startDate, endDate, startTime, endTime, location, description, picture, onUnfavorite }) => {
     const [ hovering, setHovering ] = useState(false);
+    const [ exitHovering, setExitHovering ] = useState(false);
 
     var subText = convertDate(startDate) + ', ' + convertTime(startTime) + ' - ';
     subText += (startDate !== endDate ? convertDate(endDate) + ', ' : '');
@@ -17,7 +19,8 @@ const EventTag = ({ title, startDate, endDate, startTime, endTime, location, des
                 <p className='subtitle'>{subText}</p>
                 <p>{description}</p>
             </div>
-            <div className="exit-button"/>
+            <p className={"unfavorite-btn" + (exitHovering ? ' hovering' : '')}>Unfavorite</p>
+            <GiRoundStar className="exit-button" onClick={onUnfavorite} onMouseEnter={() => setExitHovering(true)} onMouseLeave={() => setExitHovering(false)}/>
         </div>
     )
 }

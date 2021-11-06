@@ -11,9 +11,9 @@ const Navbar = ({ name, net_id }) => {
                     <p className='logo'>Quad EX</p>
                 </div>
                 <div className='links-container'>
-                    <li>QUAD</li>
-                    <li>EVENTS</li>
-                    <li>LEADERBOARD</li>
+                    <li onClick={() => {alert('nope >:I')}}>QUAD</li>
+                    <li onClick={() => {alert('nope >:I')}}>EVENTS</li>
+                    <li onClick={() => {alert('nope >:I')}}>LEADERBOARD</li>
                     <div className="profile-container">
                         <div className="name-container">
                             <p className='header'>{name}</p>
