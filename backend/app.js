@@ -5,6 +5,7 @@ const cors = require('cors')
 const port = 3001
 
 const usersRouter = require('./routes/users.routes')
+const eventsRouter = require('./routes/events.routes')
 
 app.use(bodyParser.json())
 app.use(cors())
@@ -19,6 +20,7 @@ app.get('/', (req, res) => {
 })
 
 app.use('/users', usersRouter)
+app.use('/events', eventsRouter)
 
 app.listen(port, () => {
     console.log(`App running on port ${port}.`)
