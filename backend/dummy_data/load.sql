@@ -27,10 +27,12 @@ INSERT INTO events (title, time, date, description, location, tags) VALUES
 ('Countdown to Craziness', '1200', '10102021', 'Which quad is the craziest???', 'Cameron Indoor Stadium', '{Duke basketball}');
 
 INSERT INTO favorited_events VALUES
-('ajl88', );
+('ajl88', 1), 
+('ajl88', 2),
+('jq39', 2);
 
 INSERT INTO quad_events VALUES
-('Blue Jay', );
+('Blue Jay', 2);
 
 INSERT INTO points_earned_by VALUES
 ('jq39', );

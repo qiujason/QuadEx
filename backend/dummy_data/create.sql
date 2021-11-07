@@ -54,12 +54,6 @@ CREATE TABLE quad_events(
     PRIMARY KEY(quad_name, event_id)
 );
 
-/* CREATE TABLE user_member_of(
-    net_id VARCHAR(30) references users(net_id),
-    quad_name VARCHAR(30) references quads(name),
-    PRIMARY KEY(net_id, quad_name)
-); */
-
 CREATE TABLE points_earned_by(
     net_id VARCHAR(30) references users(net_id),
     points_id SERIAL references points(id),
