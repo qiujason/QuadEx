@@ -2,10 +2,19 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import Login from './pages/Login'
 import Profile from './pages/Profile'
 import Navbar from './components/Navbar'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 function App() {
     const [ netID, setNetID ] = useState('');
+
+    useEffect(() => {
+        setNetID(window.localStorage.getItem('netID'));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    useEffect(() => {
+        window.localStorage.setItem('netID', netID);
+    }, [netID]);
 
     return (
         <div className="App">

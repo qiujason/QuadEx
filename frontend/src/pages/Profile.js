@@ -93,9 +93,27 @@ const Profile = ({ netID }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [userInfo]);
 
-    const [ isSettingsOn, setIsSettingsOn ] = useState(false);
 
+    // == EVENTS == //
+
+    const [ showPastEvents, setShowPastEvents ] = useState(false);
     const [ renderedEvents, setRenderedEvents ] = useState(userInfo.events);
+
+    useEffect(() => {
+        if(showPastEvents){
+            setRenderedEvents(userInfo.events);
+            return;
+        } else {
+            setRenderedEvents([]);
+            const date = new Date();
+            var currDate, eventDate;
+            userInfo.events.forEach(eventObj => {
+                currDate = Number(String(date.getFullYear()) + String(date.getMonth() + 1).padStart(2, '0') + String(date.getDate()).padStart(2, '0') + String(date.getHours()).padStart(2, '0') + String(date.getMinutes()).padStart(2, '0'));
+                eventDate = Number(eventObj.date.substring(4) + eventObj.date.substring(0, 2) + eventObj.date.substring(2, 4) + eventObj.time.substring(0, 2) + eventObj.time.substring(2));
+                if(eventDate >= currDate) setRenderedEvents(renderedEvents => [...renderedEvents, eventObj]);
+            });
+        }
+    }, [showPastEvents, userInfo]);
 
     // sort events list chronologically
     renderedEvents.sort(function (i1, i2){
@@ -119,9 +137,23 @@ const Profile = ({ netID }) => {
         });
     }
 
+    async function unfavoriteEvent(event_id) {
+        await fetch('http://localhost:3001/events/favoriteForUser/?net_id=' + userInfo.net_id + '&event_id=' + event_id, 
+            { 
+                method: 'DELETE', 
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: null
+            } 
+        );
+        fetchUserInfo();
+    }
+
 
     // == SETTINGS & PREFERENCES == //
 
+    const [ isSettingsOn, setIsSettingsOn ] = useState(false);
     const [ settingsValues, setSettingsValues ] = useState({});
 
     const updatePrefValue = (key, value) => {
@@ -181,22 +213,10 @@ const Profile = ({ netID }) => {
             degree: userInfo.degree,
             insta: userInfo.insta,
             hometown: userInfo.hometown,
+            bday_cal: userInfo.bday_cal,
         });
     }
 
-    // EVENTS
-    async function unfavoriteEvent(event_id) {
-        await fetch('http://localhost:3001/events/favoriteForUser/?net_id=' + userInfo.net_id + '&event_id=' + event_id, 
-            { 
-                method: 'DELETE', 
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: null
-            } 
-        );
-        fetchUserInfo();
-    }
 
     return (
         <div className='profile-page'>
@@ -223,7 +243,7 @@ const Profile = ({ netID }) => {
                     </div>
                     <div className='info-box'>
                         <p className='title'>CONTACT</p>
-                        <p><strong>Instagram :</strong> {userInfo.insta ? '@' : ''}{userInfo.insta ?? '?'}</p>
+                        <p><strong>Instagram :</strong> {userInfo.insta && userInfo.insta[0] !== '@' ? '@' : ''}{userInfo.insta ?? '?'}</p>
                         <p><strong>Hometown :</strong> {userInfo.hometown ?? '?'}</p>
                     </div>                    
                     <IoSettingsSharp className='settings-btn' onClick={() => setIsSettingsOn(true)}/>
@@ -237,6 +257,12 @@ const Profile = ({ netID }) => {
                     </div>
                     <div className='filter-container'>
                         <SearchField placeholder='Search for events by title' onChange={filterTitle}/>
+                        <div className="time-container" onClick={() => setShowPastEvents(!showPastEvents)}>
+                            <div className={'icon-container' + (showPastEvents ? ' active' : '')}>
+                                {showPastEvents ? <IoMdCheckmarkCircle className='icon active'/> : <IoMdCloseCircle className='icon'/>}
+                            </div>
+                            <p>Include past events</p>
+                        </div>
                     </div>
                     {/* { title, startDate, endDate, startTime, endTime, location, description, picture } */}
                     <div className='list-container'>
@@ -274,42 +300,45 @@ const Profile = ({ netID }) => {
                         <h1>SETTINGS</h1>
                     </div>
 
-                    <div className='list-container'>
-                        <p className='subheader'>Name</p>
-                        {/* wait until userInfo data is fetched */}
-                        {userInfo.net_id !== 'net_id' ? 
-                            <div>
-                                <div className='inputs-container'>
-                                    <InputBox placeholder={'first'} value={settingsValues['first_name']} width='11rem' onChange={val => updatePrefValue('first_name', val)}/>
-                                    <InputBox placeholder={'last'} value={settingsValues['last_name']} width='8rem' onChange={val => updatePrefValue('last_name', val)}/>
-                                </div>
-
-                                <p className='subheader'>Quad Affiliation</p>
-                                <InputBox placeholder={'e.g. Cardinals'} value={settingsValues['quad'] ?? ''} width='20rem' onChange={val => updatePrefValue('quad', val)}/>
-
-                                <p className='subheader'>Birthday</p>
-                                <div className='inputs-container'>
-                                    <InputBox placeholder={'MM'} value={settingsValues['birthday_M']} width='6rem' limit={2} isNumeric={true} onChange={val => updatePrefValue('birthday_M', val)}/>
-                                    <InputBox placeholder={'DD'} value={settingsValues['birthday_D']} width='6rem' limit={2} isNumeric={true} onChange={val => updatePrefValue('birthday_D', val)}/>
-                                    <InputBox placeholder={'YYYY'} value={settingsValues['birthday_Y']} width='8rem' limit={4} isNumeric={true} onChange={val => updatePrefValue('birthday_Y', val)}/>
-                                </div>
-                                
-                                <p className='subheader'>School Year</p>
-                                <InputBox placeholder={'e.g. 1, 2, 3, 4'} value={settingsValues['year'] ?? ''} width='20rem' limit={1} isNumeric={true} onChange={val => updatePrefValue('year', val)}/>
-
-                                <p className='subheader'>Degree Program</p>
-                                <InputBox placeholder={'e.g. Computer Science'} value={settingsValues['degree'] ?? ''} width='20rem' onChange={val => updatePrefValue('degree', val)}/>
-
-                                <p className='subheader'>Instagram Handle</p>
-                                <InputBox placeholder={'e.g. @optional'} value={settingsValues['insta'] ?? ''} width='20rem' onChange={val => updatePrefValue('insta', val)}/>
-
-                                <p className='subheader'>Hometown</p>
-                                <InputBox placeholder={'e.g. City, State'} value={settingsValues['hometown'] ?? ''} width='20rem' onChange={val => updatePrefValue('hometown', val)}/>
-
-                                <p className='subheader'></p>
+                    {userInfo.net_id !== 'net_id' ? 
+                        <div className='list-container'>
+                            <p className='subheader'>Name</p>
+                            <div className='inputs-container'>
+                                <InputBox placeholder={'First'} value={settingsValues['first_name']} width='11rem' onChange={val => updatePrefValue('first_name', val)}/>
+                                <InputBox placeholder={'Last'} value={settingsValues['last_name']} width='8rem' onChange={val => updatePrefValue('last_name', val)}/>
                             </div>
-                        : ''}
-                    </div>
+
+                            <p className='subheader'>Quad Affiliation</p>
+                            <InputBox placeholder={'e.g. Cardinal'} value={settingsValues['quad'] ?? ''} width='20rem' onChange={val => updatePrefValue('quad', val)}/>
+
+                            <p className='subheader'>Birthday</p>
+                            <div className='inputs-container'>
+                                <InputBox placeholder={'MM'} value={settingsValues['birthday_M']} width='6rem' limit={2} isNumeric={true} onChange={val => updatePrefValue('birthday_M', val)}/>
+                                <InputBox placeholder={'DD'} value={settingsValues['birthday_D']} width='6rem' limit={2} isNumeric={true} onChange={val => updatePrefValue('birthday_D', val)}/>
+                                <InputBox placeholder={'YYYY'} value={settingsValues['birthday_Y']} width='8rem' limit={4} isNumeric={true} onChange={val => updatePrefValue('birthday_Y', val)}/>
+                            </div>
+                            
+                            <p className='subheader'>School Year</p>
+                            <InputBox placeholder={'e.g. 1, 2, 3, 4'} value={settingsValues['year'] ?? ''} width='20rem' limit={1} isNumeric={true} onChange={val => updatePrefValue('year', val)}/>
+
+                            <p className='subheader'>Degree Program</p>
+                            <InputBox placeholder={'e.g. Computer Science'} value={settingsValues['degree'] ?? ''} width='20rem' onChange={val => updatePrefValue('degree', val)}/>
+
+                            <p className='subheader'>Instagram Handle</p>
+                            <InputBox placeholder={'e.g. @optional'} value={settingsValues['insta'] ?? ''} width='20rem' onChange={val => updatePrefValue('insta', val)}/>
+
+                            <p className='subheader'>Hometown</p>
+                            <InputBox placeholder={'e.g. City, State'} value={settingsValues['hometown'] ?? ''} width='20rem' onChange={val => updatePrefValue('hometown', val)}/>
+
+                            <p className='subheader'/>
+                            <div className="checkbox">
+                                <div className={'icon-container' + (settingsValues['bday_cal'] ? ' active' : '')} onClick={() => updatePrefValue('bday_cal', !settingsValues['bday_cal'])}>
+                                    {settingsValues['bday_cal'] ? <IoMdCheckmarkCircle className='icon active'/> : <IoMdCloseCircle className='icon'/>}
+                                </div>
+                                <p>Make birthday public</p>
+                            </div>
+                        </div>
+                    : ''}
 
                     <div className='btns-container'>
                         <IoMdCheckmarkCircle className='btn apply' onClick={() => {

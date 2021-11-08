@@ -23,6 +23,83 @@
     }
   }
 
+  .primary-btn {
+    transition: all $transition-duration;
+    font-weight: bold;
+    font-size: 1rem;
+    background-color: $hover-color;
+    color: $primary-color;
+    width: 8rem;
+    height: 2.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    margin-top: 1rem;
+    cursor: pointer;
+
+    &:hover {
+      transform: scale(1.05, 1.05);
+      color: $primary-color;
+    }
+  }
+
+  .separator {
+    color: $secondary-text-color;
+    margin-top: 2rem;
+  }
+
+  .secondary-btn {
+    margin: 2rem 0 1rem 0;
+    font-size: 0.8rem;
+    background-color: transparent;
+    width: 12rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    cursor: pointer;
+    color: $secondary-text-color;
+
+    &:hover {
+      transform: scale(1.02, 1.02);
+      color: $primary-text-color;
+    }
+  }
+
+  .signup-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: $primary-color;
+    box-shadow: 0 1px 5px 0px $shadow-color;
+    max-width: 20rem;
+    width: 25vw;
+    border-radius: 40px;
+    padding-top: 2rem;
+
+    .subheader {
+      font-weight: bold;
+      color: $secondary-text-color;
+      font-size: 0.8rem;
+      text-align: left;
+      width: 16rem;
+      margin-bottom: 0.3rem;
+      padding-left: 0.3rem;
+    }
+
+    .input-box-container {
+      margin-bottom: 1rem;
+    }
+
+    .inputs-container {
+      display: flex;
+      align-items: flex-end;
+      gap: 1rem;
+    }
+  }
+
   .login-container {
     display: flex;
     flex-direction: column;
@@ -31,57 +108,11 @@
     box-shadow: 0 1px 5px 0px $shadow-color;
     max-width: 20rem;
     width: 25vw;
-    height: 20rem;
     border-radius: 40px;
     padding-top: 2rem;
 
     .input-box-container {
       margin-bottom: 1rem;
-    }
-
-    .login-btn {
-      transition: all $transition-duration;
-      font-weight: bold;
-      font-size: 1rem;
-      background-color: $hover-color;
-      color: $primary-color;
-      width: 8rem;
-      height: 2.4rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 10px;
-      margin-top: 1rem;
-      cursor: pointer;
-
-      &:hover {
-        transform: scale(1.05, 1.05);
-        color: $primary-color;
-      }
-    }
-
-    .separator {
-      color: $secondary-text-color;
-      margin-top: 2rem;
-    }
-
-    .signup-btn {
-      margin-top: 2rem;
-      font-size: 0.8rem;
-      background-color: transparent;
-      width: 12rem;
-      height: 2rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 10px;
-      cursor: pointer;
-      color: $secondary-text-color;
-
-      &:hover {
-        transform: scale(1.02, 1.02);
-        color: $primary-text-color;
-      }
     }
   }
 }
@@ -264,7 +295,53 @@
 
       .filter-container {
         display: flex;
-        align-items: top;
+        align-items: center;
+        justify-content: space-between;
+        height: 2rem;
+        position: relative;
+
+        .time-container {
+          transition: all $transition-duration;
+          z-index: 1;
+          display: flex;
+          align-items: center;
+          font-size: 0.8rem;
+          color: $secondary-text-color;
+          margin-right: 0.5rem;
+          cursor: pointer;
+          user-select: none;
+
+          p {
+            color: $secondary-text-color;
+            font-size: 0.8rem;
+          }
+
+          .icon-container {
+            transition: all $transition-duration;
+            user-select: none;
+            color: $secondary-text-color;
+            cursor: pointer;
+            margin-right: 0.3rem;
+            height: 2rem;
+            width: 2rem;
+            transform: rotate(-90deg);
+
+            &.active {
+              color: $hover-color;
+              transform: rotate(0deg);
+            }
+
+            .icon {
+              transition: all $transition-duration;
+              height: 100%;
+              width: 100%;
+
+              &:hover {
+                transform: scale(1.1, 1.1);
+              }
+            }
+          }    
+        }
 
         .search-container {
           $container-width: 40%;
@@ -272,7 +349,6 @@
           width: $container-width;
           height: $container-height;
           z-index: 1;
-          position: relative;
 
           input {
             width: 100%;
@@ -286,11 +362,12 @@
 
             transition: all $transition-duration;
 
-            &:hover, &:focus {
-              border-color: $hover-color;
+            &:hover {
+              border-color: $shadow-color;
             }
 
             &:focus {
+              border-color: $hover-color;
               padding-left: 0.5rem;
             }
           }
@@ -327,6 +404,7 @@
         .no-events-indicator {
           font-size: 0.8rem;
           text-align: center;
+          margin-top: 1rem;
           color: $secondary-text-color;
         }
         
@@ -341,7 +419,6 @@
           position: relative;
           border: 2px solid transparent;
 
-          transition: all $transition-duration;
           cursor: pointer;
 
           display: flex;
@@ -493,6 +570,45 @@
           color: $secondary-text-color;
           font-size: 0.8rem;
           margin: 1rem 0 0.5rem 0.3rem;
+        }
+
+        .checkbox {
+          width: 100%;
+          height: 4rem;
+          display: flex;
+          align-items: center;
+          font-weight: bold;
+
+          p {
+            color: $secondary-text-color;
+            font-size: 0.8rem;
+          }
+
+          .icon-container {
+            transition: all $transition-duration;
+            user-select: none;
+            color: $secondary-text-color;
+            cursor: pointer;
+            margin-right: 0.3rem;
+            height: 2rem;
+            width: 2rem;
+            transform: rotate(-90deg);
+
+            &.active {
+              color: $hover-color;
+              transform: rotate(0deg);
+            }
+
+            .icon {
+              transition: all $transition-duration;
+              height: 100%;
+              width: 100%;
+
+              &:hover {
+                transform: scale(1.1, 1.1);
+              }
+            }
+          }          
         }
       }
 
