@@ -67,6 +67,10 @@ $navbar-height: 50px;
             font-size: 0.7rem;
             color: $primary-text-color;
             cursor: pointer;
+
+            &:hover {
+              color: $secondary-text-color;
+            }
           }
         }
   
