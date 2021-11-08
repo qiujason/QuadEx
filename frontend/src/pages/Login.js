@@ -6,6 +6,13 @@ import { GiAtomicSlashes } from 'react-icons/gi'
 
 const minPasswordLength = 4;
 
+/*
+TODO:
+
+separate field checkers into separate class -> 
+settings fields must also be value checked in similar fashion
+*/
+
 const Login = ({ setNetID }) => {
     const [ isSignUp, setIsSignUp ] = useState(false);
 
@@ -246,6 +253,7 @@ const Login = ({ setNetID }) => {
                             error={inputValues.username[1] ? 'Username not found': ''} 
                             placeholder='Username' value={inputValues.username[0]} 
                             width='16rem'
+                            onEnter={() => fetchUserData()}
                             onChange={val => {
                                 updateState(inputValues, setInputValues, 'username', val);
                                 updateState(inputValues, setInputValues, 'username', false);
@@ -257,6 +265,7 @@ const Login = ({ setNetID }) => {
                             value={inputValues.password[0]} 
                             width='16rem'
                             isPassword={true}
+                            onEnter={() => fetchUserData()}
                             onChange={val => {
                                 updateState(inputValues, setInputValues, 'password', val);
                                 updateState(inputValues, setInputValues, 'password', false);

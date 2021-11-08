@@ -1,7 +1,7 @@
 import React from 'react'
 import '../stylesheets/components.scss'
 
-const InputBox = ({ placeholder, value, onChange, width = '10rem', limit, isNumeric = false, isPassword = false, error = '' }) => {
+const InputBox = ({ placeholder, value, onChange, width = '10rem', limit, isNumeric = false, isPassword = false, error = '', onEnter = () => {} }) => {
     const widthStyle = {
         width: width
     }
@@ -16,10 +16,14 @@ const InputBox = ({ placeholder, value, onChange, width = '10rem', limit, isNume
         onChange(e.target.value !== '' ? e.target.value.padStart(limit, '0') : '');
     }
 
+    const handleKeyPress = (e) => {
+        if(e.key === 'Enter') onEnter();
+    }
+
     return (
         <div className='input-box-container' style={widthStyle}>
             {error.length >= 1 ? <p className='error-display'>* {value === '' ? 'Empty' : error}</p> : ''}
-            <input placeholder={placeholder} value={value} type={!isPassword ? 'text' : 'password'} className="input-box" onChange={e => handleChange(e)} onBlur={e => handleBlur(e)}/>
+            <input placeholder={placeholder} value={value} onKeyDown={e => handleKeyPress(e)} type={!isPassword ? 'text' : 'password'} className="input-box" onChange={e => handleChange(e)} onBlur={e => handleBlur(e)}/>
         </div>
     )
 }
