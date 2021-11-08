@@ -23,6 +23,51 @@
     }
   }
 
+  .primary-btn {
+    transition: all $transition-duration;
+    font-weight: bold;
+    font-size: 1rem;
+    background-color: $hover-color;
+    color: $primary-color;
+    width: 8rem;
+    height: 2.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    margin-top: 1rem;
+    cursor: pointer;
+
+    &:hover {
+      transform: scale(1.05, 1.05);
+      color: $primary-color;
+    }
+  }
+
+  .separator {
+    color: $secondary-text-color;
+    margin-top: 2rem;
+  }
+
+  .secondary-btn {
+    margin: 2rem 0 1rem 0;
+    font-size: 0.8rem;
+    background-color: transparent;
+    width: 12rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    cursor: pointer;
+    color: $secondary-text-color;
+
+    &:hover {
+      transform: scale(1.02, 1.02);
+      color: $primary-text-color;
+    }
+  }
+
   .signup-container {
     display: flex;
     flex-direction: column;
@@ -31,9 +76,18 @@
     box-shadow: 0 1px 5px 0px $shadow-color;
     max-width: 20rem;
     width: 25vw;
-    height: 20rem;
     border-radius: 40px;
     padding-top: 2rem;
+
+    .subheader {
+      font-weight: bold;
+      color: $secondary-text-color;
+      font-size: 0.8rem;
+      text-align: left;
+      width: 16rem;
+      margin-bottom: 0.3rem;
+      padding-left: 0.3rem;
+    }
 
     .input-box-container {
       margin-bottom: 1rem;
@@ -41,6 +95,7 @@
 
     .inputs-container {
       display: flex;
+      align-items: flex-end;
       gap: 1rem;
     }
   }
@@ -53,57 +108,11 @@
     box-shadow: 0 1px 5px 0px $shadow-color;
     max-width: 20rem;
     width: 25vw;
-    height: 20rem;
     border-radius: 40px;
     padding-top: 2rem;
 
     .input-box-container {
       margin-bottom: 1rem;
-    }
-
-    .login-btn {
-      transition: all $transition-duration;
-      font-weight: bold;
-      font-size: 1rem;
-      background-color: $hover-color;
-      color: $primary-color;
-      width: 8rem;
-      height: 2.4rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 10px;
-      margin-top: 1rem;
-      cursor: pointer;
-
-      &:hover {
-        transform: scale(1.05, 1.05);
-        color: $primary-color;
-      }
-    }
-
-    .separator {
-      color: $secondary-text-color;
-      margin-top: 2rem;
-    }
-
-    .signup-btn {
-      margin-top: 2rem;
-      font-size: 0.8rem;
-      background-color: transparent;
-      width: 12rem;
-      height: 2rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 10px;
-      cursor: pointer;
-      color: $secondary-text-color;
-
-      &:hover {
-        transform: scale(1.02, 1.02);
-        color: $primary-text-color;
-      }
     }
   }
 }

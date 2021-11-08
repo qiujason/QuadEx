@@ -4,8 +4,10 @@ import InputBox from '../components/InputBox'
 import { useState } from 'react'
 import { GiAtomicSlashes } from 'react-icons/gi'
 
+const minPasswordLength = 4;
+
 const Login = ({ setNetID }) => {
-    const [ isSignUp, setIsSignUp ] = useState(true);
+    const [ isSignUp, setIsSignUp ] = useState(false);
 
     const [ inputValues, setInputValues ] = useState({
         username: ['', false],
@@ -22,10 +24,6 @@ const Login = ({ setNetID }) => {
         birthday_M: ['', false],
         birthday_D: ['', false],
         birthday_Y: ['', false],
-        year: ['', false],
-        degree: ['', false],
-        insta: ['', false],
-        hometown: ['', false],
     });
 
     const updateState = (state, func, key, value) => {
@@ -45,14 +43,54 @@ const Login = ({ setNetID }) => {
                 console.log('successful authentication');
                 setNetID(inputValues.username[0]);
             } else {
-                updateState(inputValues, setInputValues, 'password', '');
                 updateState(inputValues, setInputValues, 'password', true);
             }
         } else {
-            updateState(inputValues, setInputValues, 'username', '');
-            updateState(inputValues, setInputValues, 'password', '');
             updateState(inputValues, setInputValues, 'username', true);
         }
+    }
+
+    async function postUserData() {
+        let userResponse = await fetch('http://localhost:3001/users/?id=' + registerValues.net_id[0]);
+        let userData = await userResponse.json();
+
+        var numErrors = 0;
+        Object.keys(registerValues).forEach(key => {
+            if(registerValues[key][0] === ''){
+                updateState(registerValues, setRegisterValues, key, true);
+                numErrors++;
+            }
+        });
+        
+        if(userData.length > 0){
+            numErrors++;
+            updateState(registerValues, setRegisterValues, 'net_id', true);
+        }
+        if(String(registerValues.password[0]).length < 4){
+            numErrors++;
+            updateState(registerValues, setRegisterValues, 'password', true);
+        }
+        if(registerValues.confirm_password[0] !== registerValues.password[0]){
+            numErrors++;
+            updateState(registerValues, setRegisterValues, 'confirm_password', true);
+        }
+
+        //check if valid quad
+
+        if(Number(registerValues.birthday_M[0]) < 1 || Number(registerValues.birthday_M[0]) > 12){
+            numErrors++;
+            updateState(registerValues, setRegisterValues, 'birthday_M', true);
+        }
+        if(Number(registerValues.birthday_D[0]) < 1 || Number(registerValues.birthday_D[0]) > 31){
+            numErrors++;
+            updateState(registerValues, setRegisterValues, 'birthday_D', true);
+        }
+        if(Number(registerValues.birthday_Y[0]) > new Date().getFullYear()){
+            numErrors++;
+            updateState(registerValues, setRegisterValues, 'birthday_Y', true);
+        }
+
+        if(numErrors === 0) console.log('signup successful');
     }
 
     return (
@@ -61,9 +99,10 @@ const Login = ({ setNetID }) => {
             {
                 isSignUp ? 
                     <div className="signup-container">
+                        <p className='subheader'>Net ID</p>
                         <InputBox 
-                            error={registerValues.net_id[1] ? 'Net ID already taken': ''} 
-                            placeholder='Net ID' 
+                            error={registerValues.net_id[1] ? 'Already taken' : ''} 
+                            placeholder='e.g. abc123' 
                             value={registerValues.net_id[0]} 
                             width='16rem'
                             onChange={val => {
@@ -71,28 +110,35 @@ const Login = ({ setNetID }) => {
                                 updateState(registerValues, setRegisterValues, 'net_id', false);
                             }} 
                         />
+                        <p className='subheader'>Password</p>
                         <InputBox 
-                            placeholder='Password' 
+                            error={registerValues.password[1] ? 'Must be at least ' + minPasswordLength + ' characters' : ''} 
+                            placeholder={'At least ' + minPasswordLength + ' characters'}
                             value={registerValues.password[0]}
                             width='16rem'
+                            isPassword={true}
                             onChange={val => {
                                 updateState(registerValues, setRegisterValues, 'password', val);
                                 updateState(registerValues, setRegisterValues, 'password', false);
-                            }} 
+                            }}
                         />
+                        <p className='subheader'>Confirm Password</p>
                         <InputBox 
                             error={registerValues.confirm_password[1] ? 'Passwords do not match': ''} 
-                            placeholder='Confirm password' 
+                            placeholder='Password'
                             value={registerValues.confirm_password[0]} 
                             width='16rem'
+                            isPassword={true}
                             onChange={val => {
                                 updateState(registerValues, setRegisterValues, 'confirm_password', val);
                                 updateState(registerValues, setRegisterValues, 'confirm_password', false);
                             }} 
                         />
+                        <p className='subheader'>Name</p>
                         <div className="inputs-container">
                             <InputBox
-                                placeholder='First name' 
+                                error={registerValues.first_name[1] ? 'Invalid': ''} 
+                                placeholder='First' 
                                 value={registerValues.first_name[0]} 
                                 width='8.5rem'
                                 onChange={val => {
@@ -100,9 +146,9 @@ const Login = ({ setNetID }) => {
                                     updateState(registerValues, setRegisterValues, 'first_name', false);
                                 }} 
                             />
-
                             <InputBox
-                                placeholder='Last name' 
+                                error={registerValues.last_name[1] ? 'Invalid': ''} 
+                                placeholder='Last' 
                                 value={registerValues.last_name[0]} 
                                 width='6.5rem'
                                 onChange={val => {
@@ -111,9 +157,10 @@ const Login = ({ setNetID }) => {
                                 }} 
                             />
                         </div>
+                        <p className='subheader'>Affiliated Quad</p>
                         <InputBox 
-                            error={registerValues.quad[1] ? 'Not a valid quad name': ''} 
-                            placeholder='Affiliated Quad' 
+                            error={registerValues.quad[1] ? 'Invalid quad name': ''} 
+                            placeholder='e.g. Cardinals' 
                             value={registerValues.quad[0]} 
                             width='16rem'
                             onChange={val => {
@@ -121,38 +168,48 @@ const Login = ({ setNetID }) => {
                                 updateState(registerValues, setRegisterValues, 'quad', false);
                             }} 
                         />
+                        <p className='subheader'>Birthday</p>
                         <div className="inputs-container">
                             <InputBox 
-                                error={registerValues.birthday_M[1] ? 'Invalid month': ''} 
+                                error={registerValues.birthday_M[1] ? 'Invalid': ''} 
                                 placeholder='MM' 
                                 value={registerValues.birthday_M[0]} 
                                 width='4rem'
+                                limit={2} 
+                                isNumeric={true}
                                 onChange={val => {
                                     updateState(registerValues, setRegisterValues, 'birthday_M', val);
                                     updateState(registerValues, setRegisterValues, 'birthday_M', false);
                                 }} 
                             />
                             <InputBox 
-                                error={registerValues.birthday_D[1] ? 'Invalid day': ''} 
+                                error={registerValues.birthday_D[1] ? 'Invalid': ''} 
                                 placeholder='DD' 
                                 value={registerValues.birthday_D[0]} 
                                 width='4rem'
+                                limit={2} 
+                                isNumeric={true}
                                 onChange={val => {
                                     updateState(registerValues, setRegisterValues, 'birthday_D', val);
                                     updateState(registerValues, setRegisterValues, 'birthday_D', false);
                                 }} 
                             />
                             <InputBox 
-                                error={registerValues.birthday_Y[1] ? 'Invalid year': ''} 
+                                error={registerValues.birthday_Y[1] ? 'Invalid': ''} 
                                 placeholder='YYYY' 
                                 value={registerValues.birthday_Y[0]} 
                                 width='6rem'
+                                limit={4} 
+                                isNumeric={true}
                                 onChange={val => {
                                     updateState(registerValues, setRegisterValues, 'birthday_Y', val);
                                     updateState(registerValues, setRegisterValues, 'birthday_Y', false);
                                 }} 
                             />
                         </div>
+                        <div className="primary-btn" onClick={() => postUserData()}>Sign Up</div>
+                        <p className='separator'>. . .</p>
+                        <div className="secondary-btn" onClick={() => setIsSignUp(false)}>Log in with Existing Account</div>
                     </div>
                 :
                     <div className="login-container">
@@ -176,9 +233,9 @@ const Login = ({ setNetID }) => {
                                 updateState(inputValues, setInputValues, 'password', false);
                             }} 
                         />
-                        <div className="login-btn" onClick={() => fetchUserData()}>Log In</div>
+                        <div className="primary-btn" onClick={() => fetchUserData()}>Log In</div>
                         <p className='separator'>. . .</p>
-                        <div className="signup-btn">Create New Account</div>
+                        <div className="secondary-btn" onClick={() => setIsSignUp(true)}>Create New Account</div>
                     </div>
             }
             

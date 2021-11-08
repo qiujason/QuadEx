@@ -280,8 +280,8 @@ const Profile = ({ netID }) => {
                         {userInfo.net_id !== 'net_id' ? 
                             <div>
                                 <div className='inputs-container'>
-                                    <InputBox placeholder={'first'} value={settingsValues['first_name']} width='11rem' onChange={val => updatePrefValue('first_name', val)}/>
-                                    <InputBox placeholder={'last'} value={settingsValues['last_name']} width='8rem' onChange={val => updatePrefValue('last_name', val)}/>
+                                    <InputBox placeholder={'First'} value={settingsValues['first_name']} width='11rem' onChange={val => updatePrefValue('first_name', val)}/>
+                                    <InputBox placeholder={'Last'} value={settingsValues['last_name']} width='8rem' onChange={val => updatePrefValue('last_name', val)}/>
                                 </div>
 
                                 <p className='subheader'>Quad Affiliation</p>
