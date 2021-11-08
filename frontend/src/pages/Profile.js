@@ -93,10 +93,29 @@ const Profile = ({ netID }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [userInfo]);
 
-    const [ isSettingsOn, setIsSettingsOn ] = useState(false);
+
+    // == EVENTS == //
 
     const [ showPastEvents, setShowPastEvents ] = useState(false);
     const [ renderedEvents, setRenderedEvents ] = useState(userInfo.events);
+
+    useEffect(() => {
+        if(showPastEvents){
+            setRenderedEvents(userInfo.events);
+            return;
+        } else {
+            setRenderedEvents([]);
+            const date = new Date();
+            var currDate, eventDate;
+            userInfo.events.forEach(eventObj => {
+                currDate = Number(String(date.getFullYear()) + String(date.getMonth() + 1).padStart(2, '0') + String(date.getDate()).padStart(2, '0') + String(date.getHours()).padStart(2, '0') + String(date.getMinutes()).padStart(2, '0'));
+                eventDate = Number(eventObj.date.substring(4) + eventObj.date.substring(0, 2) + eventObj.date.substring(2, 4) + eventObj.time.substring(0, 2) + eventObj.time.substring(2));
+                if(eventDate >= currDate){
+                    setRenderedEvents(renderedEvents => [...renderedEvents, eventObj]);
+                }
+            });
+        }
+    }, [showPastEvents, userInfo]);
 
     // sort events list chronologically
     renderedEvents.sort(function (i1, i2){
@@ -120,9 +139,23 @@ const Profile = ({ netID }) => {
         });
     }
 
+    async function unfavoriteEvent(event_id) {
+        await fetch('http://localhost:3001/events/favoriteForUser/?net_id=' + userInfo.net_id + '&event_id=' + event_id, 
+            { 
+                method: 'DELETE', 
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: null
+            } 
+        );
+        fetchUserInfo();
+    }
+
 
     // == SETTINGS & PREFERENCES == //
 
+    const [ isSettingsOn, setIsSettingsOn ] = useState(false);
     const [ settingsValues, setSettingsValues ] = useState({});
 
     const updatePrefValue = (key, value) => {
@@ -186,19 +219,6 @@ const Profile = ({ netID }) => {
         });
     }
 
-    // EVENTS
-    async function unfavoriteEvent(event_id) {
-        await fetch('http://localhost:3001/events/favoriteForUser/?net_id=' + userInfo.net_id + '&event_id=' + event_id, 
-            { 
-                method: 'DELETE', 
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: null
-            } 
-        );
-        fetchUserInfo();
-    }
 
     return (
         <div className='profile-page'>
@@ -317,7 +337,7 @@ const Profile = ({ netID }) => {
                                 <div className={'icon-container' + (settingsValues['bday_cal'] ? ' active' : '')} onClick={() => updatePrefValue('bday_cal', !settingsValues['bday_cal'])}>
                                     {settingsValues['bday_cal'] ? <IoMdCheckmarkCircle className='icon active'/> : <IoMdCloseCircle className='icon'/>}
                                 </div>
-                                <p>Show birthday on quad calendar</p>
+                                <p>Make birthday public</p>
                             </div>
                         </div>
                     : ''}

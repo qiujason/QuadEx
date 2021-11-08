@@ -9,7 +9,7 @@ const EventTag = ({ title, startDate, endDate, startTime, endTime, location, des
 
     var subText = convertDate(startDate) + ', ' + convertTime(startTime) + ' - ';
     subText += (startDate !== endDate ? convertDate(endDate) + ', ' : '');
-    subText += convertTime(endTime) + ' ~ @ ' + capitalize(location);
+    subText += convertTime(endTime) + (location !== null ? ' ~ @ ' + capitalize(location) : '');
 
     return (
         <div className="event-tag" onMouseEnter={() => setHovering(true)} onMouseLeave={() => setHovering(false)}>
