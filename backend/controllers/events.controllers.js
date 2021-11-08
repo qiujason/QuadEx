@@ -15,16 +15,20 @@ const postEvents = (req, res) => {
         title,
         time,
         date,
+        end_time,
+        end_date,
         description,
         location,
         tags
     } = req.body
 
-    db.query('INSERT INTO events (title, time, date, description, location, tags) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id',
+    db.query('INSERT INTO events (title, time, date, end_time, end_date, description, location, tags) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id',
         [
             title,
             time,
             date,
+            end_time,
+            end_date,
             description,
             location,
             tags
@@ -43,17 +47,21 @@ const putEvents = (req, res) => {
         title,
         time,
         date,
+        end_time,
+        end_date,
         description,
         location,
         tags
     } = req.body
 
-    db.query('UPDATE events SET title = $2, time = $3, date = $4, description = $5, location = $6, tags = $7 WHERE id = $1',
+    db.query('UPDATE events SET title = $2, time = $3, date = $4, end_time = $5, end_date = $6, description = $7, location = $8, tags = $9 WHERE id = $1',
         [
             req.query.id,
             title,
             time,
             date,
+            end_time,
+            end_date,
             description,
             location,
             tags
