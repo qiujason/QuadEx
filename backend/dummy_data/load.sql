@@ -32,6 +32,8 @@ INSERT INTO events (title, time, date, end_time, end_date, description, location
 INSERT INTO favorited_events VALUES
 ('ajl88', 1), 
 ('ajl88', 2),
+('ajl88', 3),
+('ajl88', 4),
 ('jq39', 2);
 
 INSERT INTO quad_events VALUES

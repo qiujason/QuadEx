@@ -23,6 +23,23 @@
     }
   }
 
+  .signup-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: $primary-color;
+    box-shadow: 0 1px 5px 0px $shadow-color;
+    max-width: 20rem;
+    width: 25vw;
+    height: 20rem;
+    border-radius: 40px;
+    padding-top: 2rem;
+
+    .input-box-container {
+      margin-bottom: 1rem;
+    }
+  }
+
   .login-container {
     display: flex;
     flex-direction: column;
