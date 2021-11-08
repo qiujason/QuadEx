@@ -295,7 +295,53 @@
 
       .filter-container {
         display: flex;
-        align-items: top;
+        align-items: center;
+        justify-content: space-between;
+        height: 2rem;
+        position: relative;
+
+        .time-container {
+          transition: all $transition-duration;
+          z-index: 1;
+          display: flex;
+          align-items: center;
+          font-size: 0.8rem;
+          color: $secondary-text-color;
+          margin-right: 0.5rem;
+          cursor: pointer;
+          user-select: none;
+
+          p {
+            color: $secondary-text-color;
+            font-size: 0.8rem;
+          }
+
+          .icon-container {
+            transition: all $transition-duration;
+            user-select: none;
+            color: $secondary-text-color;
+            cursor: pointer;
+            margin-right: 0.5rem;
+            height: 2rem;
+            width: 2rem;
+            transform: rotate(-90deg);
+
+            &.active {
+              color: $hover-color;
+              transform: rotate(0deg);
+            }
+
+            .icon {
+              transition: all $transition-duration;
+              height: 100%;
+              width: 100%;
+
+              &:hover {
+                transform: scale(1.1, 1.1);
+              }
+            }
+          }    
+        }
 
         .search-container {
           $container-width: 40%;
@@ -303,7 +349,6 @@
           width: $container-width;
           height: $container-height;
           z-index: 1;
-          position: relative;
 
           input {
             width: 100%;
@@ -374,7 +419,6 @@
           position: relative;
           border: 2px solid transparent;
 
-          transition: all $transition-duration;
           cursor: pointer;
 
           display: flex;

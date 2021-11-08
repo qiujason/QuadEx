@@ -95,6 +95,7 @@ const Profile = ({ netID }) => {
 
     const [ isSettingsOn, setIsSettingsOn ] = useState(false);
 
+    const [ showPastEvents, setShowPastEvents ] = useState(false);
     const [ renderedEvents, setRenderedEvents ] = useState(userInfo.events);
 
     // sort events list chronologically
@@ -238,6 +239,12 @@ const Profile = ({ netID }) => {
                     </div>
                     <div className='filter-container'>
                         <SearchField placeholder='Search for events by title' onChange={filterTitle}/>
+                        <div className="time-container" onClick={() => setShowPastEvents(!showPastEvents)}>
+                            <div className={'icon-container' + (showPastEvents ? ' active' : '')}>
+                                {showPastEvents ? <IoMdCheckmarkCircle className='icon active'/> : <IoMdCloseCircle className='icon'/>}
+                            </div>
+                            <p>Include past events</p>
+                        </div>
                     </div>
                     {/* { title, startDate, endDate, startTime, endTime, location, description, picture } */}
                     <div className='list-container'>

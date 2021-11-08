@@ -9,6 +9,8 @@ const minPasswordLength = 4;
 /*
 TODO:
 
+implement logic to show past events filter
+
 separate field checkers into separate class -> 
 settings fields must also be value checked in similar fashion
 
