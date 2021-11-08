@@ -285,7 +285,7 @@ const Profile = ({ netID }) => {
                                 </div>
 
                                 <p className='subheader'>Quad Affiliation</p>
-                                <InputBox placeholder={'e.g. Cardinals'} value={settingsValues['quad'] ?? ''} width='20rem' onChange={val => updatePrefValue('quad', val)}/>
+                                <InputBox placeholder={'e.g. Cardinal'} value={settingsValues['quad'] ?? ''} width='20rem' onChange={val => updatePrefValue('quad', val)}/>
 
                                 <p className='subheader'>Birthday</p>
                                 <div className='inputs-container'>

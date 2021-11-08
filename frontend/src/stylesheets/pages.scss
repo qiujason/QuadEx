@@ -317,11 +317,12 @@
 
             transition: all $transition-duration;
 
-            &:hover, &:focus {
-              border-color: $hover-color;
+            &:hover {
+              border-color: $shadow-color;
             }
 
             &:focus {
+              border-color: $hover-color;
               padding-left: 0.5rem;
             }
           }
@@ -358,6 +359,7 @@
         .no-events-indicator {
           font-size: 0.8rem;
           text-align: center;
+          margin-top: 1rem;
           color: $secondary-text-color;
         }
         

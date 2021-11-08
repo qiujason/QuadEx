@@ -235,7 +235,7 @@ const Login = ({ setNetID }) => {
                         <p className='subheader'>Affiliated Quad</p>
                         <InputBox 
                             error={registerValues.quad[1] ? 'Invalid quad name': ''} 
-                            placeholder='e.g. Cardinals' 
+                            placeholder='e.g. Cardinal' 
                             value={registerValues.quad[0]} 
                             width='16rem'
                             onChange={val => {
