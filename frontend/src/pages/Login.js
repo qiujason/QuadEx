@@ -10,7 +10,6 @@ const minPasswordLength = 4;
 TODO:
 
 test include past event filter with times (dates checked): add total # of events indicator
-* getMonth() shows one month before, not accurate
 
 separate field checkers into separate class -> 
 settings fields must also be value checked in similar fashion

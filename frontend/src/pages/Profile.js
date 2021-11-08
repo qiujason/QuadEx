@@ -110,9 +110,7 @@ const Profile = ({ netID }) => {
             userInfo.events.forEach(eventObj => {
                 currDate = Number(String(date.getFullYear()) + String(date.getMonth() + 1).padStart(2, '0') + String(date.getDate()).padStart(2, '0') + String(date.getHours()).padStart(2, '0') + String(date.getMinutes()).padStart(2, '0'));
                 eventDate = Number(eventObj.date.substring(4) + eventObj.date.substring(0, 2) + eventObj.date.substring(2, 4) + eventObj.time.substring(0, 2) + eventObj.time.substring(2));
-                if(eventDate >= currDate){
-                    setRenderedEvents(renderedEvents => [...renderedEvents, eventObj]);
-                }
+                if(eventDate >= currDate) setRenderedEvents(renderedEvents => [...renderedEvents, eventObj]);
             });
         }
     }, [showPastEvents, userInfo]);
