@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { GiAtomicSlashes } from 'react-icons/gi'
 
 const Login = ({ setNetID }) => {
-    const [ isSignUp, setIsSignUp ] = useState(false);
+    const [ isSignUp, setIsSignUp ] = useState(true);
 
     const [ inputValues, setInputValues ] = useState({
         username: ['', false],
@@ -61,9 +61,98 @@ const Login = ({ setNetID }) => {
             {
                 isSignUp ? 
                     <div className="signup-container">
-                        <InputBox placeholder='Net ID' width='16rem' value={registerValues.net_id}/>
-                        <InputBox placeholder='Password' width='16rem' isPassword={true} value={registerValues.net_id}/>
-                        <InputBox placeholder='Confirm password' width='16rem' isPassword={true} value={registerValues.net_id}/>
+                        <InputBox 
+                            error={registerValues.net_id[1] ? 'Net ID already taken': ''} 
+                            placeholder='Net ID' 
+                            value={registerValues.net_id[0]} 
+                            width='16rem'
+                            onChange={val => {
+                                updateState(registerValues, setRegisterValues, 'net_id', val);
+                                updateState(registerValues, setRegisterValues, 'net_id', false);
+                            }} 
+                        />
+                        <InputBox 
+                            placeholder='Password' 
+                            value={registerValues.password[0]}
+                            width='16rem'
+                            onChange={val => {
+                                updateState(registerValues, setRegisterValues, 'password', val);
+                                updateState(registerValues, setRegisterValues, 'password', false);
+                            }} 
+                        />
+                        <InputBox 
+                            error={registerValues.confirm_password[1] ? 'Passwords do not match': ''} 
+                            placeholder='Confirm password' 
+                            value={registerValues.confirm_password[0]} 
+                            width='16rem'
+                            onChange={val => {
+                                updateState(registerValues, setRegisterValues, 'confirm_password', val);
+                                updateState(registerValues, setRegisterValues, 'confirm_password', false);
+                            }} 
+                        />
+                        <div className="inputs-container">
+                            <InputBox
+                                placeholder='First name' 
+                                value={registerValues.first_name[0]} 
+                                width='8.5rem'
+                                onChange={val => {
+                                    updateState(registerValues, setRegisterValues, 'first_name', val);
+                                    updateState(registerValues, setRegisterValues, 'first_name', false);
+                                }} 
+                            />
+
+                            <InputBox
+                                placeholder='Last name' 
+                                value={registerValues.last_name[0]} 
+                                width='6.5rem'
+                                onChange={val => {
+                                    updateState(registerValues, setRegisterValues, 'last_name', val);
+                                    updateState(registerValues, setRegisterValues, 'last_name', false);
+                                }} 
+                            />
+                        </div>
+                        <InputBox 
+                            error={registerValues.quad[1] ? 'Not a valid quad name': ''} 
+                            placeholder='Affiliated Quad' 
+                            value={registerValues.quad[0]} 
+                            width='16rem'
+                            onChange={val => {
+                                updateState(registerValues, setRegisterValues, 'quad', val);
+                                updateState(registerValues, setRegisterValues, 'quad', false);
+                            }} 
+                        />
+                        <div className="inputs-container">
+                            <InputBox 
+                                error={registerValues.birthday_M[1] ? 'Invalid month': ''} 
+                                placeholder='MM' 
+                                value={registerValues.birthday_M[0]} 
+                                width='4rem'
+                                onChange={val => {
+                                    updateState(registerValues, setRegisterValues, 'birthday_M', val);
+                                    updateState(registerValues, setRegisterValues, 'birthday_M', false);
+                                }} 
+                            />
+                            <InputBox 
+                                error={registerValues.birthday_D[1] ? 'Invalid day': ''} 
+                                placeholder='DD' 
+                                value={registerValues.birthday_D[0]} 
+                                width='4rem'
+                                onChange={val => {
+                                    updateState(registerValues, setRegisterValues, 'birthday_D', val);
+                                    updateState(registerValues, setRegisterValues, 'birthday_D', false);
+                                }} 
+                            />
+                            <InputBox 
+                                error={registerValues.birthday_Y[1] ? 'Invalid year': ''} 
+                                placeholder='YYYY' 
+                                value={registerValues.birthday_Y[0]} 
+                                width='6rem'
+                                onChange={val => {
+                                    updateState(registerValues, setRegisterValues, 'birthday_Y', val);
+                                    updateState(registerValues, setRegisterValues, 'birthday_Y', false);
+                                }} 
+                            />
+                        </div>
                     </div>
                 :
                     <div className="login-container">
@@ -78,7 +167,8 @@ const Login = ({ setNetID }) => {
                         />
                         <InputBox 
                             error={inputValues.password[1] ? 'Password incorrect': ''} 
-                            placeholder='Password' value={inputValues.password[0]} 
+                            placeholder='Password' 
+                            value={inputValues.password[0]} 
                             width='16rem'
                             isPassword={true}
                             onChange={val => {
