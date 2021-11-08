@@ -37,6 +37,8 @@ CREATE TABLE events(
     title VARCHAR(150) NOT NULL,
     time VARCHAR(4) NOT NULL,
     date VARCHAR(8) NOT NULL,
+    end_time VARCHAR(4) NOT NULL,
+    end_date VARCHAR(8) NOT NULL,
     description TEXT,
     location VARCHAR(30),
     tags VARCHAR(30) []
