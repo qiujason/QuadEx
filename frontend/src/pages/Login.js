@@ -11,6 +11,8 @@ TODO:
 
 separate field checkers into separate class -> 
 settings fields must also be value checked in similar fashion
+
+update password in settings
 */
 
 const Login = ({ setNetID }) => {

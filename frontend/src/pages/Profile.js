@@ -181,6 +181,7 @@ const Profile = ({ netID }) => {
             degree: userInfo.degree,
             insta: userInfo.insta,
             hometown: userInfo.hometown,
+            bday_cal: userInfo.bday_cal,
         });
     }
 
@@ -274,42 +275,45 @@ const Profile = ({ netID }) => {
                         <h1>SETTINGS</h1>
                     </div>
 
-                    <div className='list-container'>
-                        <p className='subheader'>Name</p>
-                        {/* wait until userInfo data is fetched */}
-                        {userInfo.net_id !== 'net_id' ? 
-                            <div>
-                                <div className='inputs-container'>
-                                    <InputBox placeholder={'First'} value={settingsValues['first_name']} width='11rem' onChange={val => updatePrefValue('first_name', val)}/>
-                                    <InputBox placeholder={'Last'} value={settingsValues['last_name']} width='8rem' onChange={val => updatePrefValue('last_name', val)}/>
-                                </div>
-
-                                <p className='subheader'>Quad Affiliation</p>
-                                <InputBox placeholder={'e.g. Cardinal'} value={settingsValues['quad'] ?? ''} width='20rem' onChange={val => updatePrefValue('quad', val)}/>
-
-                                <p className='subheader'>Birthday</p>
-                                <div className='inputs-container'>
-                                    <InputBox placeholder={'MM'} value={settingsValues['birthday_M']} width='6rem' limit={2} isNumeric={true} onChange={val => updatePrefValue('birthday_M', val)}/>
-                                    <InputBox placeholder={'DD'} value={settingsValues['birthday_D']} width='6rem' limit={2} isNumeric={true} onChange={val => updatePrefValue('birthday_D', val)}/>
-                                    <InputBox placeholder={'YYYY'} value={settingsValues['birthday_Y']} width='8rem' limit={4} isNumeric={true} onChange={val => updatePrefValue('birthday_Y', val)}/>
-                                </div>
-                                
-                                <p className='subheader'>School Year</p>
-                                <InputBox placeholder={'e.g. 1, 2, 3, 4'} value={settingsValues['year'] ?? ''} width='20rem' limit={1} isNumeric={true} onChange={val => updatePrefValue('year', val)}/>
-
-                                <p className='subheader'>Degree Program</p>
-                                <InputBox placeholder={'e.g. Computer Science'} value={settingsValues['degree'] ?? ''} width='20rem' onChange={val => updatePrefValue('degree', val)}/>
-
-                                <p className='subheader'>Instagram Handle</p>
-                                <InputBox placeholder={'e.g. @optional'} value={settingsValues['insta'] ?? ''} width='20rem' onChange={val => updatePrefValue('insta', val)}/>
-
-                                <p className='subheader'>Hometown</p>
-                                <InputBox placeholder={'e.g. City, State'} value={settingsValues['hometown'] ?? ''} width='20rem' onChange={val => updatePrefValue('hometown', val)}/>
-
-                                <p className='subheader'></p>
+                    {userInfo.net_id !== 'net_id' ? 
+                        <div className='list-container'>
+                            <p className='subheader'>Name</p>
+                            <div className='inputs-container'>
+                                <InputBox placeholder={'First'} value={settingsValues['first_name']} width='11rem' onChange={val => updatePrefValue('first_name', val)}/>
+                                <InputBox placeholder={'Last'} value={settingsValues['last_name']} width='8rem' onChange={val => updatePrefValue('last_name', val)}/>
                             </div>
-                        : ''}
-                    </div>
+
+                            <p className='subheader'>Quad Affiliation</p>
+                            <InputBox placeholder={'e.g. Cardinal'} value={settingsValues['quad'] ?? ''} width='20rem' onChange={val => updatePrefValue('quad', val)}/>
+
+                            <p className='subheader'>Birthday</p>
+                            <div className='inputs-container'>
+                                <InputBox placeholder={'MM'} value={settingsValues['birthday_M']} width='6rem' limit={2} isNumeric={true} onChange={val => updatePrefValue('birthday_M', val)}/>
+                                <InputBox placeholder={'DD'} value={settingsValues['birthday_D']} width='6rem' limit={2} isNumeric={true} onChange={val => updatePrefValue('birthday_D', val)}/>
+                                <InputBox placeholder={'YYYY'} value={settingsValues['birthday_Y']} width='8rem' limit={4} isNumeric={true} onChange={val => updatePrefValue('birthday_Y', val)}/>
+                            </div>
+                            
+                            <p className='subheader'>School Year</p>
+                            <InputBox placeholder={'e.g. 1, 2, 3, 4'} value={settingsValues['year'] ?? ''} width='20rem' limit={1} isNumeric={true} onChange={val => updatePrefValue('year', val)}/>
+
+                            <p className='subheader'>Degree Program</p>
+                            <InputBox placeholder={'e.g. Computer Science'} value={settingsValues['degree'] ?? ''} width='20rem' onChange={val => updatePrefValue('degree', val)}/>
+
+                            <p className='subheader'>Instagram Handle</p>
+                            <InputBox placeholder={'e.g. @optional'} value={settingsValues['insta'] ?? ''} width='20rem' onChange={val => updatePrefValue('insta', val)}/>
+
+                            <p className='subheader'>Hometown</p>
+                            <InputBox placeholder={'e.g. City, State'} value={settingsValues['hometown'] ?? ''} width='20rem' onChange={val => updatePrefValue('hometown', val)}/>
+
+                            <p className='subheader'/>
+                            <div className="checkbox">
+                                <div className={'icon-container' + (settingsValues['bday_cal'] ? ' active' : '')} onClick={() => updatePrefValue('bday_cal', !settingsValues['bday_cal'])}>
+                                    {settingsValues['bday_cal'] ? <IoMdCheckmarkCircle className='icon active'/> : <IoMdCloseCircle className='icon'/>}
+                                </div>
+                                <p>Show birthday on quad calendar</p>
+                            </div>
+                        </div>
+                    : ''}
 
                     <div className='btns-container'>
                         <IoMdCheckmarkCircle className='btn apply' onClick={() => {
