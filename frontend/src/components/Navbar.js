@@ -2,7 +2,7 @@ import React from 'react'
 import '../stylesheets/navbar.scss'
 import { GiAtomicSlashes } from 'react-icons/gi'
 
-const Navbar = ({ name }) => {
+const Navbar = ({ netID, setNetID }) => {
     return (
         <div className='navbar-page'>
             <div className="navbar">
@@ -17,8 +17,8 @@ const Navbar = ({ name }) => {
                     <li onClick={() => {alert('nope >:I')}}>LEADERBOARD</li>
                     <div className="profile-container">
                         <div className="name-container">
-                            <p className='header'>{name}</p>
-                            <p className='subheader'>Sign out</p>
+                            <p className='header'>{netID}</p>
+                            <p className='subheader' onClick={() => setNetID('')}>Sign out</p>
                         </div>
                         <div className='profile-icon'/>
                     </div>
