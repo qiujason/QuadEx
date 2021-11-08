@@ -74,9 +74,6 @@ const Login = ({ setNetID }) => {
             numErrors++;
             updateState(registerValues, setRegisterValues, 'confirm_password', true);
         }
-
-        //check if valid quad
-
         if(Number(registerValues.birthday_M[0]) < 1 || Number(registerValues.birthday_M[0]) > 12){
             numErrors++;
             updateState(registerValues, setRegisterValues, 'birthday_M', true);
@@ -89,8 +86,39 @@ const Login = ({ setNetID }) => {
             numErrors++;
             updateState(registerValues, setRegisterValues, 'birthday_Y', true);
         }
+        if(!['raven', 'cardinal', 'eagle', 'robin', 'blue jay', 'owl', 'dove'].includes(String(registerValues.quad[0]).toLowerCase())){
+            numErrors++;
+            updateState(registerValues, setRegisterValues, 'quad', true);
+        }
 
-        if(numErrors === 0) console.log('signup successful');
+        if(numErrors === 0){
+            await fetch('http://localhost:3001/users', 
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        net_id: registerValues.net_id[0], 
+                        password: registerValues.password[0], 
+                        first_name: registerValues.first_name[0], 
+                        last_name: registerValues.last_name[0], 
+                        birthday: String(registerValues.birthday_M[0]) + String(registerValues.birthday_D[0]) + String(registerValues.birthday_Y[0]), 
+                        year: null,
+                        hometown: null,
+                        quad: String(registerValues.quad[0]).toLowerCase(),
+                        degree: null,
+                        bio: null,
+                        insta: null,
+                        bday_cal: true
+                    })
+                }
+            );
+
+            updateState(inputValues, setInputValues, 'username', registerValues.net_id[0]);
+            updateState(inputValues, setInputValues, 'password', registerValues.password[0]);
+            await fetchUserData();
+        }
     }
 
     return (
@@ -157,17 +185,6 @@ const Login = ({ setNetID }) => {
                                 }} 
                             />
                         </div>
-                        <p className='subheader'>Affiliated Quad</p>
-                        <InputBox 
-                            error={registerValues.quad[1] ? 'Invalid quad name': ''} 
-                            placeholder='e.g. Cardinals' 
-                            value={registerValues.quad[0]} 
-                            width='16rem'
-                            onChange={val => {
-                                updateState(registerValues, setRegisterValues, 'quad', val);
-                                updateState(registerValues, setRegisterValues, 'quad', false);
-                            }} 
-                        />
                         <p className='subheader'>Birthday</p>
                         <div className="inputs-container">
                             <InputBox 
@@ -207,6 +224,17 @@ const Login = ({ setNetID }) => {
                                 }} 
                             />
                         </div>
+                        <p className='subheader'>Affiliated Quad</p>
+                        <InputBox 
+                            error={registerValues.quad[1] ? 'Invalid quad name': ''} 
+                            placeholder='e.g. Cardinals' 
+                            value={registerValues.quad[0]} 
+                            width='16rem'
+                            onChange={val => {
+                                updateState(registerValues, setRegisterValues, 'quad', val);
+                                updateState(registerValues, setRegisterValues, 'quad', false);
+                            }} 
+                        />
                         <div className="primary-btn" onClick={() => postUserData()}>Sign Up</div>
                         <p className='separator'>. . .</p>
                         <div className="secondary-btn" onClick={() => setIsSignUp(false)}>Log in with Existing Account</div>

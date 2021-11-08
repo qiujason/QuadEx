@@ -1,18 +1,17 @@
 INSERT INTO quads VALUES
-('Raven', '{Craven, Bassett, Pegram}'),
-('Cardinal', '{Crowell, Alspaugh, Brown}'),
-('Eagle', '{Edens, Bell Tower, Trinity}'),
-('Robin', '{Few, Gilbert-Addoms, Southgate}'),
-('Blue Jay', '{Keohane, Blackwell, Randolph}'),
-('Owl', '{Kilgo, Giles, Wilson}'),
-('Dove', '{Wannamaker, East House, West House}');
+('raven', '{Craven, Bassett, Pegram}'),
+('cardinal', '{Crowell, Alspaugh, Brown}'),
+('eagle', '{Edens, Bell Tower, Trinity}'),
+('robin', '{Few, Gilbert-Addoms, Southgate}'),
+('blue jay', '{Keohane, Blackwell, Randolph}'),
+('owl', '{Kilgo, Giles, Wilson}'),
+('dove', '{Wannamaker, East House, West House}');
 
 INSERT INTO users VALUES
-('jq39', 'password', 'Jason', 'Qiu', '12262000', 3, 'Philadelphia, PA', 'Cardinal', 'Computer Science', NULL, 'jsonqiu', DEFAULT),
-('Price', 'p1', 'Vince', 'Price', '01012001', NULL, NULL, NULL, NULL, NULL, NULL, FALSE),
-('ajl88', 'psswrd', 'Andrew', 'Lee', '12241999', 4, 'Centreville, VA', 'Blue Jay', 'Economics', NULL, 'andrewandylee', DEFAULT),
-('rz97', 'word', 'Ray', 'Zhang', '10102001', 3, 'Beijing, China', 'Dove', 'Biophysics', NULL, 'roastyraybaybay', DEFAULT),
-('dp239', 'yeet', 'Donghan', 'park', '03092001', 3, 'palisades park, NJ', 'Eagle', 'ECE/CS', NULL, 'dongimon', DEFAULT);
+('jq39', 'password', 'Jason', 'Qiu', '12262000', 3, 'Philadelphia, PA', 'cardinal', 'computer science', NULL, 'jsonqiu', DEFAULT),
+('ajl88', 'psswrd', 'Andrew', 'Lee', '12241999', 4, 'Centreville, VA', 'blue jay', 'economics', NULL, 'andrewandylee', DEFAULT),
+('rz97', 'word', 'Ray', 'Zhang', '10102001', 3, 'Beijing, China', 'dove', 'biophysics', NULL, 'roastyraybaybay', DEFAULT),
+('dp239', 'yeet', 'Donghan', 'park', '03092001', 3, 'palisades park, NJ', 'eagle', 'ECE/CS', NULL, 'dongimon', DEFAULT);
 
 INSERT INTO admin VALUES
 ('Price', 'President', 'president@duke.edu'),
@@ -34,6 +33,8 @@ INSERT INTO favorited_events VALUES
 ('ajl88', 2),
 ('ajl88', 3),
 ('ajl88', 4),
+('dp239', 2),
+('dp239', 4),
 ('jq39', 2);
 
 INSERT INTO quad_events VALUES

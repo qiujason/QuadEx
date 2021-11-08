@@ -223,7 +223,7 @@ const Profile = ({ netID }) => {
                     </div>
                     <div className='info-box'>
                         <p className='title'>CONTACT</p>
-                        <p><strong>Instagram :</strong> {userInfo.insta ? '@' : ''}{userInfo.insta ?? '?'}</p>
+                        <p><strong>Instagram :</strong> {userInfo.insta && userInfo.insta[0] !== '@' ? '@' : ''}{userInfo.insta ?? '?'}</p>
                         <p><strong>Hometown :</strong> {userInfo.hometown ?? '?'}</p>
                     </div>                    
                     <IoSettingsSharp className='settings-btn' onClick={() => setIsSettingsOn(true)}/>
