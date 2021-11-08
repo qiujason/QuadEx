@@ -147,6 +147,7 @@ const Login = ({ setNetID }) => {
                             isPassword={true}
                             onChange={val => {
                                 updateState(registerValues, setRegisterValues, 'password', val);
+                                updateState(registerValues, setRegisterValues, 'confirm_password', '');
                                 updateState(registerValues, setRegisterValues, 'password', false);
                             }}
                         />
