@@ -37,7 +37,7 @@ import { IoMdCheckmarkCircle, IoMdCloseCircle } from 'react-icons/io'
     }
 */
 
-const Profile = () => {
+const Profile = ({ netID }) => {
     const [ userInfo, setUserInfo ] = useState({
         net_id:'net_id', 
         password:'password',
@@ -72,10 +72,11 @@ const Profile = () => {
     }, []);
 
     async function fetchUserInfo() {
-        let userResponse = await fetch('http://localhost:3001/users/?id=ajl88');
+        const net_id = netID;
+        let userResponse = await fetch('http://localhost:3001/users/?id=' + net_id);
         let userData = await userResponse.json();
 
-        let eventsResponse = await fetch('http://localhost:3001/events/favoriteByUser/?id=ajl88');
+        let eventsResponse = await fetch('http://localhost:3001/events/favoriteByUser/?id=' + net_id);
         let eventsData = await eventsResponse.json();
 
         const prevUserInfo = { ...userInfo };
@@ -87,7 +88,7 @@ const Profile = () => {
     }
 
     useEffect(() => {
-        resetPrefValues();
+        resetSettingsValues();
         setRenderedEvents(userInfo.events);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [userInfo]);
@@ -121,22 +122,22 @@ const Profile = () => {
 
     // == SETTINGS & PREFERENCES == //
 
-    const [ prefValues, setPrefValues ] = useState({});
+    const [ settingsValues, setSettingsValues ] = useState({});
 
     const updatePrefValue = (key, value) => {
-        const prevObj = { ...prefValues };
+        const prevObj = { ...settingsValues };
         if(!(key in prevObj)) return;
         prevObj[key] = value;
-        setPrefValues(prevObj);
+        setSettingsValues(prevObj);
     }
 
     const updateUserInfo = () => {
         // update userInfo object
         const prevUserInfo = { ...userInfo };
-        Object.keys(prefValues).forEach(key => {
-            if(key in prevUserInfo) prevUserInfo[key] = prefValues[key];
+        Object.keys(settingsValues).forEach(key => {
+            if(key in prevUserInfo) prevUserInfo[key] = settingsValues[key];
         });
-        prevUserInfo['birthday'] = prefValues['birthday_M'] + prefValues['birthday_D'] + prefValues['birthday_Y'];
+        prevUserInfo['birthday'] = settingsValues['birthday_M'] + settingsValues['birthday_D'] + settingsValues['birthday_Y'];
         setUserInfo(prevUserInfo);
 
         // update database
@@ -167,9 +168,9 @@ const Profile = () => {
         putUserInfo();
     }
 
-    const resetPrefValues = () => {
-        setPrefValues({
-            state_id: 'prefValues',
+    const resetSettingsValues = () => {
+        setSettingsValues({
+            state_id: 'settingsValues',
             first_name: userInfo.first_name,
             last_name: userInfo.last_name,
             quad: userInfo.quad,
@@ -254,6 +255,11 @@ const Profile = () => {
                                 />
                             )
                         }
+                        {
+                            renderedEvents.length < 1 ?
+                                <p className='no-events-indicator'>No favorited events found</p>
+                            : ''
+                        }
                     </div>
                 </div>
             </div>
@@ -261,7 +267,7 @@ const Profile = () => {
             <div className={'settings-page-container' + (isSettingsOn ? ' active' : '')}>
                 <div className={'background' + (isSettingsOn ? ' active' : '')} onClick={() => {
                     setIsSettingsOn(false);
-                    resetPrefValues();
+                    resetSettingsValues();
                 }}/>
                 <div className={'settings-container' + (isSettingsOn ? ' active' : '')}>
                     <div className='title-container'>
@@ -274,31 +280,31 @@ const Profile = () => {
                         {userInfo.net_id !== 'net_id' ? 
                             <div>
                                 <div className='inputs-container'>
-                                    <InputBox placeholder={'first'} value={prefValues['first_name']} width='11rem' onChange={val => updatePrefValue('first_name', val)}/>
-                                    <InputBox placeholder={'last'} value={prefValues['last_name']} width='8rem' onChange={val => updatePrefValue('last_name', val)}/>
+                                    <InputBox placeholder={'first'} value={settingsValues['first_name']} width='11rem' onChange={val => updatePrefValue('first_name', val)}/>
+                                    <InputBox placeholder={'last'} value={settingsValues['last_name']} width='8rem' onChange={val => updatePrefValue('last_name', val)}/>
                                 </div>
 
                                 <p className='subheader'>Quad Affiliation</p>
-                                <InputBox placeholder={'e.g. Cardinals'} value={prefValues['quad'] ?? ''} width='20rem' onChange={val => updatePrefValue('quad', val)}/>
+                                <InputBox placeholder={'e.g. Cardinals'} value={settingsValues['quad'] ?? ''} width='20rem' onChange={val => updatePrefValue('quad', val)}/>
 
                                 <p className='subheader'>Birthday</p>
                                 <div className='inputs-container'>
-                                    <InputBox placeholder={'MM'} value={prefValues['birthday_M']} width='6rem' limit={2} isNumeric={true} onChange={val => updatePrefValue('birthday_M', val)}/>
-                                    <InputBox placeholder={'DD'} value={prefValues['birthday_D']} width='6rem' limit={2} isNumeric={true} onChange={val => updatePrefValue('birthday_D', val)}/>
-                                    <InputBox placeholder={'YYYY'} value={prefValues['birthday_Y']} width='8rem' limit={4} isNumeric={true} onChange={val => updatePrefValue('birthday_Y', val)}/>
+                                    <InputBox placeholder={'MM'} value={settingsValues['birthday_M']} width='6rem' limit={2} isNumeric={true} onChange={val => updatePrefValue('birthday_M', val)}/>
+                                    <InputBox placeholder={'DD'} value={settingsValues['birthday_D']} width='6rem' limit={2} isNumeric={true} onChange={val => updatePrefValue('birthday_D', val)}/>
+                                    <InputBox placeholder={'YYYY'} value={settingsValues['birthday_Y']} width='8rem' limit={4} isNumeric={true} onChange={val => updatePrefValue('birthday_Y', val)}/>
                                 </div>
                                 
                                 <p className='subheader'>School Year</p>
-                                <InputBox placeholder={'e.g. 1, 2, 3, 4'} value={prefValues['year'] ?? ''} width='20rem' limit={1} isNumeric={true} onChange={val => updatePrefValue('year', val)}/>
+                                <InputBox placeholder={'e.g. 1, 2, 3, 4'} value={settingsValues['year'] ?? ''} width='20rem' limit={1} isNumeric={true} onChange={val => updatePrefValue('year', val)}/>
 
                                 <p className='subheader'>Degree Program</p>
-                                <InputBox placeholder={'e.g. Computer Science'} value={prefValues['degree'] ?? ''} width='20rem' onChange={val => updatePrefValue('degree', val)}/>
+                                <InputBox placeholder={'e.g. Computer Science'} value={settingsValues['degree'] ?? ''} width='20rem' onChange={val => updatePrefValue('degree', val)}/>
 
                                 <p className='subheader'>Instagram Handle</p>
-                                <InputBox placeholder={'e.g. @optional'} value={prefValues['insta'] ?? ''} width='20rem' onChange={val => updatePrefValue('insta', val)}/>
+                                <InputBox placeholder={'e.g. @optional'} value={settingsValues['insta'] ?? ''} width='20rem' onChange={val => updatePrefValue('insta', val)}/>
 
                                 <p className='subheader'>Hometown</p>
-                                <InputBox placeholder={'e.g. City, State'} value={prefValues['hometown'] ?? ''} width='20rem' onChange={val => updatePrefValue('hometown', val)}/>
+                                <InputBox placeholder={'e.g. City, State'} value={settingsValues['hometown'] ?? ''} width='20rem' onChange={val => updatePrefValue('hometown', val)}/>
 
                                 <p className='subheader'></p>
                             </div>
@@ -312,7 +318,7 @@ const Profile = () => {
                         }}/>
                         <IoMdCloseCircle className='btn cancel' onClick={() => {
                             setIsSettingsOn(false);
-                            resetPrefValues();
+                            resetSettingsValues();
                         }}/>
                     </div>
                 </div>

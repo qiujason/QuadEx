@@ -5,15 +5,14 @@ import Navbar from './components/Navbar'
 import { useState } from 'react'
 
 function App() {
-    const [ username, setUsername ] = useState('');
-    
+    const [ netID, setNetID ] = useState('');
+
     return (
         <div className="App">
             <Router>
-                {username !== null && username.length > 0 ? <Navbar name={username}/> : ''}
+                {netID !== null && netID.length > 0 ? <Navbar name={netID}/> : ''}
                 <Switch>
-                    <Route path="/" exact component={Profile}/>
-                    <Route path="/login" exact component={Login}/>
+                    <Route path="/" exact render={(props) => netID !== null && netID.length > 0 ? <Profile {...props} netID={netID}/> : <Login {...props} setNetID={setNetID}/>}/>
                 </Switch>
             </Router>
         </div>
