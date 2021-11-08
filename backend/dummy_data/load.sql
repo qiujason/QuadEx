@@ -22,9 +22,11 @@ INSERT INTO points (net_id, date, point_value, reason) VALUES
 ('ajl88', '01012021', 10, 'Attended quad town hall'),
 ('rz97', '01012021', 50, 'Won best junior RA');
 
-INSERT INTO events (title, time, date, description, location, tags) VALUES
-('Spikeball Tournament', '1200', '10102021', NULL, 'Abele Quad', '{Sports}'),
-('Countdown to Craziness', '1200', '10102021', 'Which quad is the craziest???', 'Cameron Indoor Stadium', '{Duke basketball}');
+INSERT INTO events (title, time, date, end_time, end_date, description, location, tags) VALUES
+('Spikeball Tournament', '1200', '10102021', '1400', '10102021', NULL, 'Abele Quad', '{Sports}'),
+('HACK DUKE 2021', '0800', '11072021', '1800', '11082021', 'have a good time hackin!', 'Bostock Library', '{Social, Hackathon}'),
+('Countdown to Craziness', '1200', '10102021', '1200', '10112021', 'Which quad is the craziest???', 'Cameron Indoor Stadium', '{Duke basketball}'),
+('andrew''s birthday', '0000', '12242021', '1159', '12242021', 'yayayay; happy bdayz; much old', 'hollows a3001', '{Social}');
 
 INSERT INTO favorited_events VALUES
 ('ajl88', 1), 

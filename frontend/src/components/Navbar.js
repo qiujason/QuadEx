@@ -2,7 +2,7 @@ import React from 'react'
 import '../stylesheets/navbar.scss'
 import { GiAtomicSlashes } from 'react-icons/gi'
 
-const Navbar = ({ name, net_id }) => {
+const Navbar = ({ name }) => {
     return (
         <div className='navbar-page'>
             <div className="navbar">
@@ -10,6 +10,7 @@ const Navbar = ({ name, net_id }) => {
                     <GiAtomicSlashes/>
                     <p className='logo'>Quad EX</p>
                 </div>
+                
                 <div className='links-container'>
                     <li onClick={() => {alert('nope >:I')}}>QUAD</li>
                     <li onClick={() => {alert('nope >:I')}}>EVENTS</li>

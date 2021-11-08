@@ -53,50 +53,42 @@ const Profile = () => {
         bday_cal: true,
         events: [
             {
-                // events should have unique generated ID
-                eventID: 'eventID1',
+                id: null,
                 title: 'edens halloween',
-                startDate: '10312021',
-                endDate: '10312021',
-                startTime: '0600',
-                endTime: '2200',
+                time: '0600',
+                date: '10312021',
+                end_time: '2200',
+                end_date: '10312021',
+                description: 'test_description',
                 location: 'page auditorium',
-                description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummyLorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummyLorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy',
-                picture: null,
-                // event tag in profile page don't need members list
-                // members: ['UID_1', 'UID_2'],
-            },
-            {
-                eventID: 'eventID2',
-                title: 'hack duke 2021',
-                startDate: '10232021',
-                endDate: '10242021',
-                startTime: '0900',
-                endTime: '1800',
-                location: 'bostock library',
-                description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummyLorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummyLorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy',
-                picture: null,
+                tags: []
             },
         ]
     });
 
     useEffect(() => {
-        async function getUserInfo(){
-            let response = await fetch('http://localhost:3001/users/?id=jq39');
-            let data = await response.json();
-
-            const prevUserInfo = { ...userInfo };
-            Object.keys(data[0]).forEach(key => {
-                prevUserInfo[key] = data[0][key];
-            });
-            setUserInfo(prevUserInfo);
-        }
-        getUserInfo();
+        fetchUserInfo();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    async function fetchUserInfo() {
+        let userResponse = await fetch('http://localhost:3001/users/?id=ajl88');
+        let userData = await userResponse.json();
+
+        let eventsResponse = await fetch('http://localhost:3001/events/favoriteByUser/?id=ajl88');
+        let eventsData = await eventsResponse.json();
+
+        const prevUserInfo = { ...userInfo };
+        Object.keys(userData[0]).forEach(key => {
+            prevUserInfo[key] = userData[0][key];
+        });
+        prevUserInfo.events = eventsData;
+        setUserInfo(prevUserInfo);
+    }
+
     useEffect(() => {
         resetPrefValues();
+        setRenderedEvents(userInfo.events);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [userInfo]);
 
@@ -106,8 +98,8 @@ const Profile = () => {
 
     // sort events list chronologically
     renderedEvents.sort(function (i1, i2){
-        var year1 = Number(i1.startDate.substring(4) + i1.startDate.substring(2, 4) + i1.startDate.substring(0, 2));
-        var year2 = Number(i2.startDate.substring(4) + i2.startDate.substring(2, 4) + i2.startDate.substring(0, 2));
+        var year1 = Number(i1.date.substring(4) + i1.date.substring(0, 2) + i1.date.substring(2, 4));
+        var year2 = Number(i2.date.substring(4) + i2.date.substring(0, 2) + i2.date.substring(2, 4));
         return year1 - year2;
     });
 
@@ -191,6 +183,20 @@ const Profile = () => {
         });
     }
 
+    // EVENTS
+    async function unfavoriteEvent(event_id) {
+        await fetch('http://localhost:3001/events/favoriteForUser/?net_id=' + userInfo.net_id + '&event_id=' + event_id, 
+            { 
+                method: 'DELETE', 
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: null
+            } 
+        );
+        fetchUserInfo();
+    }
+
     return (
         <div className='profile-page'>
             <div className='info-page-container'>
@@ -207,17 +213,17 @@ const Profile = () => {
                 <div className='info-sub-container'>
                     <div className='info-box first'>
                         <p className='title'>ABOUT</p>
-                        <p><strong>Net ID:</strong> {userInfo.net_id}</p>
-                        <p><strong>Name:</strong> {capitalize(userInfo.first_name + ' ' + userInfo.last_name)}</p>
-                        <p><strong>Quad Affiliation:</strong> {capitalize(userInfo.quad ?? '?')}</p>
-                        <p><strong>Birthday:</strong> {convertDate(userInfo.birthday)}</p>
-                        <p><strong>Year:</strong> {userInfo.year ?? '?'}</p>
-                        <p><strong>Degree Program:</strong> {capitalize(userInfo.degree ?? '?')}</p>
+                        <p><strong>Net ID :</strong> {userInfo.net_id}</p>
+                        <p><strong>Name :</strong> {capitalize(userInfo.first_name + ' ' + userInfo.last_name)}</p>
+                        <p><strong>Quad Affiliation :</strong> {capitalize(userInfo.quad ?? '?')}</p>
+                        <p><strong>Birthday :</strong> {convertDate(userInfo.birthday)}</p>
+                        <p><strong>Year :</strong> {userInfo.year ?? '?'}</p>
+                        <p><strong>Degree Program :</strong> {capitalize(userInfo.degree ?? '?')}</p>
                     </div>
                     <div className='info-box'>
                         <p className='title'>CONTACT</p>
-                        <p><strong>Instagram:</strong> {userInfo.insta ? '@' : ''}{userInfo.insta ?? '?'}</p>
-                        <p><strong>Hometown:</strong> {userInfo.hometown ?? '?'}</p>
+                        <p><strong>Instagram :</strong> {userInfo.insta ? '@' : ''}{userInfo.insta ?? '?'}</p>
+                        <p><strong>Hometown :</strong> {userInfo.hometown ?? '?'}</p>
                     </div>                    
                     <IoSettingsSharp className='settings-btn' onClick={() => setIsSettingsOn(true)}/>
                 </div>
@@ -235,17 +241,18 @@ const Profile = () => {
                     <div className='list-container'>
                         {
                             renderedEvents.map((eventObj) => 
-                            <EventTag 
-                            key={eventObj.eventID}
-                            title={eventObj.title} 
-                            startDate={eventObj.startDate} 
-                            endDate={eventObj.endDate} 
-                            startTime={eventObj.startTime} 
-                            endTime={eventObj.endTime} 
-                            location={eventObj.location}
-                            description={eventObj.description} 
-                            onUnfavorite={() => alert('implement events plz. how sad :c')}
-                            />)
+                                <EventTag 
+                                    key={eventObj.id}
+                                    title={eventObj.title} 
+                                    startDate={eventObj.date} 
+                                    endDate={eventObj.end_date} 
+                                    startTime={eventObj.time} 
+                                    endTime={eventObj.end_time} 
+                                    location={eventObj.location}
+                                    description={eventObj.description} 
+                                    onUnfavorite={() => unfavoriteEvent(eventObj.id)}
+                                />
+                            )
                         }
                     </div>
                 </div>
