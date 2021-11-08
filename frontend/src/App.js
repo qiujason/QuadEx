@@ -10,9 +10,13 @@ function App() {
     return (
         <div className="App">
             <Router>
-                {netID !== null && netID.length > 0 ? <Navbar name={netID}/> : ''}
+                {netID !== null && netID.length > 0 ? <Navbar netID={netID} setNetID={setNetID}/> : ''}
                 <Switch>
-                    <Route path="/" exact render={(props) => netID !== null && netID.length > 0 ? <Profile {...props} netID={netID}/> : <Login {...props} setNetID={setNetID}/>}/>
+                    <Route path="/" exact render={(props) => netID !== null && netID.length > 0 ? 
+                        <Profile {...props} netID={netID}/> 
+                    : 
+                        <Login {...props} setNetID={setNetID}/>
+                    }/>
                 </Switch>
             </Router>
         </div>
