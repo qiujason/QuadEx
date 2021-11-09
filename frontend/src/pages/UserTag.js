@@ -1,6 +1,6 @@
 import React from 'react'
 
-const UserTag = ({ name = 'joe kim', netID = 'jk19' }) => {
+const UserTag = ({ name, netID }) => {
     return (
         <div className='user-tag-container'>
             <div className="picture-container">

@@ -4,13 +4,16 @@ import { useState, useEffect } from 'react'
 import SearchField from './SearchField'
 import EventTag from './EventTag'
 import UserTag from './UserTag'
-import { IoMdCheckmarkCircle, IoMdCloseCircle } from 'react-icons/io'
+import { IoMdCheckmarkCircle, IoMdCloseCircle, IoMdInformationCircle } from 'react-icons/io'
+import { IoPeopleCircle } from 'react-icons/io5'
 
 const Events = ({ netID }) => {
     const [ allEvents, setAllEvents ] = useState([]);
     const [ favoritedEventIDs, setFavoritedEventIDs ] = useState(null);
     const [ renderedEvents, setRenderedEvents ] = useState([]);
     const [ showPastEvents, setShowPastEvents ] = useState(false);
+
+    const [ showInterestList, setShowInterestList ] = useState(true);
 
     async function fetchEvents() {
         let eventsResponse = await fetch('http://localhost:3001/events');
@@ -151,19 +154,28 @@ const Events = ({ netID }) => {
             <div className='event-details-container'>
                 <div className='title-container'>
                     <h1>EVENT DETAILS</h1>
+                    <div className={'show-interest-btn' + (showInterestList ? ' active' : '')} onClick={() => setShowInterestList(!showInterestList)}>
+                        {showInterestList ? <IoMdInformationCircle className='icon active'/> : <IoPeopleCircle className='icon'/>}
+                    </div>
                 </div>
-                <div className='details-container'>
-                    <h1 className='title'>HACK DUKE 2021</h1>
-                    <p className='subheader'>Nov 24, 2021, 12:00 AM - Nov 28, 2021, 6:00 PM</p>
-                    <p className='description'>Wow; much fun; good break; eat some good turkey; yum yum; this is a description about an event and it is supposed to be long for styling reference.</p>
-                </div>
-                <h1 className='roster-title'>EVENT INTEREST</h1>
-                <div className='roster-container'>
-                    <UserTag/>
-                    <UserTag/>
-                    <UserTag/>
-                    <UserTag/>
-                </div>
+                {showInterestList ?
+                    <div className='details-container'>
+                        <h1 className='title'>HACK DUKE 2021</h1>
+                        <p className='subheader'>Nov 24, 2021, 12:00 AM - Nov 28, 2021, 6:00 PM</p>
+                        <p className='description'>Wow; much fun; good break; eat some good turkey; yum yum; this is a description about an event and it is supposed to be long for styling reference.</p>
+                    </div>
+                :
+                    <>
+                    <p className='roster-title'><h1 className='roster-num'>5</h1>members have favorited this event</p>
+                    <div className='roster-container'>
+                        <UserTag name='Donghan Park' netID='dp239'/>
+                        <UserTag name='Isaac Fan' netID='iyf'/>
+                        <UserTag name='Judy Zhong' netID='jtz3'/>
+                        <UserTag name='Andrew Lee' netID='ajl88'/>
+                        <UserTag name='Jason Qiu' netID='jq39'/>
+                    </div>
+                    </>
+                }
             </div>
         </div>
     )
