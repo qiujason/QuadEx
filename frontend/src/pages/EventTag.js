@@ -3,7 +3,7 @@ import { convertDate, convertTime, capitalize } from '../helpers/Helpers'
 import { useState } from 'react'
 import { GiRoundStar } from 'react-icons/gi'
 
-const EventTag = ({ title, startDate, endDate, startTime, endTime, location, description, picture, initialFavoriteState, onBtnClick }) => {
+const EventTag = ({ highlight, title, startDate, endDate, startTime, endTime, location, description, picture, initialFavoriteState, onClick, onBtnClick }) => {
     const [ hovering, setHovering ] = useState(false);
     const [ exitHovering, setExitHovering ] = useState(false);
     const [ isFavorited, setIsFavorited ] = useState(initialFavoriteState);
@@ -13,7 +13,7 @@ const EventTag = ({ title, startDate, endDate, startTime, endTime, location, des
     subText += convertTime(endTime) + (location !== null ? ' ~ @ ' + capitalize(location) : '');
 
     return (
-        <div className="event-tag" onMouseEnter={() => setHovering(true)} onMouseLeave={() => setHovering(false)}>
+        <div className={"event-tag" + (highlight ? ' highlight' : '')} onClick={onClick} onMouseEnter={() => setHovering(true)} onMouseLeave={() => setHovering(false)}>
             <div className="picture"/>
             <div className="info-container">
                 <h1 className={hovering ? 'hovering' : ''}>{title.toUpperCase()}</h1>

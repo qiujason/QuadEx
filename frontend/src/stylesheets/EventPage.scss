@@ -172,6 +172,10 @@
         display: flex;
         box-shadow: 0 1px 5px 0px $shadow-color;
 
+        &.highlight {
+          background-color: $shadow-color;
+        }
+
         &:hover {
           border: 2px solid $hover-color;
         }
@@ -251,6 +255,145 @@
             }
             color: $secondary-text-color;
             transform: scale(1.1, 1.1);
+          }
+        }
+      }
+    }
+  }
+
+  
+  .event-details-container {
+    grid-column: 2 / span 1;
+    border-radius: 40px;
+    margin-left: 2rem;
+    width: calc(100% - 6rem);
+    height: 70vh;
+    background-color: $primary-color;
+    box-shadow: 0 1px 5px 0px $shadow-color;
+
+    display: grid;
+    grid-template-rows: 5rem 1rem auto;
+    grid-template-columns: 100%;
+    padding: 1rem;
+    padding-top: 0;
+
+    .title-container {
+      width: 100%;
+      grid-row: 1 / span 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-left: 0.5rem;
+      border-bottom: 2px solid $shadow-color;
+
+      h1 {
+        font-size: 2rem;
+        vertical-align: top;
+        font-weight: bold;
+        color: $primary-text-color;
+      }
+
+      .show-interest-btn {
+        width: 2rem;
+        height: 2rem;
+        user-select: none;
+        color: $hover-color;
+        cursor: pointer;
+        margin-right: 0.3rem;
+
+        .icon {
+          width: 100%;
+          height: 100%;
+          transition: all $transition-duration;
+          &:hover {
+            transform: scale(1.1, 1.1);
+          }
+        }
+      }
+    }
+
+    .details-container {
+      grid-row: 3 / span 1;
+      overflow: overlay;
+      padding: 0 0.5rem;
+      
+      h1 {
+        font-size: 1.4rem;
+        margin-bottom: 0.5rem;
+        color: $hover-color;
+      }
+
+      p {
+        font-size: 0.8rem;
+        color: $primary-text-color;
+      }
+
+      .subheader {
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+      }
+
+      .description {
+        margin: 1.2rem 0;
+      }
+    }
+
+    .roster-title {
+      font-size: 0.8rem;
+      color: $secondary-text-color;
+      margin: 1.4rem 0;
+      padding-left: 0.5rem;
+      display: flex;
+      height: 100%;
+
+      h1 {
+        margin: -0.6rem 0.5rem 0 0;
+        font-weight: bold;
+        color: $hover-color;
+        font-size: 1.4rem;
+      }
+    }
+
+    .roster-container {
+      margin-top: 2.5rem;
+      grid-row: 3 / span 1;
+      background-color: $secondary-color;
+      border: 4px solid $secondary-color;
+      border-radius: 30px;
+      overflow: overlay;
+      padding: 1rem;
+      padding-bottom: 0;
+
+      .user-tag-container {
+        margin-bottom: 1rem;
+        background-color: $primary-color;
+        box-shadow: 0 1px 5px 0px $shadow-color;
+        border-radius: 20px;
+        display: flex;
+        cursor: pointer;
+
+        .picture-container {
+          width: 6rem;
+          height: 6rem;
+          background-color: $input-color;
+          border-radius: 15px;
+          margin: 1rem;
+        }
+
+        .info-container {
+          width: calc(100% - 8rem);
+          height: calc(100% - 2rem);
+          margin: 1rem 0;
+
+          h1 {
+            font-size: 1.4rem;
+            color: $primary-text-color;
+            margin-bottom: 0.5rem;
+          }
+
+          p { 
+            font-size: 0.8rem;
+            color: $secondary-text-color;
           }
         }
       }
