@@ -51,7 +51,7 @@ const Login = ({ setNetID }) => {
         if(userData[0] && 'password' in userData[0]){
             // user found
             if(inputValues.password[0] === userData[0].password) {
-                console.log('successful authentication');
+                // successful authentication
                 setNetID(inputValues.username[0]);
             } else {
                 updateState(inputValues, setInputValues, 'password', true);

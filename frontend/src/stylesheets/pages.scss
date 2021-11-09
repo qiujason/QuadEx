@@ -316,7 +316,6 @@
           font-size: 0.8rem;
           color: $secondary-text-color;
           margin-right: 0.5rem;
-          cursor: pointer;
           user-select: none;
 
           p {
@@ -570,6 +569,7 @@
 
         .inputs-container {
           display: flex;
+          align-items: flex-end;
           width: 100%;
           gap: 1rem;
         }
