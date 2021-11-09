@@ -24,10 +24,14 @@ df = pd.DataFrame(dict)
 for i in range(num_events):
     #generate event title
     title = random.choice(event_org_list) + " " + random.choice(event_type)
-    #generate event time
+    #generate event start time
     hour = random.randint(0, 23)
     min = random.randint(0,59)
-    time = str(hour)+str(min)
+    start_time = str(hour)+str(min)
+    #generate event end time
+    end_hour = random.randint(hour, 23)
+    end_min = random.randint(min, 59)
+    end_time = str(end_hour) + str(end_min)
     #generate event date
     d1 = datetime.strptime(f'1/1/2021', '%m/%d/%Y')
     d2 = datetime.strptime(f'1/1/2023', '%m/%d/%Y')
@@ -55,7 +59,7 @@ for i in range(num_events):
     #tags - tbd
 
     #add to df
-    df.loc[len(df.index)] = [title, time, date_str, description, location, None]
+    df.loc[len(df.index)] = [title, start_time, end_time, date_str, description, location, None]
 
 print(df)
 
