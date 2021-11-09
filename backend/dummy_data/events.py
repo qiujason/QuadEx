@@ -31,11 +31,31 @@ for i in range(num_events):
     #generate event start time
     hour = random.randint(0, 23)
     min = random.randint(0,59)
-    start_time = str(hour)+str(min)
+    if hour > 9:
+        hour_str = str(hour)
+    else:
+        hour_str = '0' + str(hour)
+    
+    if min > 9:
+        min_str = str(min)
+    else:
+        min_str = '0' + str(min)
+
+    start_time = hour_str + min_str
     #generate event end time
     end_hour = random.randint(hour, 23)
     end_min = random.randint(min, 59)
-    end_time = str(end_hour) + str(end_min)
+    if end_hour > 9:
+        end_hour_str = str(end_hour)
+    else:
+        end_hour_str = '0' + str(end_hour)
+    
+    if end_min > 9:
+        end_min_str = str(end_min)
+    else:
+        end_min_str = '0' + str(end_min)
+
+    end_time = end_hour_str + end_min_str
     #generate event date
     d1 = datetime.strptime(f'1/1/2021', '%m/%d/%Y')
     d2 = datetime.strptime(f'1/1/2023', '%m/%d/%Y')
