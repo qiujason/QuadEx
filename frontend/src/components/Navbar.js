@@ -21,7 +21,9 @@ const Navbar = ({ netID, setNetID }) => {
                     <div className="profile-container">
                         <div className="name-container">
                             <p className='header'>{netID}</p>
-                            <p className='subheader' onClick={() => setNetID('')}>Sign out</p>
+                            <Link to='/' style={{textDecoration: 'none'}}>
+                                <p className='subheader' onClick={() => setNetID('')}>Sign out</p>
+                            </Link>
                         </div>
                         <Link to='/'>
                             <div className='profile-icon'/>
