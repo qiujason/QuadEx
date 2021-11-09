@@ -45,6 +45,3 @@ INSERT INTO favorited_events VALUES
 
 INSERT INTO quad_events VALUES
 ('Blue Jay', 2);
-
-INSERT INTO points_earned_by VALUES
-('jq39', );

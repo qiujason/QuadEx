@@ -1,13 +1,23 @@
 const db = require('../db')
 
 const getEvents = (req, res) => {
-    db.query('SELECT * FROM events WHERE id = $1', [req.query.id], (error, results) => {
-        if (error) {
-            res.status(500).send("Error executing query: " + error)
-        } else {
-            res.status(200).json(results.rows)
-        }
-    })
+    if (req.query.id == null) {
+        db.query('SELECT * FROM events', (error, results) => {
+            if (error) {
+                res.status(500).send("Error executing query: " + error)
+            } else {
+                res.status(200).json(results.rows)
+            }
+        })
+    } else {
+        db.query('SELECT * FROM events WHERE id = $1', [req.query.id], (error, results) => {
+            if (error) {
+                res.status(500).send("Error executing query: " + error)
+            } else {
+                res.status(200).json(results.rows)
+            }
+        })
+    }
 }
 
 const postEvents = (req, res) => {

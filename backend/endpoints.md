@@ -7,6 +7,7 @@
 * Delete user - http://localhost:3001/users/?id=______
 
 ## Events
+* Get all events - http://localhost:3001/events/
 * Get event - http://localhost:3001/events/?id=__
 * Post event - http://localhost:3001/events (with request body); returns event ID
 * Put event - http://localhost:3001/events/?id=___ (with request body)
