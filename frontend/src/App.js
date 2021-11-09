@@ -27,7 +27,7 @@ function App() {
                     : 
                         <Login {...props} setNetID={setNetID}/>
                     }/>
-                    <Route path='/events' render={props => <Events/>}/>
+                    <Route path='/events' render={props => netID !== null && netID.length > 0 ? <Events {...props} netID={netID}/> : ''}/>
                 </Switch>
             </Router>
         </div>

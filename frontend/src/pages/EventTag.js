@@ -3,9 +3,10 @@ import { convertDate, convertTime, capitalize } from '../helpers/Helpers'
 import { useState } from 'react'
 import { GiRoundStar } from 'react-icons/gi'
 
-const EventTag = ({ title, startDate, endDate, startTime, endTime, location, description, picture, onUnfavorite }) => {
+const EventTag = ({ title, startDate, endDate, startTime, endTime, location, description, picture, initialFavoriteState, onBtnClick }) => {
     const [ hovering, setHovering ] = useState(false);
     const [ exitHovering, setExitHovering ] = useState(false);
+    const [ isFavorited, setIsFavorited ] = useState(initialFavoriteState);
 
     var subText = convertDate(startDate) + ', ' + convertTime(startTime) + ' - ';
     subText += (startDate !== endDate ? convertDate(endDate) + ', ' : '');
@@ -19,8 +20,11 @@ const EventTag = ({ title, startDate, endDate, startTime, endTime, location, des
                 <p className={'subtitle' + (hovering ? ' hovering' : '')}>{subText}</p>
                 <p>{description}</p>
             </div>
-            <p className={"unfavorite-btn" + (exitHovering ? ' hovering' : '')}>Unfavorite</p>
-            <GiRoundStar className="exit-button" onClick={onUnfavorite} onMouseEnter={() => setExitHovering(true)} onMouseLeave={() => setExitHovering(false)}/>
+            <p className={"favorite-indicator" + (exitHovering ? ' hovering' : '') + (isFavorited ? ' favorited' : '')}>{isFavorited ? 'Unfavorite' : 'Favorite'}</p>
+            <GiRoundStar className={"favorite-btn" + (isFavorited ? ' favorited' : '')} onClick={() => {
+                onBtnClick(!isFavorited);
+                setIsFavorited(!isFavorited);
+            }} onMouseEnter={() => setExitHovering(true)} onMouseLeave={() => setExitHovering(false)}/>
         </div>
     )
 }

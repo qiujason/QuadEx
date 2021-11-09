@@ -5,27 +5,31 @@ import SearchField from './SearchField'
 import EventTag from './EventTag'
 import { IoMdCheckmarkCircle, IoMdCloseCircle } from 'react-icons/io'
 
-const Events = () => {
+const Events = ({ netID }) => {
     const [ allEvents, setAllEvents ] = useState([]);
+    const [ favoritedEventIDs, setFavoritedEventIDs ] = useState(null);
     const [ renderedEvents, setRenderedEvents ] = useState([]);
     const [ showPastEvents, setShowPastEvents ] = useState(false);
 
     async function fetchEvents() {
         let eventsResponse = await fetch('http://localhost:3001/events');
         let eventsData = await eventsResponse.json();
-        console.log(eventsData);
         setAllEvents(eventsData);
+
+        eventsResponse = await fetch('http://localhost:3001/events/favoriteByUser/?id=' + netID);
+        eventsData = await eventsResponse.json();
+
+        const idSet = new Set();
+        eventsData.forEach(eventObj => {
+            idSet.add(eventObj.id);
+        });
+        setFavoritedEventIDs(idSet);
     }
 
     useEffect(() => {
         fetchEvents();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
-    useEffect(() => {
-        setRenderedEvents(allEvents);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [allEvents]);
 
     useEffect(() => {
         if(showPastEvents){
@@ -41,7 +45,7 @@ const Events = () => {
                 if(eventDate >= currDate) setRenderedEvents(renderedEvents => [...renderedEvents, eventObj]);
             });
         }
-    }, [showPastEvents, allEvents]);
+    }, [showPastEvents, allEvents, favoritedEventIDs]);
 
     // sort events list chronologically
     renderedEvents.sort(function (i1, i2){
@@ -81,28 +85,31 @@ const Events = () => {
                     </div>
                 </div>
                 {/* { title, startDate, endDate, startTime, endTime, location, description, picture } */}
-                <div className='list-container'>
-                    {
-                        renderedEvents.map((eventObj) => 
-                            <EventTag 
-                                key={eventObj.id}
-                                title={eventObj.title} 
-                                startDate={eventObj.date} 
-                                endDate={eventObj.end_date} 
-                                startTime={eventObj.time} 
-                                endTime={eventObj.end_time} 
-                                location={eventObj.location}
-                                description={eventObj.description} 
-                                onUnfavorite={() => {}}
-                            />
-                        )
-                    }
-                    {
-                        renderedEvents.length < 1 ?
-                            <p className='no-events-indicator'>No favorited events found</p>
-                        : ''
-                    }
-                </div>
+                {favoritedEventIDs !== null ? 
+                    <div className='list-container'>
+                        {
+                            renderedEvents.map((eventObj) => 
+                                <EventTag 
+                                    key={eventObj.id}
+                                    title={eventObj.title} 
+                                    startDate={eventObj.date} 
+                                    endDate={eventObj.end_date} 
+                                    startTime={eventObj.time} 
+                                    endTime={eventObj.end_time} 
+                                    location={eventObj.location}
+                                    description={eventObj.description} 
+                                    initialFavoriteState={favoritedEventIDs.has(eventObj.id) ? true : false}
+                                    onBtnClick={(e) => {console.log(e)}}
+                                />
+                            )
+                        }
+                        {
+                            renderedEvents.length < 1 ?
+                                <p className='no-events-indicator'>No favorited events found</p>
+                            : ''
+                        }
+                    </div>
+                : ''}
             </div>
         </div>
     )

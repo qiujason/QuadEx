@@ -61,12 +61,6 @@ const Profile = ({ netID }) => {
         setUserInfo(prevUserInfo);
     }
 
-    useEffect(() => {
-        resetSettingsValues();
-        setRenderedEvents(userInfo.events);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [userInfo]);
-
 
     // == EVENTS == //
 
@@ -74,6 +68,7 @@ const Profile = ({ netID }) => {
     const [ renderedEvents, setRenderedEvents ] = useState(userInfo.events);
 
     useEffect(() => {
+        resetSettingsValues();
         if(showPastEvents){
             setRenderedEvents(userInfo.events);
             return;
@@ -87,6 +82,7 @@ const Profile = ({ netID }) => {
                 if(eventDate >= currDate) setRenderedEvents(renderedEvents => [...renderedEvents, eventObj]);
             });
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [showPastEvents, userInfo]);
 
     // sort events list chronologically
@@ -295,7 +291,8 @@ const Profile = ({ netID }) => {
                                     endTime={eventObj.end_time} 
                                     location={eventObj.location}
                                     description={eventObj.description} 
-                                    onUnfavorite={() => unfavoriteEvent(eventObj.id)}
+                                    initialFavoriteState={true}
+                                    onBtnClick={() => unfavoriteEvent(eventObj.id)}
                                 />
                             )
                         }
