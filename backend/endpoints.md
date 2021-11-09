@@ -31,3 +31,15 @@
             }
 * Put quad - http://localhost:3001/quads/?id=_______ (with request body)
 * Delete quad - http://localhost:3001/quads/?id=_______
+
+## Points
+* Get points by user id - http://localhost:3001/points/?id=____
+* Get points by quad name - http://localhost:3001/points/quad/?id=________
+* Post new points - http://localhost:3001/points (with request body)
+    * ex. {
+	"net_id": "jq39",
+	"date": "110821",
+	"point_value": "-10",
+	"reason": "being too cool" 
+    }
+* Delete points - http://localhost:3001/points/?id=______ (id is point id in table)
