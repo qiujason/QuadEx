@@ -78,7 +78,18 @@ const Events = ({ netID }) => {
     }
 
     async function favoriteEvent(eventID){
-
+        await fetch('http://localhost:3001/events/favoriteForUser/?net_id=' + netID + '&event_id=' + eventID, 
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    net_id: netID, 
+                    event_id: eventID,
+                })
+            }
+        );
     }
 
     async function unfavoriteEvent(eventID) {
