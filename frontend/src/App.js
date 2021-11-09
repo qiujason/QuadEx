@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import Login from './pages/Login'
 import Profile from './pages/Profile'
+import Events from './pages/Events'
 import Navbar from './components/Navbar'
 import { useState, useEffect } from 'react'
 
@@ -21,11 +22,12 @@ function App() {
             <Router>
                 {netID !== null && netID.length > 0 ? <Navbar netID={netID} setNetID={setNetID}/> : ''}
                 <Switch>
-                    <Route path="/" exact render={(props) => netID !== null && netID.length > 0 ? 
+                    <Route path="/" exact render={props => netID !== null && netID.length > 0 ? 
                         <Profile {...props} netID={netID}/> 
                     : 
                         <Login {...props} setNetID={setNetID}/>
                     }/>
+                    <Route path='/events' render={props => netID !== null && netID.length > 0 ? <Events {...props} netID={netID}/> : ''}/>
                 </Switch>
             </Router>
         </div>

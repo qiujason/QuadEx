@@ -1,5 +1,5 @@
 import React from 'react'
-import '../stylesheets/pages.scss'
+import '../stylesheets/HomePage.scss'
 import InputBox from '../components/InputBox'
 import { useState } from 'react'
 import { GiAtomicSlashes } from 'react-icons/gi'
@@ -9,7 +9,9 @@ const minPasswordLength = 4;
 /*
 TODO:
 
-update password in settings
+points system
+roles -> allow only admins to create events & modify points
+events creation page
 */
 
 const Login = ({ setNetID }) => {

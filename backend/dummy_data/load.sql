@@ -30,18 +30,11 @@ INSERT INTO events (title, time, date, end_time, end_date, description, location
 ('thanksgiving break', '0000', '11242021', '1159', '11282021', 'wow; much fun; good break; eat some good turkey, yum yum', null, '{holiday}');
 
 INSERT INTO favorited_events VALUES
-('ajl88', 1), 
-('ajl88', 2),
-('ajl88', 3),
-('ajl88', 4),
-('ajl88', 5),
-('dp239', 1),
-('dp239', 2),
-('dp239', 4),
-('dp239', 5),
-('jq39', 2),
-('jq39', 4),
-('jq39', 5);
+('dp239', 516), 
+('dp239', 517),
+('dp239', 518),
+('dp239', 519),
+('dp239', 520);
 
 INSERT INTO quad_events VALUES
 ('Blue Jay', 2);

@@ -1,5 +1,6 @@
 import React from 'react'
-import '../stylesheets/navbar.scss'
+import '../stylesheets/Navbar.scss'
+import { Link } from 'react-router-dom'
 import { GiAtomicSlashes } from 'react-icons/gi'
 
 const Navbar = ({ netID, setNetID }) => {
@@ -13,14 +14,20 @@ const Navbar = ({ netID, setNetID }) => {
                 
                 <div className='links-container'>
                     <li onClick={() => {alert('nope >:I')}}>QUAD</li>
-                    <li onClick={() => {alert('nope >:I')}}>EVENTS</li>
+                    <Link to='/events' style={{textDecoration: 'none'}}>
+                        <li component={Link} to={'/events'}>EVENTS</li>
+                    </Link>
                     <li onClick={() => {alert('nope >:I')}}>LEADERBOARD</li>
                     <div className="profile-container">
                         <div className="name-container">
                             <p className='header'>{netID}</p>
-                            <p className='subheader' onClick={() => setNetID('')}>Sign out</p>
+                            <Link to='/' style={{textDecoration: 'none'}}>
+                                <p className='subheader' onClick={() => setNetID('')}>Sign out</p>
+                            </Link>
                         </div>
-                        <div className='profile-icon'/>
+                        <Link to='/'>
+                            <div className='profile-icon'/>
+                        </Link>
                     </div>
                 </div>
             </div>

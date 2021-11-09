@@ -1,0 +1,259 @@
+@import './colors.scss';
+
+.events-page {
+  width: 100vw;
+  height: calc(100vh - #{$navbar-height});
+  background-color: $secondary-color;
+  display: grid;
+  grid-template-columns: 60% auto;
+  align-items: center;
+
+  .events-container {
+    grid-row: 1 / span 1;
+    border-radius: 40px;
+    width: calc(100% - 4rem);
+    margin-left: 4rem;
+    height: 80vh;
+    background-color: $primary-color;
+    box-shadow: 0 1px 5px 0px $shadow-color;
+
+    display: grid;
+    grid-template-rows: 5rem 3rem auto;
+    padding: 1rem;
+    padding-top: 0;
+
+    .title-container {
+      display: flex;
+      align-items: center;
+      margin-left: 0.5rem;
+      h1 {
+        font-size: 2.6rem;
+        vertical-align: top;
+        font-weight: bold;
+        color: $primary-text-color;
+        display: flex;
+        
+        p {
+          margin-left: 1rem;
+          font-size: 2rem;
+          color: $hover-color;
+          margin-top: 0.8rem;
+        }
+      }
+    }
+
+    .filter-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 2rem;
+      position: relative;
+
+      .time-container {
+        transition: all $transition-duration;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        font-size: 0.8rem;
+        color: $secondary-text-color;
+        margin-right: 0.5rem;
+        user-select: none;
+
+        p {
+          color: $secondary-text-color;
+          font-size: 0.8rem;
+        }
+
+        .icon-container {
+          transition: all $transition-duration;
+          user-select: none;
+          color: $secondary-text-color;
+          cursor: pointer;
+          margin-right: 0.3rem;
+          height: 2rem;
+          width: 2rem;
+          transform: rotate(-90deg);
+
+          &.active {
+            color: $hover-color;
+            transform: rotate(0deg);
+          }
+
+          .icon {
+            transition: all $transition-duration;
+            height: 100%;
+            width: 100%;
+
+            &:hover {
+              transform: scale(1.1, 1.1);
+            }
+          }
+        }    
+      }
+
+      .search-container {
+        $container-width: 40%;
+        $container-height: 2rem;
+        width: $container-width;
+        height: $container-height;
+        z-index: 1;
+
+        input {
+          width: 100%;
+          height: 100%;
+          border: 2px solid $input-color;
+          background-color: $input-color;
+          outline: none;
+          padding-left: 2rem;
+          font-size: 0.8rem;
+          border-radius: 10px;
+
+          transition: all $transition-duration;
+
+          &:hover {
+            border-color: $shadow-color;
+          }
+
+          &:focus {
+            border-color: $hover-color;
+            padding-left: 0.5rem;
+          }
+        }
+
+        .search-btn {
+          transition: all $transition-duration;
+
+          &.hover {
+            color: $hover-color;
+            transform: scale(1.2, 1.2);
+          }
+
+          &.focused {
+            opacity: 0;
+          }
+
+          position: absolute;
+          color: $secondary-text-color;
+          height: 1rem;
+          left: 0.5rem;
+          top: 0.5rem;
+        }
+      }        
+    }
+
+    .list-container {
+      background-color: $secondary-color;
+      border: 4px solid $secondary-color;
+      border-radius: 35px;
+      padding: 1rem;
+      padding-bottom: 0;
+      overflow: overlay;
+
+      .no-events-indicator {
+        font-size: 0.8rem;
+        text-align: center;
+        margin-top: 1rem;
+        color: $secondary-text-color;
+      }
+      
+      .event-tag {
+        $event-tag-size: 250px;
+
+        margin-bottom: 1rem;
+        background-color: $primary-color;
+        padding: 1.4rem;
+        border-radius: 20px;
+        height: $event-tag-size;
+        position: relative;
+        border: 2px solid transparent;
+
+        cursor: pointer;
+
+        display: flex;
+        box-shadow: 0 1px 5px 0px $shadow-color;
+
+        &:hover {
+          border: 2px solid $hover-color;
+        }
+
+        .picture {
+          background-color: $input-color;
+          height: calc(#{$event-tag-size} - 2.8rem);
+          width: calc(#{$event-tag-size} - 2.8rem);
+          border-radius: 15px;
+        }
+
+        .info-container {
+          margin-left: 1.4rem;
+          height: calc(#{$event-tag-size} - 2.8rem);
+          width: calc(100% - #{$event-tag-size});
+
+          h1 {
+            &.hovering {
+              color: $hover-color;
+            }
+            font-size: 1.4rem;
+            margin-bottom: 0.4rem;
+            color: $primary-text-color;
+          }
+
+          p {
+            &.subtitle {
+              &.hovering {
+                color: $primary-text-color;
+                font-weight: bold;
+              }
+              margin-bottom: 1.4rem;
+            }
+            color: $secondary-text-color;
+            font-size: 0.8rem;
+          }
+        }
+
+        .favorite-indicator {
+          transition: all $transition-duration;
+          font-size: 0.8rem;
+          color: $hover-color;
+          position: absolute;
+          right: 40px;
+          top: 22px;
+          font-weight: bold;
+          opacity: 0;
+
+          &.favorited {
+            color: $secondary-text-color;
+          }
+
+          &.hovering {
+            opacity: 1;
+            right: 50px;
+          }
+        }
+
+        .favorite-btn {
+          transition: all $transition-duration;
+          position: absolute;
+          width: 30px;
+          height: 30px;
+          background-color: transparent;
+          color: $secondary-text-color;
+          right: 15px;
+          top: 15px;
+          border-radius: 50%;
+
+          &.favorited {
+            color: $hover-color;
+          }
+
+          &:hover {
+            &.favorited {
+              color: $hover-color;
+            }
+            color: $secondary-text-color;
+            transform: scale(1.1, 1.1);
+          }
+        }
+      }
+    }
+  }
+}
