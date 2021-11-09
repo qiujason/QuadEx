@@ -167,7 +167,7 @@ const Profile = ({ netID }) => {
         // update userInfo object
         const prevUserInfo = { ...userInfo };
         Object.keys(settingsValues).forEach(key => {
-            if(key in prevUserInfo) prevUserInfo[key] = settingsValues[key];
+            if(key in prevUserInfo) prevUserInfo[key] = (settingsValues[key] === '' ? null : settingsValues[key]);
         });
         prevUserInfo['birthday'] = settingsValues['birthday_M'] + settingsValues['birthday_D'] + settingsValues['birthday_Y'];
         setUserInfo(prevUserInfo);
@@ -186,12 +186,12 @@ const Profile = ({ netID }) => {
                         first_name: prevUserInfo.first_name,
                         last_name: prevUserInfo.last_name,
                         birthday: prevUserInfo.birthday,
-                        year: prevUserInfo.year ?? null,
-                        hometown: prevUserInfo.hometown ?? null,
-                        quad: prevUserInfo.quad ?? null,
-                        degree: prevUserInfo.degree ?? null,
-                        bio: prevUserInfo.bio ?? null,
-                        insta: prevUserInfo.insta ?? null,
+                        year: prevUserInfo.year,
+                        hometown: prevUserInfo.hometown,
+                        quad: prevUserInfo.quad,
+                        degree: prevUserInfo.degree,
+                        bio: prevUserInfo.bio,
+                        insta: prevUserInfo.insta,
                         bday_cal: prevUserInfo.bday_cal
                     })
                 }
@@ -214,6 +214,7 @@ const Profile = ({ netID }) => {
             insta: userInfo.insta,
             hometown: userInfo.hometown,
             bday_cal: userInfo.bday_cal,
+            bio: userInfo.bio,
         });
     }
 
@@ -330,7 +331,18 @@ const Profile = ({ netID }) => {
                             <p className='subheader'>Hometown</p>
                             <InputBox placeholder={'e.g. City, State'} value={settingsValues['hometown'] ?? ''} width='18rem' onChange={val => updatePrefValue('hometown', val)}/>
 
-                            <p className='subheader'/>
+                            <p className='subheader'>Bio</p>
+                            <div className="textarea-container">
+                                <textarea value={settingsValues['bio'] ?? ''} onChange={e => {
+                                    if(e.target.value.length <= 150){
+                                        updatePrefValue('bio', e.target.value);
+                                    }
+                                }}/>
+                                <p className='char-count-indicator'>{(settingsValues['bio'] ?? '').length}/150</p>
+                            </div>
+                            
+
+                            <p className='subheader'>Preferences</p>
                             <div className="checkbox">
                                 <div className={'icon-container' + (settingsValues['bday_cal'] ? ' active' : '')} onClick={() => updatePrefValue('bday_cal', !settingsValues['bday_cal'])}>
                                     {settingsValues['bday_cal'] ? <IoMdCheckmarkCircle className='icon active'/> : <IoMdCloseCircle className='icon'/>}

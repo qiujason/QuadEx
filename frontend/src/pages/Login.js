@@ -9,7 +9,7 @@ const minPasswordLength = 4;
 /*
 TODO:
 
-test include past event filter with times (dates checked): add total # of events indicator
+test include past event filter with times (dates checked)
 
 separate field checkers into separate class -> 
 settings fields must also be value checked in similar fashion
