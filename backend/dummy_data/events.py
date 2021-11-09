@@ -1,11 +1,13 @@
-#INSERT INTO events (title, time, date, description, location, tags) VALUES
-#('Spikeball Tournament', '1200', '10102021', NULL, 'Abele Quad', '{Sports}'),
-#('Countdown to Craziness', '1200', '10102021', 'Which quad is the craziest???', 'Cameron Indoor Stadium', '{Duke basketball}');
+#INSERT INTO events (title, time, date, end_time, end_date, description, location, tags) VALUES
+#('Spikeball Tournament', '1200', '09272021', '1400', '10102021', 'spikeball lit; winners get kool prizes; good good lots fun', 'Abele Quad', '{Sports}'),
+#('Countdown to Craziness', '1200', '10102021', '1200', '10112021', 'Which quad is the craziest???', 'Cameron Indoor Stadium', '{Duke basketball}'),
 import pandas as pd
 import random
 from faker import Faker
 from random import randrange
 from datetime import datetime
+import numpy as np
+import psycopg2
 
 event_org_list = ['Basketball', 'Soccer', 'Spikeball', 'Computer Science', 'Statistical Science', 'AIV', 'DIIG', 'Simple Charity', 'DML']
 event_type = ['Mixer', 'Rager', 'Party', 'Tournament', 'Kickback', 'Hackathon', 'Large Group', 'GBM', 'Interest Meeting']
@@ -15,6 +17,8 @@ dict = {
     'title':[],
     'time':[],
     'date':[],
+    'end_time':[],
+    'end_date':[],
     'description':[],
     'location':[],
     'tags':[]
@@ -39,7 +43,6 @@ for i in range(num_events):
     month = date.month
     day = date.day
     year = date.year
-    
     year_str = str(year)
     if month > 9:
         month_str = str(month)
@@ -51,6 +54,8 @@ for i in range(num_events):
     else:
         day_str = '0' + str(day)
     date_str = month_str + day_str + year_str
+    #generate end date (got lazy)
+    end_date = date_str
     #generate description
     description = fake.sentence()
     #location
@@ -59,12 +64,58 @@ for i in range(num_events):
     #tags - tbd
 
     #add to df
-    df.loc[len(df.index)] = [title, start_time, end_time, date_str, description, location, None]
+    df.loc[len(df.index)] = [title, start_time, date_str, end_time, end_date, description, location, None]
 
 print(df)
 
-from sqlalchemy import create_engine
+#from sqlalchemy import create_engine
 #i'm guessing username: me, password: cs316, mydatabase: postgres
 #engine = create_engine('postgresql://username:password@localhost:5432/mydatabase')
-engine = create_engine('postgresql://me:cs316@localhost:5432/postgres')
-df.to_sql('events_dummy', engine)
+#engine = create_engine('postgresql://me:cs316@localhost:5432/postgres')
+#df.to_sql('events_dummy2', engine)
+param_dic = {
+    "host"      : "localhost",
+    "database"  : "quadex",
+    "port"      : "5432",
+    "user"      : "me",
+    "password"  : "cs316"
+}
+
+def connect(params_dic):
+    """ Connect to the PostgreSQL database server """
+    conn = None
+    try:
+        # connect to the PostgreSQL server
+        print('Connecting to the PostgreSQL database...')
+        conn = psycopg2.connect(**params_dic)
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+        sys.exit(1) 
+    print("Connection successful")
+    return conn
+
+conn = connect(param_dic)
+
+def execute_many(conn, df, table):
+    """
+    Using cursor.executemany() to insert the dataframe
+    """
+    # Create a list of tupples from the dataframe values
+    tuples = [tuple(x) for x in df.to_numpy()]
+    # Comma-separated dataframe columns
+    cols = ','.join(list(df.columns))
+    # SQL quert to execute
+    query  = "INSERT INTO %s(%s) VALUES(%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s)" % (table, cols)
+    cursor = conn.cursor()
+    try:
+        cursor.executemany(query, tuples)
+        conn.commit()
+    except (Exception, psycopg2.DatabaseError) as error:
+        print("Error: %s" % error)
+        conn.rollback()
+        cursor.close()
+        return 1
+    print("execute_many() done")
+    cursor.close()
+
+execute_many(conn, df, 'events')
