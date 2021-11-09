@@ -1,5 +1,5 @@
 import React from 'react'
-import '../stylesheets/pages.scss'
+import '../stylesheets/HomePage.scss'
 import EventTag from './EventTag'
 import SearchField from './SearchField'
 import InputBox from '../components/InputBox'

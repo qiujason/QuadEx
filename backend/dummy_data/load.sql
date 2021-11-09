@@ -30,6 +30,8 @@ INSERT INTO events (title, time, date, end_time, end_date, description, location
 ('thanksgiving break', '0000', '11242021', '1159', '11282021', 'wow; much fun; good break; eat some good turkey, yum yum', null, '{holiday}');
 
 INSERT INTO favorited_events VALUES
+('iyf', 4),
+('iyf', 5),
 ('ajl88', 1), 
 ('ajl88', 2),
 ('ajl88', 3),

@@ -1,10 +1,8 @@
 @import './colors.scss';
 
-$navbar-height: 50px;
-
 .navbar-page {
   background-color: $secondary-color;
-  height: calc(#{$navbar-height} + 5px);
+  height: $navbar-height;
   width: 100vw;
 
   .navbar {
@@ -12,7 +10,7 @@ $navbar-height: 50px;
     align-items: center;
     justify-content: space-between;
     padding: 0 2rem;
-    height: $navbar-height;
+    height: calc(#{$navbar-height} - 5px);
     background-color: $primary-color;
     box-shadow: 0 1px 5px 0px $shadow-color;
 
@@ -31,6 +29,7 @@ $navbar-height: 50px;
       gap: 4rem;
 
       li {
+        text-decoration: none;
         list-style-type: none;
         font-weight: bold;
         color: $primary-text-color;
@@ -75,11 +74,17 @@ $navbar-height: 50px;
         }
   
         .profile-icon {
-          height: calc(#{$navbar-height} - 16px);
-          width: calc(#{$navbar-height} - 16px);
+          transition: all $transition-duration;
+          height: calc(#{$navbar-height} - 20px);
+          width: calc(#{$navbar-height} - 20px);
           background-color: $input-color;
           box-shadow: 0 1px 5px 0px $shadow-color;
-          border-radius: 50%;
+          border-radius: 10px;
+          border: 2px solid transparent;
+
+          &:hover {
+            border: 2px solid $shadow-color;
+          }
         }
       }
     }
