@@ -290,6 +290,14 @@
           vertical-align: top;
           font-weight: bold;
           color: $primary-text-color;
+          display: flex;
+          
+          p {
+            margin-left: 1rem;
+            font-size: 2rem;
+            color: $hover-color;
+            margin-top: 0.8rem;
+          }
         }
       }
 
@@ -400,7 +408,6 @@
         padding: 1rem;
         padding-bottom: 0;
         overflow: overlay;
-        scroll-padding-top: 20px;
 
         .no-events-indicator {
           font-size: 0.8rem;
