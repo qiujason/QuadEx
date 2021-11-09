@@ -399,7 +399,8 @@
         border-radius: $main-containers-border-radius - 5px;
         padding: 1rem;
         padding-bottom: 0;
-        overflow: auto;
+        overflow: overlay;
+        scroll-padding-top: 20px;
 
         .no-events-indicator {
           font-size: 0.8rem;
@@ -554,10 +555,11 @@
 
       .list-container {
         margin-top: 1rem;
+        padding-left: 1rem;
         grid-row: 2 / span 1;
-        overflow: auto;
-        border-top: $secondary-text-color solid 2px;
-        border-bottom: $secondary-text-color solid 2px;
+        overflow: overlay;
+        border-top: $shadow-color solid 2px;
+        border-bottom: $shadow-color solid 2px;
 
         .inputs-container {
           display: flex;
