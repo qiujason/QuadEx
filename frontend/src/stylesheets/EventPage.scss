@@ -172,6 +172,10 @@
         display: flex;
         box-shadow: 0 1px 5px 0px $shadow-color;
 
+        &.highlight {
+          background-color: $shadow-color;
+        }
+
         &:hover {
           border: 2px solid $hover-color;
         }
@@ -311,7 +315,7 @@
     .details-container {
       grid-row: 3 / span 1;
       overflow: overlay;
-      padding-left: 0.5rem;
+      padding: 0 0.5rem;
       
       h1 {
         font-size: 1.4rem;
@@ -342,7 +346,7 @@
       display: flex;
       height: 100%;
 
-      .roster-num {
+      h1 {
         margin: -0.6rem 0.5rem 0 0;
         font-weight: bold;
         color: $hover-color;

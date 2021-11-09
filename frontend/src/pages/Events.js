@@ -6,14 +6,21 @@ import EventTag from './EventTag'
 import UserTag from './UserTag'
 import { IoMdCheckmarkCircle, IoMdCloseCircle, IoMdInformationCircle } from 'react-icons/io'
 import { IoPeopleCircle } from 'react-icons/io5'
+import { convertDate, convertTime, capitalize } from '../helpers/Helpers'
 
 const Events = ({ netID }) => {
     const [ allEvents, setAllEvents ] = useState([]);
     const [ favoritedEventIDs, setFavoritedEventIDs ] = useState(null);
     const [ renderedEvents, setRenderedEvents ] = useState([]);
     const [ showPastEvents, setShowPastEvents ] = useState(false);
-
     const [ showInterestList, setShowInterestList ] = useState(true);
+    const [ detailedEvent, setDetailedEvent ] = useState({
+        id: null,
+        title: '',
+        subtext: '',
+        description: '',
+        members: [],
+    });
 
     async function fetchEvents() {
         let eventsResponse = await fetch('http://localhost:3001/events');
@@ -73,12 +80,38 @@ const Events = ({ netID }) => {
         });
     }
 
-    const handleFavorite = (state, eventID) => {
+    async function updateDetailedEvent(eventObj) {
+        var subText = convertDate(eventObj.date) + ', ' + convertTime(eventObj.time) + ' - ';
+        subText += (eventObj.date !== eventObj.end_date ? convertDate(eventObj.end_date) + ', ' : '');
+        subText += convertTime(eventObj.end_time) + (eventObj.location !== null ? ' ~ @ ' + capitalize(eventObj.location) : '');
+        const newObj = { ...detailedEvent };
+        newObj.id = eventObj.id;
+        newObj.title = eventObj.title.toUpperCase();
+        newObj.subtext =  subText;
+        newObj.description = eventObj.description;
+
+        let response = await fetch('http://localhost:3001/events/listUsers/?id=' + newObj.id);
+        let data = await response.json();
+
+        data.sort(function(obj1, obj2){
+            var name1 = obj1.first_name + obj1.last_name;
+            var name2 = obj2.first_name + obj2.last_name;
+            return name1.localeCompare(name2);
+        });
+
+        newObj.members = data;
+
+        setDetailedEvent(newObj);
+    }
+
+    const handleFavorite = (state, eventObj) => {
         if(state){
-            favoriteEvent(eventID);
+            favoriteEvent(eventObj.id);
         } else {
-            unfavoriteEvent(eventID);
+            unfavoriteEvent(eventObj.id);
         }
+        fetchEvents();
+        updateDetailedEvent(eventObj);
     }
 
     async function favoriteEvent(eventID){
@@ -106,7 +139,6 @@ const Events = ({ netID }) => {
                 body: null
             } 
         );
-        fetchEvents();
     }
 
     return (
@@ -131,6 +163,7 @@ const Events = ({ netID }) => {
                             renderedEvents.map((eventObj) => 
                                 <EventTag 
                                     key={eventObj.id}
+                                    highlight={eventObj.id === detailedEvent.id}
                                     title={eventObj.title} 
                                     startDate={eventObj.date} 
                                     endDate={eventObj.end_date} 
@@ -139,7 +172,8 @@ const Events = ({ netID }) => {
                                     location={eventObj.location}
                                     description={eventObj.description} 
                                     initialFavoriteState={favoritedEventIDs.has(eventObj.id) ? true : false}
-                                    onBtnClick={(e) => handleFavorite(e, eventObj.id)}
+                                    onClick={() => updateDetailedEvent(eventObj)}
+                                    onBtnClick={(e) => handleFavorite(e, eventObj)}
                                 />
                             )
                         }
@@ -160,19 +194,18 @@ const Events = ({ netID }) => {
                 </div>
                 {showInterestList ?
                     <div className='details-container'>
-                        <h1 className='title'>HACK DUKE 2021</h1>
-                        <p className='subheader'>Nov 24, 2021, 12:00 AM - Nov 28, 2021, 6:00 PM</p>
-                        <p className='description'>Wow; much fun; good break; eat some good turkey; yum yum; this is a description about an event and it is supposed to be long for styling reference.</p>
+                        <h1 className='title'>{detailedEvent.title}</h1>
+                        <p className='subheader'>{detailedEvent.subtext}</p>
+                        <p className='description'>{detailedEvent.description}</p>
                     </div>
                 :
                     <>
-                    <p className='roster-title'><h1 className='roster-num'>5</h1>members have favorited this event</p>
+                    <div className="roster-title">
+                        <h1>{detailedEvent.members.length}</h1>
+                        <p>members have favorited this event</p>
+                    </div>
                     <div className='roster-container'>
-                        <UserTag name='Donghan Park' netID='dp239'/>
-                        <UserTag name='Isaac Fan' netID='iyf'/>
-                        <UserTag name='Judy Zhong' netID='jtz3'/>
-                        <UserTag name='Andrew Lee' netID='ajl88'/>
-                        <UserTag name='Jason Qiu' netID='jq39'/>
+                        {detailedEvent.members.map(userObj => <UserTag key={userObj.net_id} name={capitalize(userObj.first_name + ' ' + userObj.last_name)} netID={userObj.net_id}/>)}
                     </div>
                     </>
                 }
