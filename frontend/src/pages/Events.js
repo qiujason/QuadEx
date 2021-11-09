@@ -69,6 +69,31 @@ const Events = ({ netID }) => {
         });
     }
 
+    const handleFavorite = (state, eventID) => {
+        if(state){
+            favoriteEvent(eventID);
+        } else {
+            unfavoriteEvent(eventID);
+        }
+    }
+
+    async function favoriteEvent(eventID){
+
+    }
+
+    async function unfavoriteEvent(eventID) {
+        await fetch('http://localhost:3001/events/favoriteForUser/?net_id=' + netID + '&event_id=' + eventID, 
+            { 
+                method: 'DELETE', 
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: null
+            } 
+        );
+        fetchEvents();
+    }
+
     return (
         <div className='events-page'>
             <div className='events-container'>
@@ -99,7 +124,7 @@ const Events = ({ netID }) => {
                                     location={eventObj.location}
                                     description={eventObj.description} 
                                     initialFavoriteState={favoritedEventIDs.has(eventObj.id) ? true : false}
-                                    onBtnClick={(e) => {console.log(e)}}
+                                    onBtnClick={(e) => handleFavorite(e, eventObj.id)}
                                 />
                             )
                         }
