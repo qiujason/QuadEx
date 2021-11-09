@@ -9,11 +9,6 @@ const minPasswordLength = 4;
 /*
 TODO:
 
-test include past event filter with times (dates checked): add total # of events indicator
-
-separate field checkers into separate class -> 
-settings fields must also be value checked in similar fashion
-
 update password in settings
 */
 
@@ -51,7 +46,7 @@ const Login = ({ setNetID }) => {
         if(userData[0] && 'password' in userData[0]){
             // user found
             if(inputValues.password[0] === userData[0].password) {
-                console.log('successful authentication');
+                // successful authentication
                 setNetID(inputValues.username[0]);
             } else {
                 updateState(inputValues, setInputValues, 'password', true);
@@ -144,6 +139,7 @@ const Login = ({ setNetID }) => {
                             placeholder='e.g. abc123' 
                             value={registerValues.net_id[0]} 
                             width='16rem'
+                            onEnter={() => postUserData()}
                             onChange={val => {
                                 updateState(registerValues, setRegisterValues, 'net_id', val);
                                 updateState(registerValues, setRegisterValues, 'net_id', false);
@@ -156,6 +152,7 @@ const Login = ({ setNetID }) => {
                             value={registerValues.password[0]}
                             width='16rem'
                             isPassword={true}
+                            onEnter={() => postUserData()}
                             onChange={val => {
                                 updateState(registerValues, setRegisterValues, 'password', val);
                                 updateState(registerValues, setRegisterValues, 'confirm_password', '');
@@ -169,6 +166,7 @@ const Login = ({ setNetID }) => {
                             value={registerValues.confirm_password[0]} 
                             width='16rem'
                             isPassword={true}
+                            onEnter={() => postUserData()}
                             onChange={val => {
                                 updateState(registerValues, setRegisterValues, 'confirm_password', val);
                                 updateState(registerValues, setRegisterValues, 'confirm_password', false);
@@ -181,6 +179,7 @@ const Login = ({ setNetID }) => {
                                 placeholder='First' 
                                 value={registerValues.first_name[0]} 
                                 width='8.5rem'
+                                onEnter={() => postUserData()}
                                 onChange={val => {
                                     updateState(registerValues, setRegisterValues, 'first_name', val);
                                     updateState(registerValues, setRegisterValues, 'first_name', false);
@@ -191,6 +190,7 @@ const Login = ({ setNetID }) => {
                                 placeholder='Last' 
                                 value={registerValues.last_name[0]} 
                                 width='6.5rem'
+                                onEnter={() => postUserData()}
                                 onChange={val => {
                                     updateState(registerValues, setRegisterValues, 'last_name', val);
                                     updateState(registerValues, setRegisterValues, 'last_name', false);
@@ -206,6 +206,7 @@ const Login = ({ setNetID }) => {
                                 width='4rem'
                                 limit={2} 
                                 isNumeric={true}
+                                onEnter={() => postUserData()}
                                 onChange={val => {
                                     updateState(registerValues, setRegisterValues, 'birthday_M', val);
                                     updateState(registerValues, setRegisterValues, 'birthday_M', false);
@@ -218,6 +219,7 @@ const Login = ({ setNetID }) => {
                                 width='4rem'
                                 limit={2} 
                                 isNumeric={true}
+                                onEnter={() => postUserData()}
                                 onChange={val => {
                                     updateState(registerValues, setRegisterValues, 'birthday_D', val);
                                     updateState(registerValues, setRegisterValues, 'birthday_D', false);
@@ -230,6 +232,7 @@ const Login = ({ setNetID }) => {
                                 width='6rem'
                                 limit={4} 
                                 isNumeric={true}
+                                onEnter={() => postUserData()}
                                 onChange={val => {
                                     updateState(registerValues, setRegisterValues, 'birthday_Y', val);
                                     updateState(registerValues, setRegisterValues, 'birthday_Y', false);
@@ -242,6 +245,7 @@ const Login = ({ setNetID }) => {
                             placeholder='e.g. Cardinal' 
                             value={registerValues.quad[0]} 
                             width='16rem'
+                            onEnter={() => postUserData()}
                             onChange={val => {
                                 updateState(registerValues, setRegisterValues, 'quad', val);
                                 updateState(registerValues, setRegisterValues, 'quad', false);

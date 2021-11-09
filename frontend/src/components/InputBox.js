@@ -22,7 +22,7 @@ const InputBox = ({ placeholder, value, onChange, width = '10rem', limit, isNume
 
     return (
         <div className='input-box-container' style={widthStyle}>
-            {error.length >= 1 ? <p className='error-display'>* {value === '' ? 'Empty' : error}</p> : ''}
+            {error.length >= 1 ? <p className='error-display'>* {value === '' ? 'Required' : error}</p> : ''}
             <input placeholder={placeholder} value={value} onKeyDown={e => handleKeyPress(e)} type={!isPassword ? 'text' : 'password'} className="input-box" onChange={e => handleChange(e)} onBlur={e => handleBlur(e)}/>
         </div>
     )

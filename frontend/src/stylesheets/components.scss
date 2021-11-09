@@ -18,7 +18,7 @@
     outline: none;
     padding-left: 0.5rem;
     border-radius: 10px;
-    transition: all 0.3s;
+    transition: all $transition-duration;
 
     &:hover {
       border-color: $shadow-color;
