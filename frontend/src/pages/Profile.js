@@ -8,34 +8,8 @@ import { convertDate, capitalize } from '../helpers/Helpers'
 import { IoSettingsSharp } from 'react-icons/io5'
 import { IoMdCheckmarkCircle, IoMdCloseCircle } from 'react-icons/io'
 
-/*
-    const postTest = () => {
-        fetch('http://localhost:3001/users', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                net_id:'dp239', 
-                password:'pass',
-                first_name: 'donghan',
-                last_name: 'park',
-                birthday: '03092001',
-                year: null,
-                hometown: null,
-                quad: null,
-                degree: null,
-                bio: null,
-                insta: null,
-                bday_cal: true
-            })
-        }).then(response => {
-            return response.text();
-        }).then(data => {
-            console.log(data);
-        });
-    }
-*/
+
+const minPasswordLength = 4;
 
 const Profile = ({ netID }) => {
     const [ userInfo, setUserInfo ] = useState({
@@ -178,6 +152,14 @@ const Profile = ({ netID }) => {
                 numErrors++;
             }
         });
+        if(settingsValues['password'][0] !== '' && String(settingsValues['password'][0]).length < 4){
+            numErrors++;
+            updateSettingsValues('password', true);
+        }
+        if(settingsValues['password'][0] !== userInfo.password && settingsValues['confirm_password'][0] !== settingsValues['password'][0]){
+            numErrors++;
+            updateSettingsValues('confirm_password', true);
+        }
         if(Number(settingsValues['birthday_M'][0]) < 1 || Number(settingsValues['birthday_M'][0]) > 12){
             numErrors++;
             updateSettingsValues('birthday_M', true);
@@ -238,6 +220,8 @@ const Profile = ({ netID }) => {
         setSettingsValues({
             first_name: [userInfo.first_name, false],
             last_name: [userInfo.last_name, false],
+            password: [userInfo.password, false],
+            confirm_password: ['', false],
             quad: [userInfo.quad, false],
             birthday_M: [userInfo.birthday.substring(0, 2), false],
             birthday_D: [userInfo.birthday.substring(2, 4), false],
@@ -336,6 +320,8 @@ const Profile = ({ netID }) => {
 
                     {userInfo.net_id !== 'net_id' ? 
                         <div className='list-container'>
+                            <p className='header'>BASIC INFORMATION</p>
+
                             <p className='subheader'>Name</p>
                             <div className='inputs-container'>
                                 <InputBox placeholder={'First'} value={settingsValues['first_name'][0]} error={settingsValues['first_name'][1] ? 'error' : ''} width='10rem' onChange={val => updateSettingsValues('first_name', val)}/>
@@ -375,13 +361,24 @@ const Profile = ({ netID }) => {
                             </div>
                             
 
-                            <p className='subheader'>Preferences</p>
+                            <p className='header'>PREFERENCES</p>
+
+                            <p className='subheader'>New Password</p>
+                            <InputBox placeholder={'At least ' + minPasswordLength + ' characters'} value={settingsValues['password'][0] ?? ''} error={settingsValues['password'][1] ? 'Must be at least ' + minPasswordLength + ' characters' : ''} isPassword={true} width='18rem' onChange={val => { updateSettingsValues('password', val); updateSettingsValues('confirm_password', '') }}/>
+
+                            <p className='subheader'>Confirm New Password</p>
+                            <InputBox placeholder={'Password'} value={settingsValues['confirm_password'][0] ?? ''} error={settingsValues['confirm_password'][1] ? 'Passwords do not match' : ''} isPassword={true} width='18rem' onChange={val => updateSettingsValues('confirm_password', val)}/>
+                            
+                            <p className='subheader'/>
+
                             <div className="checkbox">
                                 <div className={'icon-container' + (settingsValues['bday_cal'][0] ? ' active' : '')} onClick={() => updateSettingsValues('bday_cal', !settingsValues['bday_cal'][0])}>
                                     {settingsValues['bday_cal'][0] ? <IoMdCheckmarkCircle className='icon active'/> : <IoMdCloseCircle className='icon'/>}
                                 </div>
                                 <p>Make birthday public</p>
                             </div>
+
+                            <p className='subheader'/>
                         </div>
                     : ''}
 

@@ -615,6 +615,13 @@
           margin: 1rem 0 0.5rem 0.3rem;
         }
 
+        .header {
+          font-weight: bold;
+          color: $hover-color;
+          font-size: 1rem;
+          margin: 1rem 0 0 0;
+        }
+
         .checkbox {
           width: 100%;
           height: 2rem;
