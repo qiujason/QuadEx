@@ -267,7 +267,7 @@ const Profile = ({ netID }) => {
             <div className='events-page-container'>
                 <div className='events-container'>
                     <div className='title-container'>
-                        <h1>EVENTS<p>{renderedEvents.length}</p></h1>
+                        <h1>MY EVENTS<p>{renderedEvents.length}</p></h1>
                     </div>
                     <div className='filter-container'>
                         <SearchField placeholder='Search for events by title' onChange={filterTitle}/>

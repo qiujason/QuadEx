@@ -3,6 +3,7 @@ import '../stylesheets/EventPage.scss'
 import { useState, useEffect } from 'react'
 import SearchField from './SearchField'
 import EventTag from './EventTag'
+import UserTag from './UserTag'
 import { IoMdCheckmarkCircle, IoMdCloseCircle } from 'react-icons/io'
 
 const Events = ({ netID }) => {
@@ -109,11 +110,11 @@ const Events = ({ netID }) => {
         <div className='events-page'>
             <div className='events-container'>
                 <div className='title-container'>
-                    <h1>EVENTS<p>{renderedEvents.length}</p></h1>
+                    <h1>QUAD EVENTS<p>{renderedEvents.length}</p></h1>
                 </div>
                 <div className='filter-container'>
                     <SearchField placeholder='Search for events by title' onChange={filterTitle}/>
-                    <div className="time-container">
+                    <div className='time-container'>
                         <div className={'icon-container' + (showPastEvents ? ' active' : '')} onClick={() => setShowPastEvents(!showPastEvents)}>
                             {showPastEvents ? <IoMdCheckmarkCircle className='icon active'/> : <IoMdCloseCircle className='icon'/>}
                         </div>
@@ -146,6 +147,23 @@ const Events = ({ netID }) => {
                         }
                     </div>
                 : ''}
+            </div>
+            <div className='event-details-container'>
+                <div className='title-container'>
+                    <h1>EVENT DETAILS</h1>
+                </div>
+                <div className='details-container'>
+                    <h1 className='title'>HACK DUKE 2021</h1>
+                    <p className='subheader'>Nov 24, 2021, 12:00 AM - Nov 28, 2021, 6:00 PM</p>
+                    <p className='description'>Wow; much fun; good break; eat some good turkey; yum yum; this is a description about an event and it is supposed to be long for styling reference.</p>
+                </div>
+                <h1 className='roster-title'>EVENT INTEREST</h1>
+                <div className='roster-container'>
+                    <UserTag/>
+                    <UserTag/>
+                    <UserTag/>
+                    <UserTag/>
+                </div>
             </div>
         </div>
     )
