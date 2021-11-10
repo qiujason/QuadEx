@@ -9,6 +9,7 @@ backend/node_modules
 
 # testing
 /coverage
+/backend/images
 
 # production
 /build
