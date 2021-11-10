@@ -25,7 +25,7 @@ const Profile = ({ netID }) => {
         bio: null,
         insta: null,
         bday_cal: true,
-        points: null,
+        points: 0,
         events: [
             {
                 id: null,
@@ -53,7 +53,7 @@ const Profile = ({ netID }) => {
         let eventsResponse = await fetch('http://localhost:3001/events/favoriteByUser/?id=' + netID);
         let eventsData = await eventsResponse.json();
 
-        let pointsResponse = await fetch('http://localhost:3001/points/sum/?id=' + netID);
+        let pointsResponse = await fetch('http://localhost:3001/points/user/sum/?id=' + netID);
         let pointsData = await pointsResponse.json();
 
         const prevUserInfo = { ...userInfo };
@@ -61,7 +61,7 @@ const Profile = ({ netID }) => {
             prevUserInfo[key] = userData[0][key];
         });
         prevUserInfo.events = eventsData;
-        //prevUserInfo.points = pointsData[0];
+        prevUserInfo.points = pointsData[0].sum;
         setUserInfo(prevUserInfo);
     }
 
@@ -246,7 +246,7 @@ const Profile = ({ netID }) => {
                     <div className='title-container'>
                         <h1>Hi, {userInfo.first_name.toUpperCase()}.</h1>
                         <p className='bio-text'>"{userInfo.bio ?? 'Add a bio!'}"</p>
-                        <p>[temp: 100] Points</p>
+                        <p>{userInfo.points ?? '0'} points</p>
                     </div>
                 </div>
                 <div className='info-sub-container'>
