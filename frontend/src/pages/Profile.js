@@ -57,12 +57,16 @@ const Profile = ({ netID }) => {
         let pointsResponse = await fetch('http://localhost:3001/points/user/sum/?id=' + netID);
         let pointsData = await pointsResponse.json();
 
+        let adminResponse = await fetch('http://localhost:3001/admins/?id=' + netID);
+        let adminData = await adminResponse.json();
+
         const prevUserInfo = { ...userInfo };
         Object.keys(userData[0]).forEach(key => {
             prevUserInfo[key] = userData[0][key];
         });
         prevUserInfo.events = eventsData;
         prevUserInfo.points = pointsData[0].sum;
+        prevUserInfo.isAdmin = adminData.length > 0;
         setUserInfo(prevUserInfo);
     }
 
