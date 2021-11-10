@@ -26,6 +26,7 @@ const Profile = ({ netID }) => {
         insta: null,
         bday_cal: true,
         points: 0,
+        isAdmin: false,
         events: [
             {
                 id: null,
