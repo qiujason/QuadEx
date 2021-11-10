@@ -43,3 +43,8 @@
 	"reason": "being too cool" 
     }
 * Delete points - http://localhost:3001/points/?id=______ (id is point id in table)
+
+## Images
+* Get image by filename - http://localhost:3001/images/_(filename)__
+* Upload image - http://localhost:3001/images (multipart form)
+* Delete image by filename - http://localhost:3001/images/_(filename)__

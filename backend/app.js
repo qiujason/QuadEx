@@ -9,6 +9,8 @@ const eventsRouter = require('./routes/events.routes')
 const quadsRouter = require('./routes/quads.routes')
 const pointsRouter = require('./routes/points.routes')
 
+const imagesRouter = require('./routes/images.routes')
+
 app.use(bodyParser.json())
 app.use(cors())
 app.use(
@@ -25,6 +27,8 @@ app.use('/users', usersRouter)
 app.use('/events', eventsRouter)
 app.use('/quads', quadsRouter)
 app.use('/points', pointsRouter)
+
+app.use('/images', imagesRouter)
 
 app.listen(port, () => {
     console.log(`App running on port ${port}.`)
