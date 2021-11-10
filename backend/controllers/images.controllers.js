@@ -21,12 +21,11 @@ const getImage = (req, res) => {
 }
 
 const postImage = (req, res) => {
-    const { filename } = req.params
-
     console.log("upload image")
     console.log(req.file)
     
     const {
+        originalname,
         path,
         mimetype,
         size
@@ -34,7 +33,7 @@ const postImage = (req, res) => {
 
     db.query('INSERT INTO images (filename, filepath, mimetype, size) VALUES ($1, $2, $3, $4)',
         [
-            filename,
+            originalname,
             path,
             mimetype,
             size
@@ -43,7 +42,7 @@ const postImage = (req, res) => {
             if (error) {
                 res.status(500).send("Error executing image upload query: " + error)
             } else {
-                res.status(201).send(`Image uploaded with filename: ${filename}`)
+                res.status(201).send(`Image uploaded with filename: ${originalname}`)
             }
         }
     )
