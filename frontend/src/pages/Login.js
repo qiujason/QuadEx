@@ -9,9 +9,12 @@ const minPasswordLength = 4;
 /*
 TODO:
 
-points system
-roles -> allow only admins to create events & modify points
+forms:
 events creation page
+points addition page
+
+bug: detailed event view not updating on favorite/unfavorite
+
 */
 
 const Login = ({ setNetID }) => {
