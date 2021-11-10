@@ -37,4 +37,4 @@ INSERT INTO favorited_events VALUES
 ('dp239', 5);
 
 INSERT INTO quad_events VALUES
-('Blue Jay', 2);
+('blue jay', 2);
