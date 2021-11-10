@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react'
 import { convertDate, capitalize } from '../helpers/Helpers'
 import { IoSettingsSharp } from 'react-icons/io5'
 import { IoMdCheckmarkCircle, IoMdCloseCircle } from 'react-icons/io'
+import { MdAdminPanelSettings } from 'react-icons/md'
 
 
 const minPasswordLength = 4;
@@ -247,7 +248,10 @@ const Profile = ({ netID, isAdmin }) => {
                         <div className='profile-picture'/>
                     </div>
                     <div className='title-container'>
-                        <h1>Hi, {userInfo.first_name.toUpperCase()}.</h1>
+                        <div className="title">
+                            <h1>Hi, {userInfo.first_name.toUpperCase()}.</h1>
+                            {isAdmin ? <MdAdminPanelSettings className='admin-icon'/> : ''}
+                        </div>
                         <p className='bio-text'>"{userInfo.bio ?? 'Add a bio!'}"</p>
                         <p>{userInfo.points ?? '0'} points</p>
                     </div>

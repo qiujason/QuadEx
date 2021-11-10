@@ -2,8 +2,9 @@ import React from 'react'
 import '../stylesheets/Navbar.scss'
 import { Link } from 'react-router-dom'
 import { GiAtomicSlashes } from 'react-icons/gi'
+import { MdAdminPanelSettings } from 'react-icons/md'
 
-const Navbar = ({ netID, setNetID }) => {
+const Navbar = ({ netID, setNetID, isAdmin }) => {
     return (
         <div className='navbar-page'>
             <div className="navbar">
@@ -19,6 +20,7 @@ const Navbar = ({ netID, setNetID }) => {
                     </Link>
                     <li onClick={() => {alert('nope >:I')}}>LEADERBOARD</li>
                     <div className="profile-container">
+                        {isAdmin ? <MdAdminPanelSettings className='admin-icon'/> : ''}
                         <div className="name-container">
                             <p className='header'>{netID}</p>
                             <Link to='/' style={{textDecoration: 'none'}}>

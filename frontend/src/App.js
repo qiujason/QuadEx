@@ -28,7 +28,7 @@ function App() {
     return (
         <div className="App">
             <Router>
-                {netID !== null && netID.length > 0 ? <Navbar netID={netID} setNetID={setNetID}/> : ''}
+                {netID !== null && netID.length > 0 ? <Navbar netID={netID} setNetID={setNetID} isAdmin={isAdmin}/> : ''}
                 <Switch>
                     <Route path="/" exact render={props => netID !== null && netID.length > 0 ? 
                         <Profile {...props} netID={netID} isAdmin={isAdmin}/> 

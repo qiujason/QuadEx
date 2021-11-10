@@ -187,8 +187,19 @@
         flex-direction: column;
         margin-left: 1rem;
 
-        h1 {
-          font-size: 4rem;
+        .title {
+          display: flex;
+          align-items: center;
+
+          h1 {
+            font-size: 4rem;
+          }
+
+          .admin-icon {
+            margin-left: 1rem;
+            color: $hover-color;
+            font-size: 4rem;
+          }
         }
 
         p {
