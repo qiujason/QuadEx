@@ -8,6 +8,7 @@ import { convertDate, capitalize } from '../helpers/Helpers'
 import { IoSettingsSharp } from 'react-icons/io5'
 import { IoMdCheckmarkCircle, IoMdCloseCircle } from 'react-icons/io'
 import { MdAdminPanelSettings } from 'react-icons/md'
+import { AiOutlinePlusCircle } from 'react-icons/ai'
 
 
 const minPasswordLength = 4;
@@ -250,7 +251,12 @@ const Profile = ({ netID, isAdmin }) => {
                     <div className='title-container'>
                         <div className="title">
                             <h1>Hi, {userInfo.first_name.toUpperCase()}.</h1>
-                            {isAdmin ? <MdAdminPanelSettings className='admin-icon'/> : ''}
+                            {isAdmin ? 
+                            <div className='admin-btn'>
+                                <AiOutlinePlusCircle className='admin-plus-icon'/>
+                                <p>add events &amp; points</p>
+                            </div>
+                            : ''}
                         </div>
                         <p className='bio-text'>"{userInfo.bio ?? 'Add a bio!'}"</p>
                         <p>{userInfo.points ?? '0'} points</p>
