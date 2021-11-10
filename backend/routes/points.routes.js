@@ -7,7 +7,7 @@ router.get('/user/sum', pointsController.getSumPointsByUserID)
 router.get('/quad', pointsController.getPointsByQuad)
 router.get('/quad/sum', pointsController.getSumPointsByQuad)
 router.post('/', pointsController.postPoints)
-// router.put('/', pointsController.putPoints)
+router.put('/', pointsController.putPoints)
 router.delete('/', pointsController.deletePoints)
 
 module.exports = router
