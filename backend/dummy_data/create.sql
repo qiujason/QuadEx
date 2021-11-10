@@ -55,3 +55,10 @@ CREATE TABLE quad_events(
     event_id SERIAL references events(id),
     PRIMARY KEY(quad_name, event_id)
 );
+
+CREATE TABLE images(
+    filename TEXT PRIMARY KEY NOT NULL,
+    filepath TEXT NOT NULL,
+    mimetype TEXT NOT NULL,
+    size BIGINT NOT NULL
+);
