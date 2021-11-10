@@ -27,7 +27,8 @@ df = pd.DataFrame(dict)
 
 for i in range(num_events):
     #generate event title
-    title = random.choice(event_org_list) + " " + random.choice(event_type)
+    type_event = random.choice(event_type)
+    title = random.choice(event_org_list) + " " + type_event
     #generate event start time
     hour = random.randint(0, 23)
     min = random.randint(0,59)
@@ -81,10 +82,11 @@ for i in range(num_events):
     #location
     location_list = ['WU', 'Hollows A 3001', 'Bryant Center', 'Main Quad', 'Chapel', 'UNC', 'Panera']
     location = random.choice(location_list)
-    #tags - tbd
+    #tag = title.split() ''.join(tag[-1])
+    tags = [type_event]
 
     #add to df
-    df.loc[len(df.index)] = [title, start_time, date_str, end_time, end_date, description, location, None]
+    df.loc[len(df.index)] = [title, start_time, date_str, end_time, end_date, description, location, tags]
 
 print(df)
 
