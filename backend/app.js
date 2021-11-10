@@ -8,6 +8,7 @@ const usersRouter = require('./routes/users.routes')
 const eventsRouter = require('./routes/events.routes')
 const quadsRouter = require('./routes/quads.routes')
 const pointsRouter = require('./routes/points.routes')
+const adminsRouter = require('./routes/admin.routes')
 
 const imagesRouter = require('./routes/images.routes')
 
@@ -27,6 +28,7 @@ app.use('/users', usersRouter)
 app.use('/events', eventsRouter)
 app.use('/quads', quadsRouter)
 app.use('/points', pointsRouter)
+app.use('/admins', adminsRouter)
 
 app.use('/images', imagesRouter)
 
