@@ -10,7 +10,27 @@ const getPointsByUserID = (req, res) => {
     })
 }
 
+const getSumPointsByUserID = (req, res) => {
+    db.query('SELECT SUM(point_value) FROM points WHERE net_id = $1', [req.query.id], (error, results) => {
+        if (error) {
+            res.status(500).send("Error executing query: " + error)
+        } else {
+            res.status(200).json(results.rows)
+        }
+    })
+}
+
 const getPointsByQuad = (req, res) => {
+    db.query('SELECT * FROM points LEFT JOIN users ON points.net_id = users.net_id WHERE quad = $1', [req.query.id], (error, results) => {
+        if (error) {
+            res.status(500).send("Error executing query: " + error)
+        } else {
+            res.status(200).json(results.rows)
+        }
+    })
+}
+
+const getSumPointsByQuad = (req, res) => {
     db.query('SELECT SUM(point_value) as points FROM points LEFT JOIN users ON points.net_id = users.net_id WHERE quad = $1 GROUP BY quad', [req.query.id], (error, results) => {
         if (error) {
             res.status(500).send("Error executing query: " + error)
@@ -56,7 +76,9 @@ const deletePoints = (req, res) => {
 
 module.exports = {
     getPointsByUserID,
+    getSumPointsByUserID,
     getPointsByQuad,
+    getSumPointsByQuad,
     postPoints,
     deletePoints
 }
