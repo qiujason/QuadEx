@@ -33,8 +33,10 @@
 * Delete quad - http://localhost:3001/quads/?id=_______
 
 ## Points
-* Get points by user id - http://localhost:3001/points/?id=____
+* Get points by user id - http://localhost:3001/points/user/?id=_____
+* Get sum points by user id - http://localhost:3001/points/user/sum/?id=_____
 * Get points by quad name - http://localhost:3001/points/quad/?id=________
+* Get sum points by quad name - http://localhost:3001/points/quad/sum/?id=___
 * Post new points - http://localhost:3001/points (with request body); returns points ID
     * ex. {
 	"net_id": "jq39",
@@ -42,6 +44,7 @@
 	"point_value": "-10",
 	"reason": "being too cool" 
     }
+* Put points - localhost:3001/points/?id=_______ (with request body)
 * Delete points - http://localhost:3001/points/?id=______ (id is point id in table)
 
 ## Images
