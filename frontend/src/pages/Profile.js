@@ -7,11 +7,12 @@ import { useState, useEffect } from 'react'
 import { convertDate, capitalize } from '../helpers/Helpers'
 import { IoSettingsSharp } from 'react-icons/io5'
 import { IoMdCheckmarkCircle, IoMdCloseCircle } from 'react-icons/io'
+import { MdAdminPanelSettings } from 'react-icons/md'
 
 
 const minPasswordLength = 4;
 
-const Profile = ({ netID }) => {
+const Profile = ({ netID, isAdmin }) => {
     const [ userInfo, setUserInfo ] = useState({
         net_id:'net_id', 
         password:'password',
@@ -25,6 +26,7 @@ const Profile = ({ netID }) => {
         bio: null,
         insta: null,
         bday_cal: true,
+        points: 0,
         events: [
             {
                 id: null,
@@ -46,18 +48,24 @@ const Profile = ({ netID }) => {
     }, []);
 
     async function fetchUserInfo() {
-        const net_id = netID;
-        let userResponse = await fetch('http://localhost:3001/users/?id=' + net_id);
+        let userResponse = await fetch('http://localhost:3001/users/?id=' + netID);
         let userData = await userResponse.json();
 
-        let eventsResponse = await fetch('http://localhost:3001/events/favoriteByUser/?id=' + net_id);
+        let eventsResponse = await fetch('http://localhost:3001/events/favoriteByUser/?id=' + netID);
         let eventsData = await eventsResponse.json();
+
+        let pointsResponse = await fetch('http://localhost:3001/points/user/sum/?id=' + netID);
+        let pointsData = await pointsResponse.json();
+
+        // var data = new FormData();
+        // data.append("data", imagedata);
 
         const prevUserInfo = { ...userInfo };
         Object.keys(userData[0]).forEach(key => {
             prevUserInfo[key] = userData[0][key];
         });
         prevUserInfo.events = eventsData;
+        prevUserInfo.points = pointsData[0].sum;
         setUserInfo(prevUserInfo);
     }
 
@@ -240,9 +248,12 @@ const Profile = ({ netID }) => {
                         <div className='profile-picture'/>
                     </div>
                     <div className='title-container'>
-                        <h1>Hi, {userInfo.first_name.toUpperCase()}.</h1>
+                        <div className="title">
+                            <h1>Hi, {userInfo.first_name.toUpperCase()}.</h1>
+                            {isAdmin ? <MdAdminPanelSettings className='admin-icon'/> : ''}
+                        </div>
                         <p className='bio-text'>"{userInfo.bio ?? 'Add a bio!'}"</p>
-                        <p>[temp: 100] Points</p>
+                        <p>{userInfo.points ?? '0'} points</p>
                     </div>
                 </div>
                 <div className='info-sub-container'>
