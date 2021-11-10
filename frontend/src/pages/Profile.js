@@ -11,7 +11,7 @@ import { IoMdCheckmarkCircle, IoMdCloseCircle } from 'react-icons/io'
 
 const minPasswordLength = 4;
 
-const Profile = ({ netID }) => {
+const Profile = ({ netID, isAdmin }) => {
     const [ userInfo, setUserInfo ] = useState({
         net_id:'net_id', 
         password:'password',
@@ -26,7 +26,6 @@ const Profile = ({ netID }) => {
         insta: null,
         bday_cal: true,
         points: 0,
-        isAdmin: false,
         events: [
             {
                 id: null,
@@ -57,8 +56,8 @@ const Profile = ({ netID }) => {
         let pointsResponse = await fetch('http://localhost:3001/points/user/sum/?id=' + netID);
         let pointsData = await pointsResponse.json();
 
-        let adminResponse = await fetch('http://localhost:3001/admins/?id=' + netID);
-        let adminData = await adminResponse.json();
+        // var data = new FormData();
+        // data.append("data", imagedata);
 
         const prevUserInfo = { ...userInfo };
         Object.keys(userData[0]).forEach(key => {
@@ -66,7 +65,6 @@ const Profile = ({ netID }) => {
         });
         prevUserInfo.events = eventsData;
         prevUserInfo.points = pointsData[0].sum;
-        prevUserInfo.isAdmin = adminData.length > 0;
         setUserInfo(prevUserInfo);
     }
 
