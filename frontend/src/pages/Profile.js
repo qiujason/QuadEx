@@ -25,6 +25,7 @@ const Profile = ({ netID }) => {
         bio: null,
         insta: null,
         bday_cal: true,
+        points: null,
         events: [
             {
                 id: null,
@@ -46,18 +47,21 @@ const Profile = ({ netID }) => {
     }, []);
 
     async function fetchUserInfo() {
-        const net_id = netID;
-        let userResponse = await fetch('http://localhost:3001/users/?id=' + net_id);
+        let userResponse = await fetch('http://localhost:3001/users/?id=' + netID);
         let userData = await userResponse.json();
 
-        let eventsResponse = await fetch('http://localhost:3001/events/favoriteByUser/?id=' + net_id);
+        let eventsResponse = await fetch('http://localhost:3001/events/favoriteByUser/?id=' + netID);
         let eventsData = await eventsResponse.json();
+
+        let pointsResponse = await fetch('http://localhost:3001/points/sum/?id=' + netID);
+        let pointsData = await pointsResponse.json();
 
         const prevUserInfo = { ...userInfo };
         Object.keys(userData[0]).forEach(key => {
             prevUserInfo[key] = userData[0][key];
         });
         prevUserInfo.events = eventsData;
+        //prevUserInfo.points = pointsData[0];
         setUserInfo(prevUserInfo);
     }
 
