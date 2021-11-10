@@ -48,3 +48,9 @@
 * Get image by filename - http://localhost:3001/images/_(filename)__
 * Upload image - http://localhost:3001/images/_(filename)__ (multipart form)
 * Delete image by filename - http://localhost:3001/images/_(filename)__
+
+## Admin
+* Get admin - http://localhost:3001/admins/?id=_____
+* Post new admin - http://localhost:3001/admins (with request body)
+* Put admin - http://localhost:3001/admins/?id=____ (with request body)
+* Delete admin - http://localhost:3001/admins/?id=______
