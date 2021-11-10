@@ -21,11 +21,12 @@ const getImage = (req, res) => {
 }
 
 const postImage = (req, res) => {
+    const { filename } = req.params
+
     console.log("upload image")
     console.log(req.file)
     
     const {
-        filename,
         path,
         mimetype,
         size
