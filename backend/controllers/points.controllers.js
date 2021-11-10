@@ -10,7 +10,27 @@ const getPointsByUserID = (req, res) => {
     })
 }
 
+const getSumPointsByUserID = (req, res) => {
+    db.query('SELECT SUM(point_value) FROM points WHERE net_id = $1', [req.query.id], (error, results) => {
+        if (error) {
+            res.status(500).send("Error executing query: " + error)
+        } else {
+            res.status(200).json(results.rows)
+        }
+    })
+}
+
 const getPointsByQuad = (req, res) => {
+    db.query('SELECT * FROM points LEFT JOIN users ON points.net_id = users.net_id WHERE quad = $1', [req.query.id], (error, results) => {
+        if (error) {
+            res.status(500).send("Error executing query: " + error)
+        } else {
+            res.status(200).json(results.rows)
+        }
+    })
+}
+
+const getSumPointsByQuad = (req, res) => {
     db.query('SELECT SUM(point_value) as points FROM points LEFT JOIN users ON points.net_id = users.net_id WHERE quad = $1 GROUP BY quad', [req.query.id], (error, results) => {
         if (error) {
             res.status(500).send("Error executing query: " + error)
@@ -44,6 +64,31 @@ const postPoints = (req, res) => {
         })
 }
 
+const putPoints = (req, res) => {
+    const {
+        net_id,
+        date,
+        point_value,
+        reason
+    } = req.body
+
+    db.query('UPDATE points SET net_id = $2, date = $3, point_value = $4, reason = $5 WHERE id = $1',
+        [
+            req.query.id,
+            net_id,
+            date,
+            point_value,
+            reason
+        ],
+        (error, results) => {
+            if (error) {
+                res.status(500).send("Error executing query: " + error)
+            } else {
+                res.status(200).send(`Points modified with ID: ${req.query.id}`)
+            }
+        })
+}
+
 const deletePoints = (req, res) => {
     db.query('DELETE FROM points WHERE id = $1', [req.query.id], (error, results) => {
             if (error) {
@@ -56,7 +101,10 @@ const deletePoints = (req, res) => {
 
 module.exports = {
     getPointsByUserID,
+    getSumPointsByUserID,
     getPointsByQuad,
+    getSumPointsByQuad,
     postPoints,
+    putPoints,
     deletePoints
 }
