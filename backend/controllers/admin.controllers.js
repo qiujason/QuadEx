@@ -28,7 +28,7 @@ const postAdmin = (req, res) => {
             if (error) {
                 res.status(500).send("Error executing query: " + error)
             } else {
-                res.status(201).send(`User added with ID: ${net_id}`)
+                res.status(201).send(`Admin added with ID: ${username}`)
             }
         })
 }
@@ -40,7 +40,7 @@ const putAdmin = (req, res) => {
         email
     } = req.body
 
-    db.query('UPDATE admin SET username = $2, title = $3, email = $4 WHERE net_id = $1',
+    db.query('UPDATE admin SET username = $2, title = $3, email = $4 WHERE username = $1',
         [
             req.query.id,
             username,
@@ -51,17 +51,17 @@ const putAdmin = (req, res) => {
             if (error) {
                 res.status(500).send("Error executing query: " + error)
             } else {
-                res.status(200).send(`User modified with ID: ${req.query.id}`)
+                res.status(200).send(`Admin modified with ID: ${req.query.id}`)
             }
         })
 }
 
 const deleteAdmin = (req, res) => {
-    db.query('DELETE FROM admin WHERE net_id = $1', [req.query.id], (error, results) => {
+    db.query('DELETE FROM admin WHERE username = $1', [req.query.id], (error, results) => {
         if (error) {
             res.status(500).send("Error executing query: " + error)
         } else {
-            res.status(200).send(`User deleted with ID: ${req.query.id}`)
+            res.status(200).send(`Admin deleted with ID: ${req.query.id}`)
         }
     })
 }
