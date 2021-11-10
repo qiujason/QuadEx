@@ -13,6 +13,7 @@ module.exports = {
     return pool.query(text, params, (err, res) => {
       if (err) {
         console.log('error thrown when executing query', { text })
+        console.log(err)
       } else {
         const duration = Date.now() - start
         console.log('executed query', { text, duration, rows: res.rowCount })
