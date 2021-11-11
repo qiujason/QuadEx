@@ -12,6 +12,7 @@ import { FaPlusCircle } from 'react-icons/fa'
 
 import * as db from '../helpers/Database'
 import * as currDate from '../helpers/CurrDate'
+import * as errorHandler from '../helpers/ErrorHandler'
 
 
 const minPasswordLength = 4;
@@ -56,6 +57,7 @@ const Profile = ({ netID, isAdmin }) => {
         const favEventObjs = await db.getFavEventsByUser(netID);
         const totalPoints = await db.getTotalPointsByUser(netID);
 
+        // for images
         // var data = new FormData();
         // data.append("data", imagedata);
 
@@ -134,47 +136,21 @@ const Profile = ({ netID, isAdmin }) => {
     }
 
     async function updateUserInfo() {
-        // check for invalid inputs
-        var numErrors = 0;
         const requiredKeys = ['first_name', 'last_name', 'quad', 'birthday_M', 'birthday_D', 'birthday_Y'];
-        requiredKeys.forEach(key => {
-            if(settingsValues[key][0] === ''){
-                updateSettingsValues(key, true);
-                numErrors++;
-            }
-        });
-        if(settingsValues['password'][0] !== '' && String(settingsValues['password'][0]).length < 4){
-            numErrors++;
-            updateSettingsValues('password', true);
-        }
-        if(settingsValues['password'][0] !== userInfo.password && settingsValues['confirm_password'][0] !== settingsValues['password'][0]){
-            numErrors++;
-            updateSettingsValues('confirm_password', true);
-        }
-        if(Number(settingsValues['birthday_M'][0]) < 1 || Number(settingsValues['birthday_M'][0]) > 12){
-            numErrors++;
-            updateSettingsValues('birthday_M', true);
-        }
-        if(Number(settingsValues['birthday_D'][0]) < 1 || Number(settingsValues['birthday_D'][0]) > 31){
-            numErrors++;
-            updateSettingsValues('birthday_D', true);
-        }
-        if(Number(settingsValues['birthday_Y'][0]) > new Date().getFullYear()){
-            numErrors++;
-            updateSettingsValues('birthday_Y', true);
-        }
-        if(!['raven', 'cardinal', 'eagle', 'robin', 'blue jay', 'owl', 'dove'].includes(String(settingsValues['quad'][0]).toLowerCase())){
-            updateSettingsValues('quad', true);
-            numErrors++;
-        }
+        const errorObj = errorHandler.checkInputs(settingsValues, requiredKeys);
 
-        if(numErrors > 0) return;
+        // check for invalid inputs
+        if(errorObj !== null){
+            setSettingsValues(errorObj);
+            return;
+        }
 
         // update userInfo object
         const prevUserInfo = { ...userInfo };
         Object.keys(settingsValues).forEach(key => {
             if(key in prevUserInfo) prevUserInfo[key] = (settingsValues[key][0] === '' ? null : settingsValues[key][0]);
         });
+        if(settingsValues['password'][0] === '') prevUserInfo['password'] = userInfo.password;
         prevUserInfo['birthday'] = settingsValues['birthday_M'][0] + settingsValues['birthday_D'][0] + settingsValues['birthday_Y'][0];
         setUserInfo(prevUserInfo);
 
@@ -188,7 +164,7 @@ const Profile = ({ netID, isAdmin }) => {
         setSettingsValues({
             first_name: [userInfo.first_name, false],
             last_name: [userInfo.last_name, false],
-            password: [userInfo.password, false],
+            password: ['', false],
             confirm_password: ['', false],
             quad: [userInfo.quad, false],
             birthday_M: [userInfo.birthday.substring(0, 2), false],
