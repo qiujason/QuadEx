@@ -173,7 +173,7 @@
         box-shadow: 0 1px 5px 0px $shadow-color;
 
         &.highlight {
-          background-color: $shadow-color;
+          background-color: $input-color;
         }
 
         &:hover {
@@ -181,6 +181,7 @@
         }
 
         .picture {
+          border: 2px solid $primary-color;
           background-color: $input-color;
           height: calc(#{$event-tag-size} - 2.8rem);
           width: calc(#{$event-tag-size} - 2.8rem);

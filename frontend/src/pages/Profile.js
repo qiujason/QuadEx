@@ -47,11 +47,6 @@ const Profile = ({ netID, isAdmin }) => {
         ]
     });
 
-    useEffect(() => {
-        fetchUserInfo();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
     async function fetchUserInfo() {
         const userObj = await db.getUser(netID);
         const favEventObjs = await db.getFavEventsByUser(netID);
@@ -67,6 +62,11 @@ const Profile = ({ netID, isAdmin }) => {
         prevUserInfo.points = totalPoints;
         setUserInfo(prevUserInfo);
     }
+
+    useEffect(() => {
+        fetchUserInfo();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
 
     // == EVENTS == //
@@ -113,7 +113,7 @@ const Profile = ({ netID, isAdmin }) => {
     }
 
     async function unfavoriteEvent(event_id) {
-        db.deleteFavEvent(userInfo.net_id, event_id);
+        await db.deleteFavEvent(userInfo.net_id, event_id);
         fetchUserInfo();
     }
 

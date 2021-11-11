@@ -44,7 +44,7 @@
 	"point_value": "-10",
 	"reason": "being too cool" 
     }
-* Put points - localhost:3001/points/?id=_______ (with request body)
+* Put points - http://localhost:3001/points/?id=_______ (with request body)
 * Delete points - http://localhost:3001/points/?id=______ (id is point id in table)
 
 ## Images

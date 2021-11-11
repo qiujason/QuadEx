@@ -18,9 +18,7 @@ INSERT INTO admin VALUES
 ('dp239', 'RA', 'dp239@duke.edu');
 
 INSERT INTO points (net_id, date, point_value, reason) VALUES
-('jq39', '01012021', 5, 'Attended open house'),
-('ajl88', '01012021', 10, 'Attended quad town hall'),
-('rz97', '01012021', 50, 'Won best junior RA');
+('dp239', '09022021', 5, 'Attended open house');
 
 INSERT INTO events (title, time, date, end_time, end_date, description, location, tags) VALUES
 ('Spikeball Tournament', '1200', '09272021', '1400', '10102021', 'spikeball lit; winners get kool prizes; good good lots fun', 'Abele Quad', '{Sports}'),
@@ -29,12 +27,8 @@ INSERT INTO events (title, time, date, end_time, end_date, description, location
 ('andrew''s birthday', '0000', '12242021', '1159', '12242021', 'yayayay; happy bdayz; much old', 'hollows a3001', '{Social}'),
 ('thanksgiving break', '0000', '11242021', '1159', '11282021', 'wow; much fun; good break; eat some good turkey, yum yum', null, '{holiday}');
 
-INSERT INTO favorited_events VALUES
-('dp239', 1), 
-('dp239', 2),
-('dp239', 3),
-('dp239', 4),
-('dp239', 5);
+-- INSERT INTO favorited_events VALUES
+-- ('dp239', 1);
 
-INSERT INTO quad_events VALUES
-('blue jay', 2);
+-- INSERT INTO quad_events VALUES
+-- ('blue jay', 2);
