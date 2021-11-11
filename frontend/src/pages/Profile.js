@@ -10,14 +10,13 @@ import { IoMdCheckmarkCircle, IoMdCloseCircle } from 'react-icons/io'
 // import { MdAdminPanelSettings } from 'react-icons/md'
 import { FaPlusCircle } from 'react-icons/fa'
 
+import * as db from '../helpers/Database'
+import * as currDate from '../helpers/CurrDate'
+
 
 const minPasswordLength = 4;
 
 const Profile = ({ netID, isAdmin }) => {
-    const date = new Date();
-    const currDate = String(date.getFullYear()) + String(date.getMonth() + 1).padStart(2, '0') + String(date.getDate()).padStart(2, '0');
-    const currFullDate = currDate + String(date.getHours()).padStart(2, '0') + String(date.getMinutes()).padStart(2, '0');
-
     const [ userInfo, setUserInfo ] = useState({
         net_id:'net_id', 
         password:'password',
@@ -53,24 +52,17 @@ const Profile = ({ netID, isAdmin }) => {
     }, []);
 
     async function fetchUserInfo() {
-        let userResponse = await fetch('http://localhost:3001/users/?id=' + netID);
-        let userData = await userResponse.json();
-
-        let eventsResponse = await fetch('http://localhost:3001/events/favoriteByUser/?id=' + netID);
-        let eventsData = await eventsResponse.json();
-
-        let pointsResponse = await fetch('http://localhost:3001/points/user/sum/?id=' + netID);
-        let pointsData = await pointsResponse.json();
+        const userObj = await db.getUser(netID);
+        const favEventObjs = await db.getFavEventsByUser(netID);
+        const totalPoints = await db.getTotalPointsByUser(netID);
 
         // var data = new FormData();
         // data.append("data", imagedata);
 
         const prevUserInfo = { ...userInfo };
-        Object.keys(userData[0]).forEach(key => {
-            prevUserInfo[key] = userData[0][key];
-        });
-        prevUserInfo.events = eventsData;
-        prevUserInfo.points = pointsData[0].sum;
+        Object.keys(userObj).forEach(key => prevUserInfo[key] = userObj[key]);
+        prevUserInfo.events = favEventObjs;
+        prevUserInfo.points = totalPoints;
         setUserInfo(prevUserInfo);
     }
 
@@ -90,7 +82,7 @@ const Profile = ({ netID, isAdmin }) => {
             var eventDate;
             userInfo.events.forEach(eventObj => {
                 eventDate = Number(eventObj.date.substring(4) + eventObj.date.substring(0, 2) + eventObj.date.substring(2, 4) + eventObj.time.substring(0, 2) + eventObj.time.substring(2));
-                if(eventDate >= Number(currFullDate)) setRenderedEvents(renderedEvents => [...renderedEvents, eventObj]);
+                if(eventDate >= Number(currDate.getCurrDateYMDHM)) setRenderedEvents(renderedEvents => [...renderedEvents, eventObj]);
             });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -252,14 +244,30 @@ const Profile = ({ netID, isAdmin }) => {
         point_value: ['', false],
     };
     const [ pointsValues, setPointsValues ] = useState(emptyPointsValues);
-    const [ pointsSuccessIndicator, setPointsSuccessIndicator ] = useState(false);
+    const [ pointsResIndicator, setPointsResIndicator ] = useState({
+        isShowing: false,
+        isSuccess: false,
+    });
+
+    function activatePointsResIndicator(result) {
+        const prevObj = { ...pointsResIndicator };
+        prevObj.isShowing = true;
+        prevObj.isSuccess = result;
+        setPointsResIndicator(prevObj);
+    }
+
+    function resetPointsResIndicator(){
+        const prevObj = { ...pointsResIndicator };
+        Object.keys(prevObj).forEach(key => prevObj[key] = false);
+        setPointsResIndicator(prevObj);
+    }
 
     const updatePointsValues = (key, value) => {
         const prevObj = { ...pointsValues };
         if(!(key in prevObj)) return;
         prevObj[key][typeof value === 'boolean' ? 1 : 0] = value;
         if(typeof value !== 'boolean') prevObj[key][1] = false;
-        setPointsSuccessIndicator(false);
+        resetPointsResIndicator();
         setPointsValues(prevObj);
     }
 
@@ -271,32 +279,18 @@ const Profile = ({ netID, isAdmin }) => {
                 numErrors++;
             }
         });
+        if(numErrors > 0) return; // prevent unnecessary fetches
 
-        let userResponse = await fetch('http://localhost:3001/users/?id=' + pointsValues.net_id[0]);
-        let userData = await userResponse.json();
-        if(userData.length <= 0){
+        const userObj = await db.getUser(pointsValues.net_id[0]);
+        if(userObj === null){
             numErrors++;
             updatePointsValues('net_id', true);
         }
 
         if(numErrors > 0) return;
 
-        await fetch('http://localhost:3001/points', 
-            {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    net_id: pointsValues.net_id[0],
-                    date: currDate,
-                    reason: pointsValues.reason[0],
-                    point_value: Number(pointsValues.point_value[0])
-                })
-            }
-        );
-
-        setPointsSuccessIndicator(true);
+        const postRes = await db.postPoints(pointsValues.net_id[0], pointsValues.reason[0], pointsValues.point_value[0]);
+        activatePointsResIndicator(postRes);
         setPointsValues(emptyPointsValues);
         fetchUserInfo();
     }
@@ -307,7 +301,7 @@ const Profile = ({ netID, isAdmin }) => {
                 <div className="admin-main-container">
                     <div className={'background' + (isPointsOn ? ' active' : '')} onClick={() => {
                         setIsPointsOn(false);
-                        setPointsSuccessIndicator(false);
+                        resetPointsResIndicator();
                         setPointsValues(emptyPointsValues);
                     }}/>
                     <div className="admin-container">
@@ -340,11 +334,11 @@ const Profile = ({ netID, isAdmin }) => {
                                     }}/>
                                     <IoMdCloseCircle className='btn cancel' onClick={() => {
                                         setIsPointsOn(false);
-                                        setPointsSuccessIndicator(false);
+                                        resetPointsResIndicator();
                                         setPointsValues(emptyPointsValues);
                                     }}/>
                                 </div>
-                                {pointsSuccessIndicator ? <p className='success-indicator'>Points successfully awarded</p> : ''}
+                                {pointsResIndicator.isShowing ? <p className='success-indicator'>{pointsResIndicator.isSuccess ? 'Points successfully awarded' : 'Unsuccessful'}</p> : ''}
                             </div>
                         : ''}
                     </div>
