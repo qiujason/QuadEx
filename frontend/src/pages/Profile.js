@@ -246,19 +246,59 @@ const Profile = ({ netID, isAdmin }) => {
     // == POINTS == //
 
     const [ isPointsOn, setIsPointsOn ] = useState(false);
-    const [ pointsValues, setPointsValues ] = useState({
+    const emptyPointsValues = {
         net_id: ['', false],
-        date: currDate,
         reason: ['', false],
         point_value: ['', false],
-    });
+    };
+    const [ pointsValues, setPointsValues ] = useState(emptyPointsValues);
+    const [ pointsSuccessIndicator, setPointsSuccessIndicator ] = useState(false);
 
     const updatePointsValues = (key, value) => {
         const prevObj = { ...pointsValues };
         if(!(key in prevObj)) return;
         prevObj[key][typeof value === 'boolean' ? 1 : 0] = value;
         if(typeof value !== 'boolean') prevObj[key][1] = false;
+        setPointsSuccessIndicator(false);
         setPointsValues(prevObj);
+    }
+
+    async function postPoints(){
+        var numErrors = 0;
+        Object.keys(pointsValues).forEach(key => {
+            if(pointsValues[key][0] === ''){
+                updatePointsValues(key, true);
+                numErrors++;
+            }
+        });
+
+        let userResponse = await fetch('http://localhost:3001/users/?id=' + pointsValues.net_id[0]);
+        let userData = await userResponse.json();
+        if(userData.length <= 0){
+            numErrors++;
+            updatePointsValues('net_id', true);
+        }
+
+        if(numErrors > 0) return;
+
+        await fetch('http://localhost:3001/points', 
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    net_id: pointsValues.net_id[0],
+                    date: currDate,
+                    reason: pointsValues.reason[0],
+                    point_value: Number(pointsValues.point_value[0])
+                })
+            }
+        );
+
+        setPointsSuccessIndicator(true);
+        setPointsValues(emptyPointsValues);
+        fetchUserInfo();
     }
 
     return (
@@ -267,6 +307,8 @@ const Profile = ({ netID, isAdmin }) => {
                 <div className="admin-main-container">
                     <div className={'background' + (isPointsOn ? ' active' : '')} onClick={() => {
                         setIsPointsOn(false);
+                        setPointsSuccessIndicator(false);
+                        setPointsValues(emptyPointsValues);
                     }}/>
                     <div className="admin-container">
                         <div className={'title-container' + (isPointsOn ? ' active' : '')}>
@@ -279,6 +321,7 @@ const Profile = ({ netID, isAdmin }) => {
                                 <InputBox placeholder={'NetID of recipient'} value={pointsValues['net_id'][0] ?? ''} error={pointsValues['net_id'][1] ? 'NetID not found' : ''} width='18rem' onChange={val => updatePointsValues('net_id', val)}/>
                                 
                                 <p className='subheader'>Reason</p>
+                                {pointsValues.reason[1] ? <p className='error-display'>* Required</p> : ''}
                                 <div className="textarea-container">
                                     <textarea placeholder='Describe reason...' value={pointsValues['reason'][0] ?? ''} onChange={e => {
                                         if(e.target.value.length <= 100){
@@ -289,16 +332,19 @@ const Profile = ({ netID, isAdmin }) => {
                                 </div>
 
                                 <p className='subheader'>Point Value</p>
-                                <InputBox placeholder={'Number of points to award'} value={pointsValues['point_value'][0] ?? ''} error={pointsValues['point_value'][1] ? 'Invalid' : ''} width='18rem' onChange={val => updatePointsValues('point_value', val)}/>
+                                <InputBox placeholder={'Number of points to award'} value={pointsValues['point_value'][0] ?? ''} isNumeric={true} error={pointsValues['point_value'][1] ? 'Invalid' : ''} width='18rem' onChange={val => updatePointsValues('point_value', val)}/>
                             
                                 <div className='btns-container'>
                                     <IoMdCheckmarkCircle className='btn apply' onClick={() => {
-                                        
+                                        postPoints();
                                     }}/>
                                     <IoMdCloseCircle className='btn cancel' onClick={() => {
-                                        
+                                        setIsPointsOn(false);
+                                        setPointsSuccessIndicator(false);
+                                        setPointsValues(emptyPointsValues);
                                     }}/>
                                 </div>
+                                {pointsSuccessIndicator ? <p className='success-indicator'>Points successfully awarded</p> : ''}
                             </div>
                         : ''}
                     </div>

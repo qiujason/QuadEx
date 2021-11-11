@@ -217,6 +217,22 @@
           font-size: 0.8rem;
           margin: 1rem 0 0.5rem 0.3rem;
         }
+
+        .success-indicator {
+          bottom: -2rem;
+          width: 100%;
+          text-align: center;
+          font-size: 0.8rem;
+          color: $hover-color;
+          margin-top: 1rem;
+        }
+
+        .error-display {
+          color: $error-color;
+          font-size: 0.7rem;
+          font-weight: bold;
+          margin-bottom: 0.2rem;
+        }
   
         .textarea-container {
           width: 18rem;
