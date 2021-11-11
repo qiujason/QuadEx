@@ -82,7 +82,7 @@ const Profile = ({ netID, isAdmin }) => {
             var eventDate;
             userInfo.events.forEach(eventObj => {
                 eventDate = Number(eventObj.date.substring(4) + eventObj.date.substring(0, 2) + eventObj.date.substring(2, 4) + eventObj.time.substring(0, 2) + eventObj.time.substring(2));
-                if(eventDate >= Number(currDate.getCurrDateYMDHM)) setRenderedEvents(renderedEvents => [...renderedEvents, eventObj]);
+                if(eventDate >= Number(currDate.getCurrDateYMDHM())) setRenderedEvents(renderedEvents => [...renderedEvents, eventObj]);
             });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -111,15 +111,7 @@ const Profile = ({ netID, isAdmin }) => {
     }
 
     async function unfavoriteEvent(event_id) {
-        await fetch('http://localhost:3001/events/favoriteForUser/?net_id=' + userInfo.net_id + '&event_id=' + event_id, 
-            { 
-                method: 'DELETE', 
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: null
-            } 
-        );
+        db.deleteFavEvent(userInfo.net_id, event_id);
         fetchUserInfo();
     }
 
@@ -141,7 +133,7 @@ const Profile = ({ netID, isAdmin }) => {
         setSettingsValues(prevObj);
     }
 
-    const updateUserInfo = () => {
+    async function updateUserInfo() {
         // check for invalid inputs
         var numErrors = 0;
         const requiredKeys = ['first_name', 'last_name', 'quad', 'birthday_M', 'birthday_D', 'birthday_Y'];
@@ -187,32 +179,9 @@ const Profile = ({ netID, isAdmin }) => {
         setUserInfo(prevUserInfo);
 
         // update database
-        async function putUserInfo(){
-            await fetch('http://localhost:3001/users/?id=' + prevUserInfo.net_id, 
-                {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        net_id: prevUserInfo.net_id, 
-                        password: prevUserInfo.password,
-                        first_name: prevUserInfo.first_name,
-                        last_name: prevUserInfo.last_name,
-                        birthday: prevUserInfo.birthday,
-                        year: prevUserInfo.year,
-                        hometown: prevUserInfo.hometown,
-                        quad: prevUserInfo.quad,
-                        degree: prevUserInfo.degree,
-                        bio: prevUserInfo.bio,
-                        insta: prevUserInfo.insta,
-                        bday_cal: prevUserInfo.bday_cal
-                    })
-                }
-            );
-        }
-        putUserInfo();
-        setIsSettingsOn(false);
+        const putRes = await db.putUser(prevUserInfo);
+        if(putRes) setIsSettingsOn(false);
+        //console.log('put request: ' + putRes);
     }
 
     const resetSettingsValues = () => {
