@@ -117,6 +117,16 @@ const Profile = ({ netID, isAdmin }) => {
         fetchUserInfo();
     }
 
+    // ====== MISC ====== //
+
+    async function hasInputError(requiredKeys, state, setFunc){
+        const errorObj = await errorHandler.checkInputs(state, requiredKeys);
+        if(errorObj !== null){
+            setFunc(errorObj);
+            return true;
+        }
+        return false;
+    }
 
     // == SETTINGS & PREFERENCES == //
 
@@ -137,13 +147,7 @@ const Profile = ({ netID, isAdmin }) => {
 
     async function updateUserInfo() {
         const requiredKeys = ['first_name', 'last_name', 'quad', 'birthday_M', 'birthday_D', 'birthday_Y'];
-        const errorObj = errorHandler.checkInputs(settingsValues, requiredKeys);
-
-        // check for invalid inputs
-        if(errorObj !== null){
-            setSettingsValues(errorObj);
-            return;
-        }
+        if(await hasInputError(requiredKeys, settingsValues, setSettingsValues)) return;
 
         // update userInfo object
         const prevUserInfo = { ...userInfo };
@@ -217,22 +221,9 @@ const Profile = ({ netID, isAdmin }) => {
     }
 
     async function postPoints(){
-        var numErrors = 0;
-        Object.keys(pointsValues).forEach(key => {
-            if(pointsValues[key][0] === ''){
-                updatePointsValues(key, true);
-                numErrors++;
-            }
-        });
-        if(numErrors > 0) return; // prevent unnecessary fetches
-
-        const userObj = await db.getUser(pointsValues.net_id[0]);
-        if(userObj === null){
-            numErrors++;
-            updatePointsValues('net_id', true);
-        }
-
-        if(numErrors > 0) return;
+        // check for invalid inputs
+        const requiredKeys = ['net_id', 'reason', 'point_value'];
+        if(await hasInputError(requiredKeys, pointsValues, setPointsValues)) return;
 
         const postRes = await db.postPoints(pointsValues.net_id[0], pointsValues.reason[0], pointsValues.point_value[0]);
         activatePointsResIndicator(postRes);

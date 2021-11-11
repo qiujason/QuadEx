@@ -1,7 +1,9 @@
+import { getUser } from "./Database"
+
 const quadNames = ['raven', 'cardinal', 'eagle', 'robin', 'blue jay', 'owl', 'dove'];
 
 // return null if no errors, new obj
-export function checkInputs(prevObj, requiredKeys) {
+export async function checkInputs(prevObj, requiredKeys) {
     const minPasswordLength = 4;
     var isError = false;
 
@@ -33,6 +35,10 @@ export function checkInputs(prevObj, requiredKeys) {
     }
     if('quad' in obj && !quadNames.includes(String(obj['quad'][0]).toLowerCase())) {
         makeError('quad');
+    }
+
+    if('net_id' in obj && await getUser(obj['net_id'][0]) === null) {
+        makeError('net_id');
     }
     
     if(!isError) return null;
