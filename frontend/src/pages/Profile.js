@@ -338,7 +338,9 @@ const Profile = ({ netID, isAdmin }) => {
                                         setPointsValues(emptyPointsValues);
                                     }}/>
                                 </div>
-                                {pointsResIndicator.isShowing ? <p className='success-indicator'>{pointsResIndicator.isSuccess ? 'Points successfully awarded' : 'Unsuccessful'}</p> : ''}
+                                {pointsResIndicator.isShowing ? <p className={'success-indicator' + (pointsResIndicator.isSuccess ? ' success' : '')}>
+                                    {pointsResIndicator.isSuccess ? 'Points successfully awarded' : 'Oops! Something went wrong'}
+                                </p> : ''}
                             </div>
                         : ''}
                     </div>
