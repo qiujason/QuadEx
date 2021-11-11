@@ -145,6 +145,148 @@
   position: relative;
   background-color: $secondary-color;
 
+  
+
+  .admin-main-container {
+    width: 100vw;
+    height: 100vh;
+    margin-top: calc(-1 * #{$navbar-height});
+    position: absolute;
+
+    * { transition: all $transition-duration; }
+
+    .background {
+      &.active {
+        opacity: 0.5;
+        pointer-events: all;
+      }
+
+      position: absolute;
+      background-color: #000000;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      z-index: 5;
+      pointer-events: none;
+    }
+
+    .admin-container {
+      transition: all $transition-duration;
+      z-index: 5;
+      width: auto;
+      height: auto;
+      position: absolute;
+      top: calc(2rem + #{$navbar-height});
+      right: 4rem;
+      background-color: $primary-color;
+      box-shadow: 0 1px 5px 0px $shadow-color;
+      border-radius: 20px;
+      padding: 1rem;
+  
+      .title-container {
+        transition: all $transition-duration;
+        display: flex;
+        width: auto;
+        height: 1.4rem;
+        &.active {
+          height: 2rem;
+        }
+        align-items: center;
+        gap: 0.5rem;
+        
+        .admin-icon {
+          color: $hover-color;
+          width: 1.6rem;
+          height: 1.6rem;
+          cursor: pointer;
+  
+          &:hover {
+            transform: scale(1.1, 1.1);
+          }
+        }
+        p {
+          color: $primary-text-color;
+          font-size: 0.8rem;
+        }
+      }
+  
+      .body-container {
+        .subheader {
+          font-weight: bold;
+          color: $secondary-text-color;
+          font-size: 0.8rem;
+          margin: 1rem 0 0.5rem 0.3rem;
+        }
+  
+        .textarea-container {
+          width: 18rem;
+          font-size: 0.8rem;
+          height: 7rem;
+          position: relative;
+  
+          .char-count-indicator {
+            color: $secondary-text-color;
+            position: absolute;
+            right: 0.5rem;
+            bottom: 0.5rem;
+          }
+          
+          textarea {
+            width: 100%;
+            height: 100%;
+            border: 2px solid $input-color;
+            background-color: $input-color;
+            outline: none;
+            padding: 0.5rem;
+            border-radius: 10px;
+            transition: all $transition-duration;
+            resize: none;
+  
+            &:hover {
+              border-color: $shadow-color;
+            }
+  
+            &:focus {
+              border-color: $hover-color;
+            }
+          } 
+        }
+  
+        .btns-container {
+          grid-row: 3 / span 1;
+          display: flex;
+          justify-content: flex-end;
+          align-items: center;
+          gap: 0.5rem;
+          height: 3rem;
+          margin-top: 1rem;
+  
+          .btn {
+            width: 3rem;
+            height: 100%;
+            font-size: 1rem;
+            cursor: pointer;
+            color: $secondary-text-color;
+  
+            transition: all $transition-duration;
+  
+            &:hover {
+              &.apply {
+                color: $hover-color;
+              }
+  
+              &.cancel {
+                color: $primary-text-color;
+              }
+  
+              transform: scale(1.2, 1.2);
+            }
+          }
+        }
+      }
+    }
+  }
+
   .info-page-container {
     grid-column: 1 / span 1;
     display: flex;
@@ -193,29 +335,6 @@
 
           h1 {
             font-size: 4rem;
-          }
-
-          .admin-btn {
-            transition: all $transition-duration;
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-
-            &:hover {
-              transform: scale(1.02, 1.02);
-              margin-left: 0.2rem;
-            }
-
-            .admin-plus-icon {
-              transition: all $transition-duration;
-              color: $hover-color;
-              font-size: 2.4rem;
-              margin: 0 0.5rem 0 1rem;
-            }
-  
-            p {
-              color: $hover-color;
-            }
           }
         }
 
@@ -561,6 +680,7 @@
 
       &.active {
         opacity: 0.5;
+        user-select: all;
       }
 
       position: absolute;
@@ -568,7 +688,8 @@
       width: 100%;
       height: 100%;
       opacity: 0;
-      z-index: 1;
+      z-index: 9;
+      user-select: none;
     }
 
     .settings-container {
@@ -583,9 +704,10 @@
       height: calc(100% - 6rem);
       margin: 3rem 0 0 3rem;
       background-color: $primary-color;
-      z-index: 2;
+      z-index: 10;
       border-radius: $main-containers-border-radius;
       padding: 1rem;
+      box-shadow: 0 1px 5px 0px $shadow-color;
 
       display: grid;
       grid-template-rows: 4rem auto 4rem;
@@ -618,6 +740,7 @@
           font-size: 0.8rem;
           height: 8rem;
           position: relative;
+          margin-bottom: 3rem;
 
           .char-count-indicator {
             color: $secondary-text-color;

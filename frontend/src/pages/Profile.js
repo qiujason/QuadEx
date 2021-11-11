@@ -7,13 +7,17 @@ import { useState, useEffect } from 'react'
 import { convertDate, capitalize } from '../helpers/Helpers'
 import { IoSettingsSharp } from 'react-icons/io5'
 import { IoMdCheckmarkCircle, IoMdCloseCircle } from 'react-icons/io'
-import { MdAdminPanelSettings } from 'react-icons/md'
-import { AiOutlinePlusCircle } from 'react-icons/ai'
+// import { MdAdminPanelSettings } from 'react-icons/md'
+import { FaPlusCircle } from 'react-icons/fa'
 
 
 const minPasswordLength = 4;
 
 const Profile = ({ netID, isAdmin }) => {
+    const date = new Date();
+    const currDate = String(date.getFullYear()) + String(date.getMonth() + 1).padStart(2, '0') + String(date.getDate()).padStart(2, '0');
+    const currFullDate = currDate + String(date.getHours()).padStart(2, '0') + String(date.getMinutes()).padStart(2, '0');
+
     const [ userInfo, setUserInfo ] = useState({
         net_id:'net_id', 
         password:'password',
@@ -83,12 +87,10 @@ const Profile = ({ netID, isAdmin }) => {
             return;
         } else {
             setRenderedEvents([]);
-            const date = new Date();
-            var currDate, eventDate;
+            var eventDate;
             userInfo.events.forEach(eventObj => {
-                currDate = Number(String(date.getFullYear()) + String(date.getMonth() + 1).padStart(2, '0') + String(date.getDate()).padStart(2, '0') + String(date.getHours()).padStart(2, '0') + String(date.getMinutes()).padStart(2, '0'));
                 eventDate = Number(eventObj.date.substring(4) + eventObj.date.substring(0, 2) + eventObj.date.substring(2, 4) + eventObj.time.substring(0, 2) + eventObj.time.substring(2));
-                if(eventDate >= currDate) setRenderedEvents(renderedEvents => [...renderedEvents, eventObj]);
+                if(eventDate >= Number(currFullDate)) setRenderedEvents(renderedEvents => [...renderedEvents, eventObj]);
             });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -241,8 +243,68 @@ const Profile = ({ netID, isAdmin }) => {
     }
 
 
+    // == POINTS == //
+
+    const [ isPointsOn, setIsPointsOn ] = useState(false);
+    const [ pointsValues, setPointsValues ] = useState({
+        net_id: ['', false],
+        date: currDate,
+        reason: ['', false],
+        point_value: ['', false],
+    });
+
+    const updatePointsValues = (key, value) => {
+        const prevObj = { ...pointsValues };
+        if(!(key in prevObj)) return;
+        prevObj[key][typeof value === 'boolean' ? 1 : 0] = value;
+        if(typeof value !== 'boolean') prevObj[key][1] = false;
+        setPointsValues(prevObj);
+    }
+
     return (
         <div className='profile-page'>
+            {isAdmin ? 
+                <div className="admin-main-container">
+                    <div className={'background' + (isPointsOn ? ' active' : '')} onClick={() => {
+                        setIsPointsOn(false);
+                    }}/>
+                    <div className="admin-container">
+                        <div className={'title-container' + (isPointsOn ? ' active' : '')}>
+                            <FaPlusCircle className='admin-icon' onClick={() => setIsPointsOn(true)}/>
+                            <p>Manage Points</p>
+                        </div>
+                        {isPointsOn ? 
+                            <div className='body-container'>
+                                <p className='subheader'>NetID</p>
+                                <InputBox placeholder={'NetID of recipient'} value={pointsValues['net_id'][0] ?? ''} error={pointsValues['net_id'][1] ? 'NetID not found' : ''} width='18rem' onChange={val => updatePointsValues('net_id', val)}/>
+                                
+                                <p className='subheader'>Reason</p>
+                                <div className="textarea-container">
+                                    <textarea placeholder='Describe reason...' value={pointsValues['reason'][0] ?? ''} onChange={e => {
+                                        if(e.target.value.length <= 100){
+                                            updatePointsValues('reason', e.target.value);
+                                        }
+                                    }}/>
+                                    <p className='char-count-indicator'>{String(pointsValues['reason'][0] ?? '').length}/100</p>
+                                </div>
+
+                                <p className='subheader'>Point Value</p>
+                                <InputBox placeholder={'Number of points to award'} value={pointsValues['point_value'][0] ?? ''} error={pointsValues['point_value'][1] ? 'Invalid' : ''} width='18rem' onChange={val => updatePointsValues('point_value', val)}/>
+                            
+                                <div className='btns-container'>
+                                    <IoMdCheckmarkCircle className='btn apply' onClick={() => {
+                                        
+                                    }}/>
+                                    <IoMdCloseCircle className='btn cancel' onClick={() => {
+                                        
+                                    }}/>
+                                </div>
+                            </div>
+                        : ''}
+                    </div>
+                </div>
+            : ''}
+
             <div className='info-page-container'>
                 <div className='picture-container'>
                     <div className='profile-picture-container'>
@@ -251,12 +313,6 @@ const Profile = ({ netID, isAdmin }) => {
                     <div className='title-container'>
                         <div className="title">
                             <h1>Hi, {userInfo.first_name.toUpperCase()}.</h1>
-                            {isAdmin ? 
-                            <div className='admin-btn'>
-                                <AiOutlinePlusCircle className='admin-plus-icon'/>
-                                <p>add events &amp; points</p>
-                            </div>
-                            : ''}
                         </div>
                         <p className='bio-text'>"{userInfo.bio ?? 'Add a bio!'}"</p>
                         <p>{userInfo.points ?? '0'} points</p>
@@ -366,7 +422,7 @@ const Profile = ({ netID, isAdmin }) => {
 
                             <p className='subheader'>Bio</p>
                             <div className="textarea-container">
-                                <textarea value={settingsValues['bio'][0] ?? ''} onChange={e => {
+                                <textarea placeholder='Describe yourself...' value={settingsValues['bio'][0] ?? ''} onChange={e => {
                                     if(e.target.value.length <= 150){
                                         updateSettingsValues('bio', e.target.value);
                                     }
