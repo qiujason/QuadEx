@@ -753,6 +753,12 @@
           align-items: flex-end;
           width: 100%;
           gap: 1rem;
+
+          p {
+            font-size: 0.8rem;
+            align-self: center;
+            margin: 0 calc(-1 * 0.5rem);
+          }
         }
 
         .textarea-container {
