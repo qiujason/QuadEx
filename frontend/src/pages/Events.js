@@ -7,9 +7,11 @@ import UserTag from './UserTag'
 import { IoMdCheckmarkCircle, IoMdCloseCircle, IoMdInformationCircle } from 'react-icons/io'
 import { IoPeopleCircle } from 'react-icons/io5'
 import { convertDate, convertTime, capitalize } from '../helpers/Helpers'
+import { FaPlusCircle } from 'react-icons/fa'
 import * as db from '../helpers/Database'
+import InputBox from '../components/InputBox'
 
-const Events = ({ netID }) => {
+const Events = ({ netID, isAdmin }) => {
     const [ allEvents, setAllEvents ] = useState([]);
     const [ favoritedEventIDs, setFavoritedEventIDs ] = useState(null);
     const [ renderedEvents, setRenderedEvents ] = useState([]);
@@ -101,8 +103,70 @@ const Events = ({ netID }) => {
         await db.deleteFavEvent(netID, eventObj.id);
     }
 
+    const [ isAddEventOn, setIsAddEventOn ] = useState(false);
+    const emptyAddEventValues = {
+        title: ['', false],
+        date: ['', false],
+        end_date: ['', false],
+        time: ['', false],
+        end_time: ['', false],
+        description: ['', false],
+        location: ['', false],
+        tags: ['', false],
+    };
+    const [ addEventValues, setAddEventValues ] = useState(emptyAddEventValues);
+    const updateAddEventValues = (key, value) => {
+        const prevObj = { ...addEventValues };
+        if(!(key in prevObj)) return;
+        prevObj[key][typeof value === 'boolean' ? 1 : 0] = value;
+        if(typeof value !== 'boolean') prevObj[key][1] = false;
+        updateAddEventValues(prevObj);
+    }
+
     return (
         <div className='events-page'>
+            {isAdmin ? 
+                <div className="admin-main-container">
+                    <div className={'background' + (isAddEventOn ? ' active' : '')} onClick={() => {
+                        setIsAddEventOn(false);
+                        //setPointsValues(emptyPointsValues);
+                    }}/>
+                    <div className="admin-container">
+                        <div className={'title-container' + (isAddEventOn ? ' active' : '')}>
+                            <FaPlusCircle className='admin-icon' onClick={() => setIsAddEventOn(true)}/>
+                            <p>Add Events</p>
+                        </div>
+                        {isAddEventOn ? 
+                            <div className='body-container'>
+                                <p className='subheader'>Title</p>
+                                <InputBox placeholder={'Event title'} value={addEventValues['title'][0] ?? ''} error={addEventValues['title'][1] ? 'Invalid' : ''} width='18rem' onChange={val => updateAddEventValues('title', val)}/>
+                                
+                                {/* <p className='subheader'>Reason</p>
+                                {pointsValues.reason[1] ? <p className='error-display'>* Required</p> : ''}
+                                <div className="textarea-container">
+                                    <textarea placeholder='Describe reason...' value={pointsValues['reason'][0] ?? ''} onChange={e => {
+                                        if(e.target.value.length <= 100){
+                                            updatePointsValues('reason', e.target.value);
+                                        }
+                                    }}/>
+                                    <p className='char-count-indicator'>{String(pointsValues['reason'][0] ?? '').length}/100</p>
+                                </div> */}
+
+                                <div className='btns-container'>
+                                    <IoMdCheckmarkCircle className='btn apply' onClick={() => {
+                                        //postPoints();
+                                    }}/>
+                                    <IoMdCloseCircle className='btn cancel' onClick={() => {
+                                        //setIsAddEventOn(false);
+                                        //setPointsValues(emptyPointsValues);
+                                    }}/>
+                                </div>
+                            </div>
+                        : ''}
+                    </div>
+                </div>
+            : ''}
+
             <div className='events-container'>
                 <div className='title-container'>
                     <h1>QUAD EVENTS<p>{renderedEvents.length}</p></h1>
