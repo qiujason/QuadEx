@@ -13,13 +13,15 @@ const getQuad = (req, res) => {
 const postQuad = (req, res) => {
     const {
         name,
-        dorms
+        dorms,
+        pic
     } = req.body
 
-    db.query('INSERT INTO quads (name, dorms) VALUES ($1, $2)',
+    db.query('INSERT INTO quads (name, dorms, pic) VALUES ($1, $2)',
         [
             name,
-            dorms
+            dorms,
+            pic
         ],
         (error, results) => {
             if (error) {
@@ -32,14 +34,15 @@ const postQuad = (req, res) => {
 
 const putQuad = (req, res) => {
     const {
-        name,
-        dorms
+        dorms,
+        pic
     } = req.body
 
-    db.query('UPDATE quads SET dorms = $2 WHERE name = $1',
+    db.query('UPDATE quads SET dorms = $2, pic = $3 WHERE name = $1',
         [
             req.query.id,
-            dorms
+            dorms,
+            pic
         ],
         (error, results) => {
             if (error) {
