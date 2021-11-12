@@ -11,11 +11,12 @@ CREATE TABLE users(
     birthday VARCHAR(8) NOT NULL,
     year INTEGER,
     hometown TEXT,
-    quad VARCHAR(30) references quads(name),
+    quad VARCHAR(30) REFERENCES quads(name),
     degree TEXT,
     bio TEXT,
     insta TEXT,
-    bday_cal BOOLEAN DEFAULT TRUE NOT NULL
+    bday_cal BOOLEAN DEFAULT TRUE NOT NULL,
+    prof_pic VARCHAR(30) REFERENCES images(filename)
 );
 
 CREATE TABLE admin(
@@ -41,18 +42,19 @@ CREATE TABLE events(
     end_date VARCHAR(8) NOT NULL,
     description TEXT,
     location VARCHAR(30),
-    tags VARCHAR(30) []
+    tags VARCHAR(30) [],
+    pic VARCHAR(30) REFERENCES images(filename)
 );
 
 CREATE TABLE favorited_events(
-    net_id VARCHAR(30) references users(net_id),
-    event_id SERIAL references events(id),
+    net_id VARCHAR(30) REFERENCES users(net_id),
+    event_id SERIAL REFERENCES events(id),
     PRIMARY KEY(net_id, event_id)
 );
 
 CREATE TABLE quad_events(
-    quad_name VARCHAR(30) references quads(name),
-    event_id SERIAL references events(id),
+    quad_name VARCHAR(30) REFERENCES quads(name),
+    event_id SERIAL REFERENCES events(id),
     PRIMARY KEY(quad_name, event_id)
 );
 
