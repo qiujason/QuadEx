@@ -130,6 +130,7 @@ const Events = ({ netID, isAdmin }) => {
         prevObj[key][typeof value === 'boolean' ? 1 : 0] = value;
         if(typeof value !== 'boolean') prevObj[key][1] = false;
         setAddEventValues(prevObj);
+        document.getElementById("event-desc-textarea").scrollTop = document.getElementById("event-desc-textarea").scrollHeight;
     }
 
     async function hasInputError(requiredKeys, state, setFunc){
@@ -215,7 +216,11 @@ const Events = ({ netID, isAdmin }) => {
                                 </div>
                                 
                                 <div className="column-2">
-                                    <p className='subheader'>Start Time &amp; Date</p>
+                                    <div className="inputs-container sub">
+                                        <p className='subheader'>Start Time</p>
+                                        <p className='subheader'>Start Date</p>
+                                    </div>
+                                    
                                     <div className="inputs-container">
                                         <InputBox placeholder={'HH'} value={addEventValues['time_H'][0] ?? ''} isNumeric={true} limit={2} error={addEventValues['time_H'][1] ? 'Invalid' : ''} width='4rem' onChange={val => updateAddEventValues('time_H', val)}/>
                                         <InputBox placeholder={'MM'} value={addEventValues['time_M'][0] ?? ''} isNumeric={true} limit={2}  error={addEventValues['time_M'][1] ? 'Invalid' : ''} width='4rem' onChange={val => updateAddEventValues('time_M', val)}/>
@@ -225,7 +230,10 @@ const Events = ({ netID, isAdmin }) => {
                                         <InputBox placeholder={'YYYY'} value={addEventValues['date_Y'][0] ?? ''} isNumeric={true} limit={4}  error={addEventValues['date_Y'][1] ? 'Invalid' : ''} width='6rem' onChange={val => updateAddEventValues('date_Y', val)}/>
                                     </div>
 
-                                    <p className='subheader'>End Time &amp; Date</p>
+                                    <div className="inputs-container sub">
+                                        <p className='subheader'>End Time</p>
+                                        <p className='subheader'>End Date</p>
+                                    </div>
                                     <div className="inputs-container">
                                         <InputBox placeholder={'HH'} value={addEventValues['end_time_H'][0] ?? ''} isNumeric={true} limit={2}  error={addEventValues['end_time_H'][1] ? 'Invalid' : ''} width='4rem' onChange={val => updateAddEventValues('end_time_H', val)}/>
                                         <InputBox placeholder={'MM'} value={addEventValues['end_time_M'][0] ?? ''} isNumeric={true} limit={2}  error={addEventValues['end_time_M'][1] ? 'Invalid' : ''} width='4rem' onChange={val => updateAddEventValues('end_time_M', val)}/>
@@ -238,7 +246,7 @@ const Events = ({ netID, isAdmin }) => {
                                     <p className='subheader'>Description</p>
                                     {addEventValues.description[1] ? <p className='error-display'>* Required</p> : ''}
                                     <div className="textarea-container">
-                                        <textarea placeholder='Write description...' value={addEventValues['description'][0] ?? ''} onChange={e => {
+                                        <textarea id='event-desc-textarea' placeholder='Write description...' value={addEventValues['description'][0] ?? ''} onChange={e => {
                                             if(e.target.value.length <= 1000){
                                                 updateAddEventValues('description', e.target.value);
                                             }
