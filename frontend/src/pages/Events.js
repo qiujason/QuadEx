@@ -119,7 +119,9 @@ const Events = ({ netID, isAdmin }) => {
         description: ['', false],
         location: ['', false],
         tags: ['', false],
+        quad: ['', false],
     };
+    const [ isInterquad, setIsInterquad ] = useState(false);
     const [ addEventValues, setAddEventValues ] = useState(emptyAddEventValues);
     const updateAddEventValues = (key, value) => {
         const prevObj = { ...addEventValues };
@@ -174,6 +176,9 @@ const Events = ({ netID, isAdmin }) => {
                                     
                                     <p className='subheader'>Location</p>
                                     <InputBox placeholder={'e.g. BC Plaza'} value={addEventValues['location'][0] ?? ''} error={addEventValues['location'][1] ? 'Invalid' : ''} width='18rem' onChange={val => updateAddEventValues('location', val)}/>
+
+                                    <p className='subheader'>Tags</p>
+                                    <InputBox placeholder={'e.g. social, sports, etc.'} value={addEventValues['tags'][0] ?? ''} error={addEventValues['tags'][1] ? 'Invalid' : ''} width='18rem' onChange={val => updateAddEventValues('tags', val)}/>
                                 </div>
                                 
                                 <div className="column-2">
@@ -188,8 +193,20 @@ const Events = ({ netID, isAdmin }) => {
                                         <p className='char-count-indicator'>{String(addEventValues['description'][0] ?? '').length}/250</p>
                                     </div>
 
-                                    <p className='subheader'>Tags</p>
-                                    <InputBox placeholder={'e.g. social, sports, etc.'} value={addEventValues['tags'][0] ?? ''} error={addEventValues['tags'][1] ? 'Invalid' : ''} width='18rem' onChange={val => updateAddEventValues('tags', val)}/>
+                                    <p className='subheader'>Quad Preference</p>
+                                    <div className="checkbox">
+                                        <div className={'icon-container' + (isInterquad ? ' active' : '')} onClick={() => setIsInterquad(!isInterquad)}>
+                                            {isInterquad ? <IoMdCheckmarkCircle className='icon active'/> : <IoMdCloseCircle className='icon'/>}
+                                        </div>
+                                        <p>Make event inter-quad</p>
+                                    </div>
+
+                                    {!isInterquad ?
+                                    <>
+                                        <p className='subheader'>Afilliated Quad</p>
+                                        <InputBox placeholder={'e.g. Cardinal'} value={addEventValues['quad'][0] ?? ''} error={addEventValues['quad'][1] ? 'Invalid quad name' : ''} width='18rem' onChange={val => updateAddEventValues('quad', val)}/>
+                                    </>
+                                    : '' }
                                 </div>
 
                                 <div className='btns-container'>

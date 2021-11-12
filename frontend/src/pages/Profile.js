@@ -418,13 +418,12 @@ const Profile = ({ netID, isAdmin }) => {
                             <p className='subheader'>Confirm New Password</p>
                             <InputBox placeholder={'Password'} value={settingsValues['confirm_password'][0] ?? ''} error={settingsValues['confirm_password'][1] ? 'Passwords do not match' : ''} isPassword={true} width='18rem' onChange={val => updateSettingsValues('confirm_password', val)}/>
                             
-                            <p className='subheader'/>
-
+                            <p className='subheader'>Birthday preference</p>
                             <div className="checkbox">
                                 <div className={'icon-container' + (settingsValues['bday_cal'][0] ? ' active' : '')} onClick={() => updateSettingsValues('bday_cal', !settingsValues['bday_cal'][0])}>
                                     {settingsValues['bday_cal'][0] ? <IoMdCheckmarkCircle className='icon active'/> : <IoMdCloseCircle className='icon'/>}
                                 </div>
-                                <p>Make birthday public</p>
+                                <p>Make public</p>
                             </div>
 
                             <p className='subheader'/>
