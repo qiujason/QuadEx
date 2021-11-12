@@ -1,13 +1,25 @@
 const db = require('../db')
 
 const getQuad = (req, res) => {
-    db.query('SELECT * FROM quads WHERE name = $1', [req.query.id], (error, results) => {
-        if (error) {
-            res.status(500).send("Error executing query: " + error)
-        } else {
-            res.status(200).json(results.rows)
-        }
-    })
+    if (req.query.id != null) {
+        db.query('SELECT * FROM quads WHERE name = $1', [req.query.id], (error, results) => {
+            if (error) {
+                res.status(500).send("Error executing query: " + error)
+            } else {
+                res.status(200).json(results.rows)
+            }
+        })
+    } else if (req.query.event != null) {
+        db.query('SELECT * FROM quads WHERE name IN (SELECT quad_name FROM quad_events WHERE event_id = $1)', [req.query.event], (error, results) => {
+            if (error) {
+                res.status(500).send("Error executing query: " + error)
+            } else {
+                res.status(200).json(results.rows)
+            }
+        })
+    } else {
+        res.status(500).send("No parameter provided")
+    }
 }
 
 const postQuad = (req, res) => {

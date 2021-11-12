@@ -22,6 +22,7 @@
 
 ## Quads
 * Get quad - http://localhost:3001/quads/?id=____
+* Get quad by event - http://localhost:3001/quads/?event=_____
 * Post quad - http://localhost:3001/quads (with request body)
     *  ex. {
             "name": "QuadTest",
