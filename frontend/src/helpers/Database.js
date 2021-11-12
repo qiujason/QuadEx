@@ -75,7 +75,7 @@ export async function postEvent(obj){
             },
             body: JSON.stringify(obj)
         }
-    ).then(handlePostError).then(data => feedback = data).catch(() => feedback = false);
+    ).then(handlePostError).then(data => feedback = data.text()).catch(() => feedback = false);
     return feedback;
 }
 

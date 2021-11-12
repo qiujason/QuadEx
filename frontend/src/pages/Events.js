@@ -156,13 +156,18 @@ const Events = ({ netID, isAdmin }) => {
             end_date: addEventValues['end_date_M'][0] + addEventValues['end_date_D'][0] + addEventValues['end_date_Y'][0],
             description: addEventValues['description'][0],
             location: addEventValues['location'][0],
-            tags: null //must be array or null (fix later)
+            tags: null, //must be array or null (fix later),
+            pic: null
         };
-
-        console.log(postObj);
         
         const postRes = await db.postEvent(postObj);
-        if(postRes) console.log(postRes);
+        if(postRes){
+            if(!isInterquad){
+                console.log('quad: ' + addEventValues['affiliatedQuad'][0] + ', eventID: ' + postRes);
+            } else {
+                console.log('interquad, eventID: ' + postRes);
+            }
+        }
     }
 
     return (
