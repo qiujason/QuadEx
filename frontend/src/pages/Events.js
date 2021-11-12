@@ -154,8 +154,8 @@ const Events = ({ netID, isAdmin }) => {
             end_time: addEventValues['end_time_H'][0] + addEventValues['end_time_M'][0],
             date: addEventValues['date_M'][0] + addEventValues['date_D'][0] + addEventValues['date_Y'][0],
             end_date: addEventValues['end_date_M'][0] + addEventValues['end_date_D'][0] + addEventValues['end_date_Y'][0],
-            description: addEventValues['description'][0],
-            location: addEventValues['location'][0],
+            description: addEventValues['description'][0] === '' ? null : addEventValues['description'][0],
+            location: addEventValues['location'][0] === '' ? null : addEventValues['location'][0],
             tags: null, //must be array or null (fix later),
             pic: null
         };
@@ -188,50 +188,13 @@ const Events = ({ netID, isAdmin }) => {
                                 <div className="column-1">
                                     <p className='subheader'>Title</p>
                                     <InputBox placeholder={'Event title'} value={addEventValues['title'][0] ?? ''} error={addEventValues['title'][1] ? 'Invalid' : ''} width='18rem' onChange={val => updateAddEventValues('title', val)}/>
-                                    
-                                    <p className='subheader'>Start Time &amp; Date</p>
-                                    <div className="inputs-container">
-                                        <InputBox placeholder={'HH'} isCentered={true} value={addEventValues['time_H'][0] ?? ''} isNumeric={true} limit={2} error={addEventValues['time_H'][1] ? 'Invalid' : ''} width='2.5rem' onChange={val => updateAddEventValues('time_H', val)}/>
-                                        <p>:</p>
-                                        <InputBox placeholder={'MM'} isCentered={true} value={addEventValues['time_M'][0] ?? ''} isNumeric={true} limit={2}  error={addEventValues['time_M'][1] ? 'Invalid' : ''} width='2.5rem' onChange={val => updateAddEventValues('time_M', val)}/>
-                                        <InputBox placeholder={'MM'} isCentered={true} value={addEventValues['date_M'][0] ?? ''} isNumeric={true} limit={2}  error={addEventValues['date_M'][1] ? 'Invalid' : ''} width='2.5rem' onChange={val => updateAddEventValues('date_M', val)}/>
-                                        <p>/</p>
-                                        <InputBox placeholder={'DD'} isCentered={true} value={addEventValues['date_D'][0] ?? ''} isNumeric={true} limit={2}  error={addEventValues['date_D'][1] ? 'Invalid' : ''} width='2.5rem' onChange={val => updateAddEventValues('date_D', val)}/>
-                                        <p>/</p>
-                                        <InputBox placeholder={'YYYY'} isCentered={true} value={addEventValues['date_Y'][0] ?? ''} isNumeric={true} limit={4}  error={addEventValues['date_Y'][1] ? 'Invalid' : ''} width='3rem' onChange={val => updateAddEventValues('date_Y', val)}/>
-                                    </div>
-
-                                    <p className='subheader'>End Time &amp; Date</p>
-                                    <div className="inputs-container">
-                                        <InputBox placeholder={'HH'} isCentered={true} value={addEventValues['end_time_H'][0] ?? ''} isNumeric={true} limit={2}  error={addEventValues['end_time_H'][1] ? 'Invalid' : ''} width='2.5rem' onChange={val => updateAddEventValues('end_time_H', val)}/>
-                                        <p>:</p>
-                                        <InputBox placeholder={'MM'} isCentered={true} value={addEventValues['end_time_M'][0] ?? ''} isNumeric={true} limit={2}  error={addEventValues['end_time_M'][1] ? 'Invalid' : ''} width='2.5rem' onChange={val => updateAddEventValues('end_time_M', val)}/>
-                                        <InputBox placeholder={'MM'} isCentered={true} value={addEventValues['end_date_M'][0] ?? ''} isNumeric={true} limit={2}  error={addEventValues['end_date_M'][1] ? 'Invalid' : ''} width='2.5rem' onChange={val => updateAddEventValues('end_date_M', val)}/>
-                                        <p>/</p>
-                                        <InputBox placeholder={'DD'} isCentered={true} value={addEventValues['end_date_D'][0] ?? ''} isNumeric={true} limit={2}  error={addEventValues['end_date_D'][1] ? 'Invalid' : ''} width='2.5rem' onChange={val => updateAddEventValues('end_date_D', val)}/>
-                                        <p>/</p>
-                                        <InputBox placeholder={'YYYY'} isCentered={true} value={addEventValues['end_date_Y'][0] ?? ''} isNumeric={true} limit={4}  error={addEventValues['end_date_Y'][1] ? 'Invalid' : ''} width='3rem' onChange={val => updateAddEventValues('end_date_Y', val)}/>
-                                    </div>
-                                    
+                                                                        
                                     <p className='subheader'>Location</p>
                                     <InputBox placeholder={'e.g. BC Plaza'} value={addEventValues['location'][0] ?? ''} error={addEventValues['location'][1] ? 'Invalid' : ''} width='18rem' onChange={val => updateAddEventValues('location', val)}/>
 
                                     <p className='subheader'>Tags</p>
                                     <InputBox placeholder={'e.g. social, sports, etc.'} value={addEventValues['tags'][0] ?? ''} error={addEventValues['tags'][1] ? 'Invalid' : ''} width='18rem' onChange={val => updateAddEventValues('tags', val)}/>
-                                </div>
                                 
-                                <div className="column-2">
-                                    <p className='subheader'>Description</p>
-                                    {addEventValues.description[1] ? <p className='error-display'>* Required</p> : ''}
-                                    <div className="textarea-container">
-                                        <textarea placeholder='Write description...' value={addEventValues['description'][0] ?? ''} onChange={e => {
-                                            if(e.target.value.length <= 250){
-                                                updateAddEventValues('description', e.target.value);
-                                            }
-                                        }}/>
-                                        <p className='char-count-indicator'>{String(addEventValues['description'][0] ?? '').length}/250</p>
-                                    </div>
-
                                     <p className='subheader'>Quad Preference</p>
                                     <div className="checkbox">
                                         <div className={'icon-container' + (isInterquad ? ' active' : '')} onClick={() => setIsInterquad(!isInterquad)}>
@@ -246,6 +209,39 @@ const Events = ({ netID, isAdmin }) => {
                                         <InputBox placeholder={'e.g. Cardinal'} value={addEventValues['affiliatedQuad'][0] ?? ''} error={addEventValues['affiliatedQuad'][1] ? 'Invalid quad name' : ''} width='18rem' onChange={val => updateAddEventValues('affiliatedQuad', val)}/>
                                     </>
                                     : '' }
+                                </div>
+                                
+                                <div className="column-2">
+                                    <p className='subheader'>Start Time &amp; Date</p>
+                                    <div className="inputs-container">
+                                        <InputBox placeholder={'HH'} value={addEventValues['time_H'][0] ?? ''} isNumeric={true} limit={2} error={addEventValues['time_H'][1] ? 'Invalid' : ''} width='4rem' onChange={val => updateAddEventValues('time_H', val)}/>
+                                        <InputBox placeholder={'MM'} value={addEventValues['time_M'][0] ?? ''} isNumeric={true} limit={2}  error={addEventValues['time_M'][1] ? 'Invalid' : ''} width='4rem' onChange={val => updateAddEventValues('time_M', val)}/>
+                                        <div className="spacer"/>
+                                        <InputBox placeholder={'MM'} value={addEventValues['date_M'][0] ?? ''} isNumeric={true} limit={2}  error={addEventValues['date_M'][1] ? 'Invalid' : ''} width='5rem' onChange={val => updateAddEventValues('date_M', val)}/>
+                                        <InputBox placeholder={'DD'} value={addEventValues['date_D'][0] ?? ''} isNumeric={true} limit={2}  error={addEventValues['date_D'][1] ? 'Invalid' : ''} width='5rem' onChange={val => updateAddEventValues('date_D', val)}/>
+                                        <InputBox placeholder={'YYYY'} value={addEventValues['date_Y'][0] ?? ''} isNumeric={true} limit={4}  error={addEventValues['date_Y'][1] ? 'Invalid' : ''} width='6rem' onChange={val => updateAddEventValues('date_Y', val)}/>
+                                    </div>
+
+                                    <p className='subheader'>End Time &amp; Date</p>
+                                    <div className="inputs-container">
+                                        <InputBox placeholder={'HH'} value={addEventValues['end_time_H'][0] ?? ''} isNumeric={true} limit={2}  error={addEventValues['end_time_H'][1] ? 'Invalid' : ''} width='4rem' onChange={val => updateAddEventValues('end_time_H', val)}/>
+                                        <InputBox placeholder={'MM'} value={addEventValues['end_time_M'][0] ?? ''} isNumeric={true} limit={2}  error={addEventValues['end_time_M'][1] ? 'Invalid' : ''} width='4rem' onChange={val => updateAddEventValues('end_time_M', val)}/>
+                                        <div className="spacer"/>
+                                        <InputBox placeholder={'MM'} value={addEventValues['end_date_M'][0] ?? ''} isNumeric={true} limit={2}  error={addEventValues['end_date_M'][1] ? 'Invalid' : ''} width='5rem' onChange={val => updateAddEventValues('end_date_M', val)}/>
+                                        <InputBox placeholder={'DD'} value={addEventValues['end_date_D'][0] ?? ''} isNumeric={true} limit={2}  error={addEventValues['end_date_D'][1] ? 'Invalid' : ''} width='5rem' onChange={val => updateAddEventValues('end_date_D', val)}/>
+                                        <InputBox placeholder={'YYYY'} value={addEventValues['end_date_Y'][0] ?? ''} isNumeric={true} limit={4}  error={addEventValues['end_date_Y'][1] ? 'Invalid' : ''} width='6rem' onChange={val => updateAddEventValues('end_date_Y', val)}/>
+                                    </div>
+
+                                    <p className='subheader'>Description</p>
+                                    {addEventValues.description[1] ? <p className='error-display'>* Required</p> : ''}
+                                    <div className="textarea-container">
+                                        <textarea placeholder='Write description...' value={addEventValues['description'][0] ?? ''} onChange={e => {
+                                            if(e.target.value.length <= 1000){
+                                                updateAddEventValues('description', e.target.value);
+                                            }
+                                        }}/>
+                                        <p className='char-count-indicator'>{String(addEventValues['description'][0] ?? '').length}/1000</p>
+                                    </div>
                                 </div>
 
                                 <div className='btns-container'>

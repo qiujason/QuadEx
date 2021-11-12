@@ -54,7 +54,6 @@
         width: auto;
         height: 1.4rem;
         &.active {
-          width: 37rem;
           height: 2rem;
         }
         align-items: center;
@@ -79,7 +78,7 @@
       .body-container {
         display: grid;
         margin-top: 0.5rem;
-        grid-template-columns: 18rem 1rem 18rem;
+        grid-template-columns: 18rem 1rem 29rem;
         $column-height: auto;
         grid-template-rows: $column-height 4rem;
         
@@ -109,12 +108,6 @@
           align-items: flex-end;
           width: 100%;
           gap: 1rem;
-
-          p {
-            font-size: 0.8rem;
-            align-self: center;
-            margin: 0 calc(-1 * 0.5rem);
-          }
         }
 
         .error-display {
@@ -125,7 +118,7 @@
         }
   
         .textarea-container {
-          width: 18rem;
+          width: 29rem;
           font-size: 0.8rem;
           height: 11.25rem;
           position: relative;
@@ -140,6 +133,7 @@
           textarea {
             width: 100%;
             height: 100%;
+            font-size: 0.8rem;
             border: 2px solid $input-color;
             background-color: $input-color;
             outline: none;
@@ -147,6 +141,7 @@
             border-radius: 10px;
             transition: all $transition-duration;
             resize: none;
+            white-space: pre-wrap;
   
             &:hover {
               border-color: $shadow-color;
@@ -437,6 +432,9 @@
             }
             color: $secondary-text-color;
             font-size: 0.8rem;
+            overflow: hidden;
+            white-space: pre-wrap;
+            max-height: 6.8rem;
           }
         }
 
@@ -552,6 +550,8 @@
       p {
         font-size: 0.8rem;
         color: $primary-text-color;
+        overflow-wrap: break-word;
+        white-space: pre-wrap;
       }
 
       .subheader {

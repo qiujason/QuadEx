@@ -18,7 +18,7 @@ const EventTag = ({ highlight, title, startDate, endDate, startTime, endTime, lo
             <div className="info-container">
                 <h1 className={hovering ? 'hovering' : ''}>{title.toUpperCase()}</h1>
                 <p className={'subtitle' + (hovering ? ' hovering' : '')}>{subText}</p>
-                <p>{description}</p>
+                <p style={{whiteSpace: 'pre-wrap', textOverflow: 'ellipsis'}}>{description}</p>
             </div>
             <p className={"favorite-indicator" + (exitHovering ? ' hovering' : '') + (isFavorited ? ' favorited' : '')}>{isFavorited ? 'Unfavorite' : 'Favorite'}</p>
             <GiRoundStar className={"favorite-btn" + (isFavorited ? ' favorited' : '')} onClick={() => {
