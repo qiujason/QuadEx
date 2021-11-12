@@ -7,8 +7,11 @@ import UserTag from './UserTag'
 import { IoMdCheckmarkCircle, IoMdCloseCircle, IoMdInformationCircle } from 'react-icons/io'
 import { IoPeopleCircle } from 'react-icons/io5'
 import { convertDate, convertTime, capitalize } from '../helpers/Helpers'
+import { FaPlusCircle } from 'react-icons/fa'
+import * as db from '../helpers/Database'
+import InputBox from '../components/InputBox'
 
-const Events = ({ netID }) => {
+const Events = ({ netID, isAdmin }) => {
     const [ allEvents, setAllEvents ] = useState([]);
     const [ favoritedEventIDs, setFavoritedEventIDs ] = useState(null);
     const [ renderedEvents, setRenderedEvents ] = useState([]);
@@ -23,15 +26,11 @@ const Events = ({ netID }) => {
     });
 
     async function fetchEvents() {
-        let eventsResponse = await fetch('http://localhost:3001/events');
-        let eventsData = await eventsResponse.json();
-        setAllEvents(eventsData);
-
-        eventsResponse = await fetch('http://localhost:3001/events/favoriteByUser/?id=' + netID);
-        eventsData = await eventsResponse.json();
+        setAllEvents(await db.getEvents());
+        const data = await db.getFavEventsByUser(netID);
 
         const idSet = new Set();
-        eventsData.forEach(eventObj => {
+        data.forEach(eventObj => {
             idSet.add(eventObj.id);
         });
         setFavoritedEventIDs(idSet);
@@ -84,65 +83,127 @@ const Events = ({ netID }) => {
         var subText = convertDate(eventObj.date) + ', ' + convertTime(eventObj.time) + ' - ';
         subText += (eventObj.date !== eventObj.end_date ? convertDate(eventObj.end_date) + ', ' : '');
         subText += convertTime(eventObj.end_time) + (eventObj.location !== null ? ' ~ @ ' + capitalize(eventObj.location) : '');
+
         const newObj = { ...detailedEvent };
         newObj.id = eventObj.id;
         newObj.title = eventObj.title.toUpperCase();
         newObj.subtext =  subText;
         newObj.description = eventObj.description;
-
-        let response = await fetch('http://localhost:3001/events/listUsers/?id=' + newObj.id);
-        let data = await response.json();
-
-        data.sort(function(obj1, obj2){
-            var name1 = obj1.first_name + obj1.last_name;
-            var name2 = obj2.first_name + obj2.last_name;
-            return name1.localeCompare(name2);
-        });
-
-        newObj.members = data;
+        newObj.members = await db.getFavedUsersByEvent(newObj.id);
 
         setDetailedEvent(newObj);
     }
 
-    const handleFavorite = (state, eventObj) => {
-        if(state){
-            favoriteEvent(eventObj.id);
-        } else {
-            unfavoriteEvent(eventObj.id);
-        }
-        fetchEvents();
-        updateDetailedEvent(eventObj);
+    async function favoriteEvent(eventObj){
+        const postRes = await db.postFavEvent(netID, eventObj.id);
+        if(postRes) { /* no authentication */ }
     }
 
-    async function favoriteEvent(eventID){
-        await fetch('http://localhost:3001/events/favoriteForUser/?net_id=' + netID + '&event_id=' + eventID, 
-            {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    net_id: netID, 
-                    event_id: eventID,
-                })
-            }
-        );
+    async function unfavoriteEvent(eventObj) {
+        await db.deleteFavEvent(netID, eventObj.id);
     }
 
-    async function unfavoriteEvent(eventID) {
-        await fetch('http://localhost:3001/events/favoriteForUser/?net_id=' + netID + '&event_id=' + eventID, 
-            { 
-                method: 'DELETE', 
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: null
-            } 
-        );
+    const [ isAddEventOn, setIsAddEventOn ] = useState(false);
+    const emptyAddEventValues = {
+        title: ['', false],
+        date_M: ['', false],
+        date_D: ['', false],
+        date_Y: ['', false],
+        end_date_M: ['', false],
+        end_date_D: ['', false],
+        end_date_Y: ['', false],
+        time_H: ['', false],
+        time_M: ['', false],
+        end_time_H: ['', false],
+        end_time_M: ['', false],
+        description: ['', false],
+        location: ['', false],
+        tags: ['', false],
+    };
+    const [ addEventValues, setAddEventValues ] = useState(emptyAddEventValues);
+    const updateAddEventValues = (key, value) => {
+        const prevObj = { ...addEventValues };
+        if(!(key in prevObj)) return;
+        prevObj[key][typeof value === 'boolean' ? 1 : 0] = value;
+        if(typeof value !== 'boolean') prevObj[key][1] = false;
+        setAddEventValues(prevObj);
     }
 
     return (
         <div className='events-page'>
+            {isAdmin ? 
+                <div className="admin-main-container">
+                    <div className={'background' + (isAddEventOn ? ' active' : '')} onClick={() => {
+                        setIsAddEventOn(false);
+                        //setPointsValues(emptyPointsValues);
+                    }}/>
+                    <div className="admin-container">
+                        <div className={'title-container' + (isAddEventOn ? ' active' : '')}>
+                            <FaPlusCircle className='admin-icon' onClick={() => setIsAddEventOn(true)}/>
+                            <p>Add Events</p>
+                        </div>
+                        {isAddEventOn ? 
+                            <div className='body-container'>
+                                <p className='subheader'>Title</p>
+                                <InputBox placeholder={'Event title'} value={addEventValues['title'][0] ?? ''} error={addEventValues['title'][1] ? 'Invalid' : ''} width='18rem' onChange={val => updateAddEventValues('title', val)}/>
+                                
+                                <p className='subheader'>Start Time &amp; Date</p>
+                                <div className="inputs-container">
+                                    <InputBox placeholder={'HH'} value={addEventValues['time_H'][0] ?? ''} isNumeric={true} limit={2} error={addEventValues['time_H'][1] ? 'Invalid' : ''} width='2.5rem' onChange={val => updateAddEventValues('time_H', val)}/>
+                                    <p>:</p>
+                                    <InputBox placeholder={'MM'} value={addEventValues['time_M'][0] ?? ''} isNumeric={true} limit={2}  error={addEventValues['time_M'][1] ? 'Invalid' : ''} width='2.5rem' onChange={val => updateAddEventValues('time_M', val)}/>
+                                    <InputBox placeholder={'MM'} value={addEventValues['date_M'][0] ?? ''} isNumeric={true} limit={2}  error={addEventValues['date_M'][1] ? 'Invalid' : ''} width='2.5rem' onChange={val => updateAddEventValues('date_M', val)}/>
+                                    <p>/</p>
+                                    <InputBox placeholder={'DD'} value={addEventValues['date_D'][0] ?? ''} isNumeric={true} limit={2}  error={addEventValues['date_D'][1] ? 'Invalid' : ''} width='2.5rem' onChange={val => updateAddEventValues('date_D', val)}/>
+                                    <p>/</p>
+                                    <InputBox placeholder={'YYYY'} value={addEventValues['date_Y'][0] ?? ''} isNumeric={true} limit={4}  error={addEventValues['date_Y'][1] ? 'Invalid' : ''} width='3rem' onChange={val => updateAddEventValues('date_Y', val)}/>
+                                    </div>
+
+                                <p className='subheader'>End Time &amp; Date</p>
+                                <div className="inputs-container">
+                                    <InputBox placeholder={'HH'} value={addEventValues['end_time_H'][0] ?? ''} isNumeric={true} limit={2}  error={addEventValues['end_time_H'][1] ? 'Invalid' : ''} width='2.5rem' onChange={val => updateAddEventValues('end_time_H', val)}/>
+                                    <p>:</p>
+                                    <InputBox placeholder={'MM'} value={addEventValues['end_time_M'][0] ?? ''} isNumeric={true} limit={2}  error={addEventValues['end_time_M'][1] ? 'Invalid' : ''} width='2.5rem' onChange={val => updateAddEventValues('end_time_M', val)}/>
+                                    <InputBox placeholder={'MM'} value={addEventValues['end_date_M'][0] ?? ''} isNumeric={true} limit={2}  error={addEventValues['end_date_M'][1] ? 'Invalid' : ''} width='2.5rem' onChange={val => updateAddEventValues('end_date_M', val)}/>
+                                    <p>/</p>
+                                    <InputBox placeholder={'DD'} value={addEventValues['end_date_D'][0] ?? ''} isNumeric={true} limit={2}  error={addEventValues['end_date_D'][1] ? 'Invalid' : ''} width='2.5rem' onChange={val => updateAddEventValues('end_date_D', val)}/>
+                                    <p>/</p>
+                                    <InputBox placeholder={'YYYY'} value={addEventValues['end_date_Y'][0] ?? ''} isNumeric={true} limit={4}  error={addEventValues['end_date_Y'][1] ? 'Invalid' : ''} width='3rem' onChange={val => updateAddEventValues('end_date_Y', val)}/>
+                                </div>
+
+                                <p className='subheader'>Description</p>
+                                {addEventValues.description[1] ? <p className='error-display'>* Required</p> : ''}
+                                <div className="textarea-container">
+                                    <textarea placeholder='Write description...' value={addEventValues['description'][0] ?? ''} onChange={e => {
+                                        if(e.target.value.length <= 250){
+                                            updateAddEventValues('description', e.target.value);
+                                        }
+                                    }}/>
+                                    <p className='char-count-indicator'>{String(addEventValues['description'][0] ?? '').length}/250</p>
+                                </div>
+
+                                <p className='subheader'>Location</p>
+                                <InputBox placeholder={'e.g. BC Plaza'} value={addEventValues['location'][0] ?? ''} error={addEventValues['location'][1] ? 'Invalid' : ''} width='18rem' onChange={val => updateAddEventValues('location', val)}/>
+                                
+                                <p className='subheader'>Tags</p>
+                                <InputBox placeholder={'e.g. social, sports, etc.'} value={addEventValues['tags'][0] ?? ''} error={addEventValues['tags'][1] ? 'Invalid' : ''} width='18rem' onChange={val => updateAddEventValues('tags', val)}/>
+                                
+
+                                <div className='btns-container'>
+                                    <IoMdCheckmarkCircle className='btn apply' onClick={() => {
+                                        //postPoints();
+                                    }}/>
+                                    <IoMdCloseCircle className='btn cancel' onClick={() => {
+                                        //setIsAddEventOn(false);
+                                        //setPointsValues(emptyPointsValues);
+                                    }}/>
+                                </div>
+                            </div>
+                        : ''}
+                    </div>
+                </div>
+            : ''}
+
             <div className='events-container'>
                 <div className='title-container'>
                     <h1>QUAD EVENTS<p>{renderedEvents.length}</p></h1>
@@ -173,7 +234,14 @@ const Events = ({ netID }) => {
                                     description={eventObj.description} 
                                     initialFavoriteState={favoritedEventIDs.has(eventObj.id) ? true : false}
                                     onClick={() => updateDetailedEvent(eventObj)}
-                                    onBtnClick={(e) => handleFavorite(e, eventObj)}
+                                    onBtnClick={async (isFavorite) => {
+                                        if(isFavorite){
+                                            await favoriteEvent(eventObj);
+                                        } else {
+                                            await unfavoriteEvent(eventObj);
+                                        }
+                                        await updateDetailedEvent(eventObj);
+                                    }}
                                 />
                             )
                         }

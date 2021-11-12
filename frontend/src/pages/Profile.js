@@ -112,6 +112,7 @@ const Profile = ({ netID, isAdmin }) => {
         });
     }
 
+    // change
     async function unfavoriteEvent(event_id) {
         await db.deleteFavEvent(userInfo.net_id, event_id);
         fetchUserInfo();
