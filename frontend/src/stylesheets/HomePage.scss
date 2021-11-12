@@ -223,8 +223,12 @@
           width: 100%;
           text-align: center;
           font-size: 0.8rem;
-          color: $hover-color;
           margin-top: 1rem;
+          
+          &.success {
+            color: $hover-color;
+          }
+          color: $error-color;
         }
 
         .error-display {

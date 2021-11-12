@@ -10,14 +10,14 @@ import { IoMdCheckmarkCircle, IoMdCloseCircle } from 'react-icons/io'
 // import { MdAdminPanelSettings } from 'react-icons/md'
 import { FaPlusCircle } from 'react-icons/fa'
 
+import * as db from '../helpers/Database'
+import * as currDate from '../helpers/CurrDate'
+import * as errorHandler from '../helpers/ErrorHandler'
+
 
 const minPasswordLength = 4;
 
 const Profile = ({ netID, isAdmin }) => {
-    const date = new Date();
-    const currDate = String(date.getFullYear()) + String(date.getMonth() + 1).padStart(2, '0') + String(date.getDate()).padStart(2, '0');
-    const currFullDate = currDate + String(date.getHours()).padStart(2, '0') + String(date.getMinutes()).padStart(2, '0');
-
     const [ userInfo, setUserInfo ] = useState({
         net_id:'net_id', 
         password:'password',
@@ -47,32 +47,26 @@ const Profile = ({ netID, isAdmin }) => {
         ]
     });
 
-    useEffect(() => {
-        fetchUserInfo();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
     async function fetchUserInfo() {
-        let userResponse = await fetch('http://localhost:3001/users/?id=' + netID);
-        let userData = await userResponse.json();
+        const userObj = await db.getUser(netID);
+        const favEventObjs = await db.getFavEventsByUser(netID);
+        const totalPoints = await db.getTotalPointsByUser(netID);
 
-        let eventsResponse = await fetch('http://localhost:3001/events/favoriteByUser/?id=' + netID);
-        let eventsData = await eventsResponse.json();
-
-        let pointsResponse = await fetch('http://localhost:3001/points/user/sum/?id=' + netID);
-        let pointsData = await pointsResponse.json();
-
+        // for images
         // var data = new FormData();
         // data.append("data", imagedata);
 
         const prevUserInfo = { ...userInfo };
-        Object.keys(userData[0]).forEach(key => {
-            prevUserInfo[key] = userData[0][key];
-        });
-        prevUserInfo.events = eventsData;
-        prevUserInfo.points = pointsData[0].sum;
+        Object.keys(userObj).forEach(key => prevUserInfo[key] = userObj[key]);
+        prevUserInfo.events = favEventObjs;
+        prevUserInfo.points = totalPoints;
         setUserInfo(prevUserInfo);
     }
+
+    useEffect(() => {
+        fetchUserInfo();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
 
     // == EVENTS == //
@@ -90,7 +84,7 @@ const Profile = ({ netID, isAdmin }) => {
             var eventDate;
             userInfo.events.forEach(eventObj => {
                 eventDate = Number(eventObj.date.substring(4) + eventObj.date.substring(0, 2) + eventObj.date.substring(2, 4) + eventObj.time.substring(0, 2) + eventObj.time.substring(2));
-                if(eventDate >= Number(currFullDate)) setRenderedEvents(renderedEvents => [...renderedEvents, eventObj]);
+                if(eventDate >= Number(currDate.getCurrDateYMDHM())) setRenderedEvents(renderedEvents => [...renderedEvents, eventObj]);
             });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -119,18 +113,20 @@ const Profile = ({ netID, isAdmin }) => {
     }
 
     async function unfavoriteEvent(event_id) {
-        await fetch('http://localhost:3001/events/favoriteForUser/?net_id=' + userInfo.net_id + '&event_id=' + event_id, 
-            { 
-                method: 'DELETE', 
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: null
-            } 
-        );
+        await db.deleteFavEvent(userInfo.net_id, event_id);
         fetchUserInfo();
     }
 
+    // ====== MISC ====== //
+
+    async function hasInputError(requiredKeys, state, setFunc){
+        const errorObj = await errorHandler.checkInputs(state, requiredKeys);
+        if(errorObj !== null){
+            setFunc(errorObj);
+            return true;
+        }
+        return false;
+    }
 
     // == SETTINGS & PREFERENCES == //
 
@@ -149,85 +145,30 @@ const Profile = ({ netID, isAdmin }) => {
         setSettingsValues(prevObj);
     }
 
-    const updateUserInfo = () => {
-        // check for invalid inputs
-        var numErrors = 0;
+    async function updateUserInfo() {
         const requiredKeys = ['first_name', 'last_name', 'quad', 'birthday_M', 'birthday_D', 'birthday_Y'];
-        requiredKeys.forEach(key => {
-            if(settingsValues[key][0] === ''){
-                updateSettingsValues(key, true);
-                numErrors++;
-            }
-        });
-        if(settingsValues['password'][0] !== '' && String(settingsValues['password'][0]).length < 4){
-            numErrors++;
-            updateSettingsValues('password', true);
-        }
-        if(settingsValues['password'][0] !== userInfo.password && settingsValues['confirm_password'][0] !== settingsValues['password'][0]){
-            numErrors++;
-            updateSettingsValues('confirm_password', true);
-        }
-        if(Number(settingsValues['birthday_M'][0]) < 1 || Number(settingsValues['birthday_M'][0]) > 12){
-            numErrors++;
-            updateSettingsValues('birthday_M', true);
-        }
-        if(Number(settingsValues['birthday_D'][0]) < 1 || Number(settingsValues['birthday_D'][0]) > 31){
-            numErrors++;
-            updateSettingsValues('birthday_D', true);
-        }
-        if(Number(settingsValues['birthday_Y'][0]) > new Date().getFullYear()){
-            numErrors++;
-            updateSettingsValues('birthday_Y', true);
-        }
-        if(!['raven', 'cardinal', 'eagle', 'robin', 'blue jay', 'owl', 'dove'].includes(String(settingsValues['quad'][0]).toLowerCase())){
-            updateSettingsValues('quad', true);
-            numErrors++;
-        }
-
-        if(numErrors > 0) return;
+        if(await hasInputError(requiredKeys, settingsValues, setSettingsValues)) return;
 
         // update userInfo object
         const prevUserInfo = { ...userInfo };
         Object.keys(settingsValues).forEach(key => {
             if(key in prevUserInfo) prevUserInfo[key] = (settingsValues[key][0] === '' ? null : settingsValues[key][0]);
         });
+        if(settingsValues['password'][0] === '') prevUserInfo['password'] = userInfo.password;
         prevUserInfo['birthday'] = settingsValues['birthday_M'][0] + settingsValues['birthday_D'][0] + settingsValues['birthday_Y'][0];
         setUserInfo(prevUserInfo);
 
         // update database
-        async function putUserInfo(){
-            await fetch('http://localhost:3001/users/?id=' + prevUserInfo.net_id, 
-                {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        net_id: prevUserInfo.net_id, 
-                        password: prevUserInfo.password,
-                        first_name: prevUserInfo.first_name,
-                        last_name: prevUserInfo.last_name,
-                        birthday: prevUserInfo.birthday,
-                        year: prevUserInfo.year,
-                        hometown: prevUserInfo.hometown,
-                        quad: prevUserInfo.quad,
-                        degree: prevUserInfo.degree,
-                        bio: prevUserInfo.bio,
-                        insta: prevUserInfo.insta,
-                        bday_cal: prevUserInfo.bday_cal
-                    })
-                }
-            );
-        }
-        putUserInfo();
-        setIsSettingsOn(false);
+        const putRes = await db.putUser(prevUserInfo);
+        if(putRes) setIsSettingsOn(false);
+        //console.log('put request: ' + putRes);
     }
 
     const resetSettingsValues = () => {
         setSettingsValues({
             first_name: [userInfo.first_name, false],
             last_name: [userInfo.last_name, false],
-            password: [userInfo.password, false],
+            password: ['', false],
             confirm_password: ['', false],
             quad: [userInfo.quad, false],
             birthday_M: [userInfo.birthday.substring(0, 2), false],
@@ -252,51 +193,40 @@ const Profile = ({ netID, isAdmin }) => {
         point_value: ['', false],
     };
     const [ pointsValues, setPointsValues ] = useState(emptyPointsValues);
-    const [ pointsSuccessIndicator, setPointsSuccessIndicator ] = useState(false);
+    const [ pointsResIndicator, setPointsResIndicator ] = useState({
+        isShowing: false,
+        isSuccess: false,
+    });
+
+    function activatePointsResIndicator(result) {
+        const prevObj = { ...pointsResIndicator };
+        prevObj.isShowing = true;
+        prevObj.isSuccess = result;
+        setPointsResIndicator(prevObj);
+    }
+
+    function resetPointsResIndicator(){
+        const prevObj = { ...pointsResIndicator };
+        Object.keys(prevObj).forEach(key => prevObj[key] = false);
+        setPointsResIndicator(prevObj);
+    }
 
     const updatePointsValues = (key, value) => {
         const prevObj = { ...pointsValues };
         if(!(key in prevObj)) return;
         prevObj[key][typeof value === 'boolean' ? 1 : 0] = value;
         if(typeof value !== 'boolean') prevObj[key][1] = false;
-        setPointsSuccessIndicator(false);
+        resetPointsResIndicator();
         setPointsValues(prevObj);
     }
 
     async function postPoints(){
-        var numErrors = 0;
-        Object.keys(pointsValues).forEach(key => {
-            if(pointsValues[key][0] === ''){
-                updatePointsValues(key, true);
-                numErrors++;
-            }
-        });
+        // check for invalid inputs
+        const requiredKeys = ['net_id', 'reason', 'point_value'];
+        if(await hasInputError(requiredKeys, pointsValues, setPointsValues)) return;
 
-        let userResponse = await fetch('http://localhost:3001/users/?id=' + pointsValues.net_id[0]);
-        let userData = await userResponse.json();
-        if(userData.length <= 0){
-            numErrors++;
-            updatePointsValues('net_id', true);
-        }
-
-        if(numErrors > 0) return;
-
-        await fetch('http://localhost:3001/points', 
-            {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    net_id: pointsValues.net_id[0],
-                    date: currDate,
-                    reason: pointsValues.reason[0],
-                    point_value: Number(pointsValues.point_value[0])
-                })
-            }
-        );
-
-        setPointsSuccessIndicator(true);
+        const postRes = await db.postPoints(pointsValues.net_id[0], pointsValues.reason[0], pointsValues.point_value[0]);
+        activatePointsResIndicator(postRes);
         setPointsValues(emptyPointsValues);
         fetchUserInfo();
     }
@@ -307,7 +237,7 @@ const Profile = ({ netID, isAdmin }) => {
                 <div className="admin-main-container">
                     <div className={'background' + (isPointsOn ? ' active' : '')} onClick={() => {
                         setIsPointsOn(false);
-                        setPointsSuccessIndicator(false);
+                        resetPointsResIndicator();
                         setPointsValues(emptyPointsValues);
                     }}/>
                     <div className="admin-container">
@@ -340,11 +270,13 @@ const Profile = ({ netID, isAdmin }) => {
                                     }}/>
                                     <IoMdCloseCircle className='btn cancel' onClick={() => {
                                         setIsPointsOn(false);
-                                        setPointsSuccessIndicator(false);
+                                        resetPointsResIndicator();
                                         setPointsValues(emptyPointsValues);
                                     }}/>
                                 </div>
-                                {pointsSuccessIndicator ? <p className='success-indicator'>Points successfully awarded</p> : ''}
+                                {pointsResIndicator.isShowing ? <p className={'success-indicator' + (pointsResIndicator.isSuccess ? ' success' : '')}>
+                                    {pointsResIndicator.isSuccess ? 'Points successfully awarded' : 'Oops! Something went wrong'}
+                                </p> : ''}
                             </div>
                         : ''}
                     </div>
