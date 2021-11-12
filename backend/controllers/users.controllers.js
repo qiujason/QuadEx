@@ -23,10 +23,11 @@ const postUsers = (req, res) => {
         degree,
         bio,
         insta,
-        bday_cal
+        bday_cal,
+        prof_pic
     } = req.body
 
-    db.query('INSERT INTO users (net_id, password, first_name, last_name, birthday, year, hometown, quad, degree, bio, insta, bday_cal) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)',
+    db.query('INSERT INTO users (net_id, password, first_name, last_name, birthday, year, hometown, quad, degree, bio, insta, bday_cal, prof_pic) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)',
         [
             net_id,
             password,
@@ -39,7 +40,8 @@ const postUsers = (req, res) => {
             degree,
             bio,
             insta,
-            bday_cal
+            bday_cal,
+            prof_pic
         ],
         (error, results) => {
             if (error) {
@@ -62,10 +64,11 @@ const putUsers = (req, res) => {
         degree,
         bio,
         insta,
-        bday_cal
+        bday_cal,
+        prof_pic
     } = req.body
 
-    db.query('UPDATE users SET password = $2, first_name = $3, last_name = $4, birthday = $5, year = $6, hometown = $7, quad = $8, degree = $9, bio = $10, insta = $11, bday_cal = $12 WHERE net_id = $1',
+    db.query('UPDATE users SET password = $2, first_name = $3, last_name = $4, birthday = $5, year = $6, hometown = $7, quad = $8, degree = $9, bio = $10, insta = $11, bday_cal = $12, prof_pic = $13 WHERE net_id = $1',
         [
             req.query.id,
             password,
@@ -78,7 +81,8 @@ const putUsers = (req, res) => {
             degree,
             bio,
             insta,
-            bday_cal
+            bday_cal,
+            prof_pic
         ],
         (error, results) => {
             if (error) {
