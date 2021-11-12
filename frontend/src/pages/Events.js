@@ -7,6 +7,7 @@ import UserTag from './UserTag'
 import { IoMdCheckmarkCircle, IoMdCloseCircle, IoMdInformationCircle } from 'react-icons/io'
 import { IoPeopleCircle } from 'react-icons/io5'
 import { convertDate, convertTime, capitalize } from '../helpers/Helpers'
+import * as db from '../helpers/Database'
 
 const Events = ({ netID }) => {
     const [ allEvents, setAllEvents ] = useState([]);
@@ -23,15 +24,11 @@ const Events = ({ netID }) => {
     });
 
     async function fetchEvents() {
-        let eventsResponse = await fetch('http://localhost:3001/events');
-        let eventsData = await eventsResponse.json();
-        setAllEvents(eventsData);
-
-        eventsResponse = await fetch('http://localhost:3001/events/favoriteByUser/?id=' + netID);
-        eventsData = await eventsResponse.json();
+        setAllEvents(await db.getEvents());
+        const data = await db.getFavEventsByUser(netID);
 
         const idSet = new Set();
-        eventsData.forEach(eventObj => {
+        data.forEach(eventObj => {
             idSet.add(eventObj.id);
         });
         setFavoritedEventIDs(idSet);
@@ -84,61 +81,24 @@ const Events = ({ netID }) => {
         var subText = convertDate(eventObj.date) + ', ' + convertTime(eventObj.time) + ' - ';
         subText += (eventObj.date !== eventObj.end_date ? convertDate(eventObj.end_date) + ', ' : '');
         subText += convertTime(eventObj.end_time) + (eventObj.location !== null ? ' ~ @ ' + capitalize(eventObj.location) : '');
+
         const newObj = { ...detailedEvent };
         newObj.id = eventObj.id;
         newObj.title = eventObj.title.toUpperCase();
         newObj.subtext =  subText;
         newObj.description = eventObj.description;
-
-        let response = await fetch('http://localhost:3001/events/listUsers/?id=' + newObj.id);
-        let data = await response.json();
-
-        data.sort(function(obj1, obj2){
-            var name1 = obj1.first_name + obj1.last_name;
-            var name2 = obj2.first_name + obj2.last_name;
-            return name1.localeCompare(name2);
-        });
-
-        newObj.members = data;
+        newObj.members = await db.getFavedUsersByEvent(newObj.id);
 
         setDetailedEvent(newObj);
     }
 
-    const handleFavorite = (state, eventObj) => {
-        if(state){
-            favoriteEvent(eventObj.id);
-        } else {
-            unfavoriteEvent(eventObj.id);
-        }
-        fetchEvents();
-        updateDetailedEvent(eventObj);
+    async function favoriteEvent(eventObj){
+        const postRes = await db.postFavEvent(netID, eventObj.id);
+        if(postRes) { /* no authentication */ }
     }
 
-    async function favoriteEvent(eventID){
-        await fetch('http://localhost:3001/events/favoriteForUser/?net_id=' + netID + '&event_id=' + eventID, 
-            {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    net_id: netID, 
-                    event_id: eventID,
-                })
-            }
-        );
-    }
-
-    async function unfavoriteEvent(eventID) {
-        await fetch('http://localhost:3001/events/favoriteForUser/?net_id=' + netID + '&event_id=' + eventID, 
-            { 
-                method: 'DELETE', 
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: null
-            } 
-        );
+    async function unfavoriteEvent(eventObj) {
+        await db.deleteFavEvent(netID, eventObj.id);
     }
 
     return (
@@ -173,7 +133,14 @@ const Events = ({ netID }) => {
                                     description={eventObj.description} 
                                     initialFavoriteState={favoritedEventIDs.has(eventObj.id) ? true : false}
                                     onClick={() => updateDetailedEvent(eventObj)}
-                                    onBtnClick={(e) => handleFavorite(e, eventObj)}
+                                    onBtnClick={async (isFavorite) => {
+                                        if(isFavorite){
+                                            await favoriteEvent(eventObj);
+                                        } else {
+                                            await unfavoriteEvent(eventObj);
+                                        }
+                                        await updateDetailedEvent(eventObj);
+                                    }}
                                 />
                             )
                         }

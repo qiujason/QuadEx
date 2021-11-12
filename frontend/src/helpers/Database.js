@@ -5,6 +5,11 @@ function handlePostError(response){
     return response;
 }
 
+async function getRequest(url){
+    let response = await fetch(url);
+    return await response.json();
+}
+
 async function insertRequest(type, url, obj){
     var feedback = true;
     await fetch(url, 
@@ -35,9 +40,7 @@ async function deleteRequest(url){
 
 // returns user object or null
 export async function getUser(netID){
-    let response = await fetch('http://localhost:3001/users/?id=' + netID);
-    let data = await response.json();
-
+    const data = await getRequest('http://localhost:3001/users/?id=' + netID);
     if(data.length <= 0) return null;
     return data[0];
 }
@@ -48,11 +51,27 @@ export async function putUser(userObj){
 
 // == EVENTS == //
 
+export async function getEvents(){
+    return await getRequest('http://localhost:3001/events');
+}
+
 // returns array of event objects
 export async function getFavEventsByUser(netID){
-    let response = await fetch('http://localhost:3001/events/favoriteByUser/?id=' + netID);
-    let data = await response.json();
-    return data;
+    return await getRequest('http://localhost:3001/events/favoriteByUser/?id=' + netID);
+}
+
+// returns array of user objects
+export async function getFavedUsersByEvent(eventID){
+    return await getRequest('http://localhost:3001/events/listUsers/?id=' + eventID);
+}
+
+// returns true or false
+export async function postFavEvent(netID, eventID){
+    const obj = {
+        net_id: netID, 
+        event_id: eventID,
+    };
+    return await insertRequest('POST', 'http://localhost:3001/events/favoriteForUser/?net_id=' + netID + '&event_id=' + eventID, obj);
 }
 
 export async function deleteFavEvent(netID, eventID){
