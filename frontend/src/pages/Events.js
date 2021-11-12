@@ -106,10 +106,16 @@ const Events = ({ netID, isAdmin }) => {
     const [ isAddEventOn, setIsAddEventOn ] = useState(false);
     const emptyAddEventValues = {
         title: ['', false],
-        date: ['', false],
-        end_date: ['', false],
-        time: ['', false],
-        end_time: ['', false],
+        date_M: ['', false],
+        date_D: ['', false],
+        date_Y: ['', false],
+        end_date_M: ['', false],
+        end_date_D: ['', false],
+        end_date_Y: ['', false],
+        time_H: ['', false],
+        time_M: ['', false],
+        end_time_H: ['', false],
+        end_time_M: ['', false],
         description: ['', false],
         location: ['', false],
         tags: ['', false],
@@ -120,7 +126,7 @@ const Events = ({ netID, isAdmin }) => {
         if(!(key in prevObj)) return;
         prevObj[key][typeof value === 'boolean' ? 1 : 0] = value;
         if(typeof value !== 'boolean') prevObj[key][1] = false;
-        updateAddEventValues(prevObj);
+        setAddEventValues(prevObj);
     }
 
     return (
@@ -141,16 +147,47 @@ const Events = ({ netID, isAdmin }) => {
                                 <p className='subheader'>Title</p>
                                 <InputBox placeholder={'Event title'} value={addEventValues['title'][0] ?? ''} error={addEventValues['title'][1] ? 'Invalid' : ''} width='18rem' onChange={val => updateAddEventValues('title', val)}/>
                                 
-                                {/* <p className='subheader'>Reason</p>
-                                {pointsValues.reason[1] ? <p className='error-display'>* Required</p> : ''}
+                                <p className='subheader'>Start Time &amp; Date</p>
+                                <div className="inputs-container">
+                                    <InputBox placeholder={'HH'} value={addEventValues['time_H'][0] ?? ''} isNumeric={true} limit={2} error={addEventValues['time_H'][1] ? 'Invalid' : ''} width='2.5rem' onChange={val => updateAddEventValues('time_H', val)}/>
+                                    <p>:</p>
+                                    <InputBox placeholder={'MM'} value={addEventValues['time_M'][0] ?? ''} isNumeric={true} limit={2}  error={addEventValues['time_M'][1] ? 'Invalid' : ''} width='2.5rem' onChange={val => updateAddEventValues('time_M', val)}/>
+                                    <InputBox placeholder={'MM'} value={addEventValues['date_M'][0] ?? ''} isNumeric={true} limit={2}  error={addEventValues['date_M'][1] ? 'Invalid' : ''} width='2.5rem' onChange={val => updateAddEventValues('date_M', val)}/>
+                                    <p>/</p>
+                                    <InputBox placeholder={'DD'} value={addEventValues['date_D'][0] ?? ''} isNumeric={true} limit={2}  error={addEventValues['date_D'][1] ? 'Invalid' : ''} width='2.5rem' onChange={val => updateAddEventValues('date_D', val)}/>
+                                    <p>/</p>
+                                    <InputBox placeholder={'YYYY'} value={addEventValues['date_Y'][0] ?? ''} isNumeric={true} limit={4}  error={addEventValues['date_Y'][1] ? 'Invalid' : ''} width='3rem' onChange={val => updateAddEventValues('date_Y', val)}/>
+                                    </div>
+
+                                <p className='subheader'>End Time &amp; Date</p>
+                                <div className="inputs-container">
+                                    <InputBox placeholder={'HH'} value={addEventValues['end_time_H'][0] ?? ''} isNumeric={true} limit={2}  error={addEventValues['end_time_H'][1] ? 'Invalid' : ''} width='2.5rem' onChange={val => updateAddEventValues('end_time_H', val)}/>
+                                    <p>:</p>
+                                    <InputBox placeholder={'MM'} value={addEventValues['end_time_M'][0] ?? ''} isNumeric={true} limit={2}  error={addEventValues['end_time_M'][1] ? 'Invalid' : ''} width='2.5rem' onChange={val => updateAddEventValues('end_time_M', val)}/>
+                                    <InputBox placeholder={'MM'} value={addEventValues['end_date_M'][0] ?? ''} isNumeric={true} limit={2}  error={addEventValues['end_date_M'][1] ? 'Invalid' : ''} width='2.5rem' onChange={val => updateAddEventValues('end_date_M', val)}/>
+                                    <p>/</p>
+                                    <InputBox placeholder={'DD'} value={addEventValues['end_date_D'][0] ?? ''} isNumeric={true} limit={2}  error={addEventValues['end_date_D'][1] ? 'Invalid' : ''} width='2.5rem' onChange={val => updateAddEventValues('end_date_D', val)}/>
+                                    <p>/</p>
+                                    <InputBox placeholder={'YYYY'} value={addEventValues['end_date_Y'][0] ?? ''} isNumeric={true} limit={4}  error={addEventValues['end_date_Y'][1] ? 'Invalid' : ''} width='3rem' onChange={val => updateAddEventValues('end_date_Y', val)}/>
+                                </div>
+
+                                <p className='subheader'>Description</p>
+                                {addEventValues.description[1] ? <p className='error-display'>* Required</p> : ''}
                                 <div className="textarea-container">
-                                    <textarea placeholder='Describe reason...' value={pointsValues['reason'][0] ?? ''} onChange={e => {
-                                        if(e.target.value.length <= 100){
-                                            updatePointsValues('reason', e.target.value);
+                                    <textarea placeholder='Write description...' value={addEventValues['description'][0] ?? ''} onChange={e => {
+                                        if(e.target.value.length <= 250){
+                                            updateAddEventValues('description', e.target.value);
                                         }
                                     }}/>
-                                    <p className='char-count-indicator'>{String(pointsValues['reason'][0] ?? '').length}/100</p>
-                                </div> */}
+                                    <p className='char-count-indicator'>{String(addEventValues['description'][0] ?? '').length}/250</p>
+                                </div>
+
+                                <p className='subheader'>Location</p>
+                                <InputBox placeholder={'e.g. BC Plaza'} value={addEventValues['location'][0] ?? ''} error={addEventValues['location'][1] ? 'Invalid' : ''} width='18rem' onChange={val => updateAddEventValues('location', val)}/>
+                                
+                                <p className='subheader'>Tags</p>
+                                <InputBox placeholder={'e.g. social, sports, etc.'} value={addEventValues['tags'][0] ?? ''} error={addEventValues['tags'][1] ? 'Invalid' : ''} width='18rem' onChange={val => updateAddEventValues('tags', val)}/>
+                                
 
                                 <div className='btns-container'>
                                     <IoMdCheckmarkCircle className='btn apply' onClick={() => {

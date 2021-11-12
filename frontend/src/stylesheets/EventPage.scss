@@ -9,6 +9,7 @@
   align-items: center;
 
   .admin-main-container {
+    pointer-events: none;
     width: 100vw;
     height: calc(100vh - #{$navbar-height});
     position: absolute;
@@ -32,6 +33,7 @@
     }
 
     .admin-container {
+      pointer-events: all;
       transition: all $transition-duration;
       z-index: 5;
       width: auto;
@@ -72,6 +74,9 @@
       }
   
       .body-container {
+        overflow: overlay;
+
+        max-height: 70vh;
         .subheader {
           font-weight: bold;
           color: $secondary-text-color;
@@ -79,17 +84,21 @@
           margin: 1rem 0 0.5rem 0.3rem;
         }
 
-        .success-indicator {
-          bottom: -2rem;
+        .inputs-container {
+          display: flex;
+          align-items: flex-end;
           width: 100%;
-          text-align: center;
-          font-size: 0.8rem;
-          margin-top: 1rem;
-          
-          &.success {
-            color: $hover-color;
+          gap: 1rem;
+
+          p {
+            font-size: 0.8rem;
+            align-self: center;
+            margin: 0 calc(-1 * 0.5rem);
           }
-          color: $error-color;
+        }
+
+        .spacer {
+          margin: 0 calc(-1 * 1rem + 1rem);
         }
 
         .error-display {
@@ -102,7 +111,7 @@
         .textarea-container {
           width: 18rem;
           font-size: 0.8rem;
-          height: 7rem;
+          height: 10rem;
           position: relative;
   
           .char-count-indicator {
