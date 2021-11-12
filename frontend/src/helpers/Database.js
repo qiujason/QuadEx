@@ -65,6 +65,20 @@ export async function getFavedUsersByEvent(eventID){
     return await getRequest('http://localhost:3001/events/listUsers/?id=' + eventID);
 }
 
+export async function postEvent(obj){
+    var feedback;
+    await fetch('http://localhost:3001/events', 
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(obj)
+        }
+    ).then(handlePostError).then(data => feedback = data).catch(() => feedback = false);
+    return feedback;
+}
+
 // returns true or false
 export async function postFavEvent(netID, eventID){
     const obj = {

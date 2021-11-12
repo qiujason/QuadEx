@@ -36,6 +36,9 @@ export async function checkInputs(prevObj, requiredKeys) {
     if('quad' in obj && !quadNames.includes(String(obj['quad'][0]).toLowerCase())) {
         makeError('quad');
     }
+    if('affiliatedQuad' in obj && requiredKeys.includes('affiliatedQuad') && !quadNames.includes(String(obj['affiliatedQuad'][0]).toLowerCase())) {
+        makeError('affiliatedQuad');
+    }
 
     if('net_id' in obj && await getUser(obj['net_id'][0]) === null) {
         makeError('net_id');

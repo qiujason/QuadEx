@@ -10,6 +10,7 @@ import { convertDate, convertTime, capitalize } from '../helpers/Helpers'
 import { FaPlusCircle } from 'react-icons/fa'
 import * as db from '../helpers/Database'
 import InputBox from '../components/InputBox'
+import * as errorHandler from '../helpers/ErrorHandler'
 
 const Events = ({ netID, isAdmin }) => {
     const [ allEvents, setAllEvents ] = useState([]);
@@ -119,7 +120,7 @@ const Events = ({ netID, isAdmin }) => {
         description: ['', false],
         location: ['', false],
         tags: ['', false],
-        quad: ['', false],
+        affiliatedQuad: ['', false],
     };
     const [ isInterquad, setIsInterquad ] = useState(false);
     const [ addEventValues, setAddEventValues ] = useState(emptyAddEventValues);
@@ -129,6 +130,39 @@ const Events = ({ netID, isAdmin }) => {
         prevObj[key][typeof value === 'boolean' ? 1 : 0] = value;
         if(typeof value !== 'boolean') prevObj[key][1] = false;
         setAddEventValues(prevObj);
+    }
+
+    async function hasInputError(requiredKeys, state, setFunc){
+        const errorObj = await errorHandler.checkInputs(state, requiredKeys);
+        if(errorObj !== null){
+            setFunc(errorObj);
+            return true;
+        }
+        return false;
+    }
+
+    async function postEvent(){
+        var requiredKeys = ['title', 'date_M', 'date_D', 'date_Y', 'end_date_M', 'end_date_D', 'end_date_Y', 'time_H', 'time_M', 'end_time_H', 'end_time_M', 'description'];
+        if(!isInterquad) requiredKeys.push('affiliatedQuad');
+        if(await hasInputError(requiredKeys, addEventValues, setAddEventValues)) return;
+
+        // ^^ add checks in error handler
+
+        const postObj = {
+            title: addEventValues['title'][0],
+            time: addEventValues['time_H'][0] + addEventValues['time_M'][0],
+            end_time: addEventValues['end_time_H'][0] + addEventValues['end_time_M'][0],
+            date: addEventValues['date_M'][0] + addEventValues['date_D'][0] + addEventValues['date_Y'][0],
+            end_date: addEventValues['end_date_M'][0] + addEventValues['end_date_D'][0] + addEventValues['end_date_Y'][0],
+            description: addEventValues['description'][0],
+            location: addEventValues['location'][0],
+            tags: null //must be array or null (fix later)
+        };
+
+        console.log(postObj);
+        
+        const postRes = await db.postEvent(postObj);
+        if(postRes) console.log(postRes);
     }
 
     return (
@@ -204,7 +238,7 @@ const Events = ({ netID, isAdmin }) => {
                                     {!isInterquad ?
                                     <>
                                         <p className='subheader'>Afilliated Quad</p>
-                                        <InputBox placeholder={'e.g. Cardinal'} value={addEventValues['quad'][0] ?? ''} error={addEventValues['quad'][1] ? 'Invalid quad name' : ''} width='18rem' onChange={val => updateAddEventValues('quad', val)}/>
+                                        <InputBox placeholder={'e.g. Cardinal'} value={addEventValues['affiliatedQuad'][0] ?? ''} error={addEventValues['affiliatedQuad'][1] ? 'Invalid quad name' : ''} width='18rem' onChange={val => updateAddEventValues('affiliatedQuad', val)}/>
                                     </>
                                     : '' }
                                 </div>
@@ -212,6 +246,7 @@ const Events = ({ netID, isAdmin }) => {
                                 <div className='btns-container'>
                                     <IoMdCheckmarkCircle className='btn apply' onClick={() => {
                                         //postPoints();
+                                        postEvent();
                                     }}/>
                                     <IoMdCloseCircle className='btn cancel' onClick={() => {
                                         //setIsAddEventOn(false);
