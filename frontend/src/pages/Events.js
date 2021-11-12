@@ -167,6 +167,9 @@ const Events = ({ netID, isAdmin }) => {
             } else {
                 console.log('interquad, eventID: ' + postRes);
             }
+            await fetchEvents();
+            setIsAddEventOn(false);
+            setAddEventValues(emptyAddEventValues);
         }
     }
 
@@ -176,7 +179,7 @@ const Events = ({ netID, isAdmin }) => {
                 <div className="admin-main-container">
                     <div className={'background' + (isAddEventOn ? ' active' : '')} onClick={() => {
                         setIsAddEventOn(false);
-                        //setPointsValues(emptyPointsValues);
+                        setAddEventValues(emptyAddEventValues);
                     }}/>
                     <div className="admin-container">
                         <div className={'title-container' + (isAddEventOn ? ' active' : '')}>
@@ -250,8 +253,8 @@ const Events = ({ netID, isAdmin }) => {
                                         postEvent();
                                     }}/>
                                     <IoMdCloseCircle className='btn cancel' onClick={() => {
-                                        //setIsAddEventOn(false);
-                                        //setPointsValues(emptyPointsValues);
+                                        setIsAddEventOn(false);
+                                        setAddEventValues(emptyAddEventValues);
                                     }}/>
                                 </div>
                             </div>
