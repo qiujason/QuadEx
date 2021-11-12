@@ -27,9 +27,9 @@
     *  ex. {
             "name": "QuadTest",
             "dorms": [
-            "Avana",
+                "Avana",
                     "Swift"
-            ]
+                ]
             }
 * Put quad - http://localhost:3001/quads/?id=_______ (with request body)
 * Delete quad - http://localhost:3001/quads/?id=_______
