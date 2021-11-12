@@ -1,6 +1,14 @@
+CREATE TABLE images(
+    filename TEXT PRIMARY KEY NOT NULL,
+    filepath TEXT NOT NULL,
+    mimetype TEXT NOT NULL,
+    size BIGINT NOT NULL
+);
+
 CREATE TABLE quads(
     name VARCHAR(30) PRIMARY KEY,
-    dorms VARCHAR(30) [] UNIQUE
+    dorms VARCHAR(30) [] UNIQUE,
+    pic VARCHAR(30) REFERENCES images(filename)
 );
 
 CREATE TABLE users(
@@ -58,9 +66,8 @@ CREATE TABLE quad_events(
     PRIMARY KEY(quad_name, event_id)
 );
 
-CREATE TABLE images(
-    filename TEXT PRIMARY KEY NOT NULL,
-    filepath TEXT NOT NULL,
-    mimetype TEXT NOT NULL,
-    size BIGINT NOT NULL
+CREATE TABLE quad_admins(
+    quad_name VARCHAR(30) REFERENCES quads(name),
+    admin VARCHAR(30) REFERENCES admin(username),
+    PRIMARY KEY(quad_name, admin)
 );
