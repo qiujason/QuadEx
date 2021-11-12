@@ -27,8 +27,8 @@ INSERT INTO events (title, time, date, end_time, end_date, description, location
 ('andrew''s birthday', '0000', '12242021', '1159', '12242021', 'yayayay; happy bdayz; much old', 'hollows a3001', '{Social}'),
 ('thanksgiving break', '0000', '11242021', '1159', '11282021', 'wow; much fun; good break; eat some good turkey, yum yum', null, '{holiday}');
 
--- INSERT INTO favorited_events VALUES
--- ('dp239', 1);
+INSERT INTO favorited_events VALUES
+('dp239', 1);
 
--- INSERT INTO quad_events VALUES
--- ('blue jay', 2);
+INSERT INTO quad_events VALUES
+('blue jay', 2);

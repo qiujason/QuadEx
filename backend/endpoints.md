@@ -8,7 +8,8 @@
 
 ## Events
 * Get all events - http://localhost:3001/events/
-* Get event - http://localhost:3001/events/?id=__
+* Get event by id - http://localhost:3001/events/?id=__
+* Get event by quad - http://localhost:3001/events/?quad=________ (use %20 as space like ?quad=blue%20jay)
 * Post event - http://localhost:3001/events (with request body); returns event ID
 * Put event - http://localhost:3001/events/?id=___ (with request body)
 * Delete event - http://localhost:3001/events/?id=____
