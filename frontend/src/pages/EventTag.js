@@ -2,6 +2,7 @@ import React from 'react'
 import { convertDate, convertTime, capitalize } from '../helpers/Helpers'
 import { useState } from 'react'
 import { GiRoundStar } from 'react-icons/gi'
+import { MdDeleteForever } from 'react-icons/md'
 
 const EventTag = ({ highlight, title, startDate, endDate, startTime, endTime, location, description, picture, initialFavoriteState, onClick, onBtnClick }) => {
     const [ hovering, setHovering ] = useState(false);
@@ -25,6 +26,7 @@ const EventTag = ({ highlight, title, startDate, endDate, startTime, endTime, lo
                 onBtnClick(!isFavorited);
                 setIsFavorited(!isFavorited);
             }} onMouseEnter={() => setExitHovering(true)} onMouseLeave={() => setExitHovering(false)}/>
+            {/* <MdDeleteForever/>  */}
         </div>
     )
 }

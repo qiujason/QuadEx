@@ -320,30 +320,33 @@ const Events = ({ netID, isAdmin }) => {
                     </div>
                 : ''}
             </div>
+
             <div className='event-details-container'>
                 <div className='title-container'>
                     <h1>EVENT DETAILS</h1>
                     <div className={'show-interest-btn' + (showInterestList ? ' active' : '')} onClick={() => setShowInterestList(!showInterestList)}>
-                        {showInterestList ? <IoMdInformationCircle className='icon active'/> : <IoPeopleCircle className='icon'/>}
+                        {showInterestList ? <IoPeopleCircle className='icon active'/> : <IoMdInformationCircle className='icon'/>}
                     </div>
                 </div>
-                {showInterestList ?
-                    <div className='details-container'>
-                        <h1 className='title'>{detailedEvent.title}</h1>
-                        <p className='subheader'>{detailedEvent.subtext}</p>
+                
+                <div className='details-container'>
+                    <h1 className='title'>{detailedEvent.title}</h1>
+                    <p className='subheader'>{detailedEvent.subtext}</p>
+                    <div className="interested-container">
+                        <p className='indicator'>{detailedEvent.members.length}</p>
+                        <p>{(detailedEvent.members.length === 1 ? ' member has' : ' members have')} favorited this event</p>
+                    </div>
+                </div>
+                
+                <div className="body-container">
+                    {showInterestList ? 
                         <p className='description'>{detailedEvent.description}</p>
-                    </div>
-                :
-                    <>
-                    <div className="roster-title">
-                        <h1>{detailedEvent.members.length}</h1>
-                        <p>members have favorited this event</p>
-                    </div>
-                    <div className='roster-container'>
-                        {detailedEvent.members.map(userObj => <UserTag key={userObj.net_id} name={capitalize(userObj.first_name + ' ' + userObj.last_name)} netID={userObj.net_id}/>)}
-                    </div>
-                    </>
-                }
+                    : 
+                        <div className='roster-container'>
+                            {detailedEvent.members.map(userObj => <UserTag key={userObj.net_id} name={capitalize(userObj.first_name + ' ' + userObj.last_name)} netID={userObj.net_id}/>)}
+                        </div>
+                    }
+                </div>
             </div>
         </div>
     )
