@@ -408,7 +408,7 @@ const Events = ({ netID, isAdmin }) => {
                         <p className='description'>{detailedEvent.description}</p>
                     : 
                         <div className='roster-container'>
-                            {detailedEvent.members.map(userObj => <UserTag key={userObj.net_id} name={capitalize(userObj.first_name + ' ' + userObj.last_name)} netID={userObj.net_id}/>)}
+                            {detailedEvent.members.map(userObj => <UserTag key={userObj.net_id} name={capitalize(userObj.first_name + ' ' + userObj.last_name)} netID={userObj.net_id} quad={userObj.quad}/>)}
                         </div>
                     }
                 </div>
