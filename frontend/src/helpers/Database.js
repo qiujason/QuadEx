@@ -88,6 +88,10 @@ export async function postFavEvent(netID, eventID){
     return await insertRequest('POST', 'http://localhost:3001/events/favoriteForUser/?net_id=' + netID + '&event_id=' + eventID, obj);
 }
 
+export async function deleteEvent(eventID){
+    await deleteRequest('http://localhost:3001/events/?id=' + eventID);
+}
+
 export async function deleteFavEvent(netID, eventID){
     await deleteRequest('http://localhost:3001/events/favoriteForUser/?net_id=' + netID + '&event_id=' + eventID);
 }

@@ -175,6 +175,11 @@ const Events = ({ netID, isAdmin }) => {
         }
     }
 
+    async function deleteEvent(eventID){
+        await db.deleteEvent(eventID);
+        await fetchEvents();
+    }
+
     return (
         <div className='events-page'>
             {isAdmin ? 
@@ -294,6 +299,7 @@ const Events = ({ netID, isAdmin }) => {
                             renderedEvents.map((eventObj) => 
                                 <EventTag 
                                     key={eventObj.id}
+                                    isAdmin={isAdmin}
                                     highlight={eventObj.id === detailedEvent.id}
                                     title={eventObj.title} 
                                     startDate={eventObj.date} 
@@ -304,7 +310,7 @@ const Events = ({ netID, isAdmin }) => {
                                     description={eventObj.description} 
                                     initialFavoriteState={favoritedEventIDs.has(eventObj.id) ? true : false}
                                     onClick={() => updateDetailedEvent(eventObj)}
-                                    onBtnClick={async (isFavorite) => {
+                                    onFavBtnClick={async (isFavorite) => {
                                         if(isFavorite){
                                             await favoriteEvent(eventObj);
                                         } else {
@@ -312,6 +318,7 @@ const Events = ({ netID, isAdmin }) => {
                                         }
                                         await updateDetailedEvent(eventObj);
                                     }}
+                                    onDelBtnClick={() => deleteEvent(eventObj.id)}
                                 />
                             )
                         }

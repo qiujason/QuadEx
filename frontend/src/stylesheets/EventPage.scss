@@ -488,6 +488,36 @@
             transform: scale(1.1, 1.1);
           }
         }
+
+        .btn {
+          visibility: hidden;
+          &.btn-visible {
+            visibility: visible;
+          }
+
+          transition-property: color, transform;
+          transition-duration: $transition-duration;
+          position: absolute;
+          color: $secondary-text-color;
+          right: 15px;
+
+          &:hover {
+            transform: scale(1.1, 1.1);
+            color: #000000;
+          }
+        }
+
+        .delete-btn {
+          width: 30px;
+          height: 30px;
+          top: 55px;
+        }
+
+        .edit-btn {
+          width: 26px;
+          height: 24px;
+          top: 95px;
+        }
       }
     }
   }
