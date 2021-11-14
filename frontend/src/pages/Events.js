@@ -93,6 +93,7 @@ const Events = ({ netID, isAdmin }) => {
         newObj.members = await db.getFavedUsersByEvent(newObj.id);
 
         setDetailedEvent(newObj);
+        setShowInterestList(false);
     }
 
     async function favoriteEvent(eventObj){
@@ -142,14 +143,14 @@ const Events = ({ netID, isAdmin }) => {
         return false;
     }
 
-    async function postEvent(){
+    async function getInsertEventObj(){
         var requiredKeys = ['title', 'date_M', 'date_D', 'date_Y', 'end_date_M', 'end_date_D', 'end_date_Y', 'time_H', 'time_M', 'end_time_H', 'end_time_M', 'description'];
         if(!isInterquad) requiredKeys.push('affiliatedQuad');
-        if(await hasInputError(requiredKeys, addEventValues, setAddEventValues)) return;
+        if(await hasInputError(requiredKeys, addEventValues, setAddEventValues)) return null;
 
         // ^^ add checks in error handler
 
-        const postObj = {
+        const returnObj = {
             title: addEventValues['title'][0],
             time: addEventValues['time_H'][0] + addEventValues['time_M'][0],
             end_time: addEventValues['end_time_H'][0] + addEventValues['end_time_M'][0],
@@ -160,6 +161,12 @@ const Events = ({ netID, isAdmin }) => {
             tags: null, //must be array or null (fix later),
             pic: null
         };
+        return returnObj;
+    }
+
+    async function postEvent(){
+        const postObj = await getInsertEventObj();
+        if(postObj === null) return;
         
         const postRes = await db.postEvent(postObj);
         if(postRes){
@@ -178,6 +185,45 @@ const Events = ({ netID, isAdmin }) => {
     async function deleteEvent(eventID){
         await db.deleteEvent(eventID);
         await fetchEvents();
+    }
+
+    const [ editingEventID, setEditingEventID ] = useState(null);
+
+    function editEvent(eventObj){
+        setEditingEventID(eventObj.id);
+        const newValues = {
+            title: [eventObj.title, false],
+            date_M: [eventObj.date.substring(0, 2), false],
+            date_D: [eventObj.date.substring(2, 4), false],
+            date_Y: [eventObj.date.substring(4), false],
+            end_date_M: [eventObj.end_date.substring(0, 2), false],
+            end_date_D: [eventObj.end_date.substring(2, 4), false],
+            end_date_Y: [eventObj.end_date.substring(4), false],
+            time_H: [eventObj.time.substring(0, 2), false],
+            time_M: [eventObj.time.substring(2), false],
+            end_time_H: [eventObj.end_time.substring(0, 2), false],
+            end_time_M: [eventObj.end_time.substring(2), false],
+            description: [eventObj.description ?? '', false],
+            location: [eventObj.location ?? '', false],
+            tags: ['', false], // implement later
+            affiliatedQuad: ['', false], // implement later
+        };
+        setAddEventValues(newValues);
+        setIsAddEventOn(true);
+    }
+
+    async function updateEvent(){
+        const putObj = await getInsertEventObj();
+        if(putObj === null) return;
+
+        const putRes = await db.putEvent(editingEventID, putObj);
+        if(putRes){
+            setEditingEventID(null);
+            await fetchEvents();
+            setIsAddEventOn(false);
+            setIsInterquad(false);
+            setAddEventValues(emptyAddEventValues);
+        }
     }
 
     return (
@@ -264,8 +310,11 @@ const Events = ({ netID, isAdmin }) => {
 
                                 <div className='btns-container'>
                                     <IoMdCheckmarkCircle className='btn apply' onClick={() => {
-                                        //postPoints();
-                                        postEvent();
+                                        if(editingEventID === null){
+                                            postEvent();
+                                        } else {
+                                            updateEvent();
+                                        }
                                     }}/>
                                     <IoMdCloseCircle className='btn cancel' onClick={() => {
                                         setIsAddEventOn(false);
@@ -319,6 +368,7 @@ const Events = ({ netID, isAdmin }) => {
                                         await updateDetailedEvent(eventObj);
                                     }}
                                     onDelBtnClick={() => deleteEvent(eventObj.id)}
+                                    onEditBtnClick={() => editEvent(eventObj)}
                                 />
                             )
                         }
@@ -336,8 +386,8 @@ const Events = ({ netID, isAdmin }) => {
                 <div className='title-container'>
                     <h1>EVENT DETAILS</h1>
                     {detailedEvent.id !== null ?
-                    <div className={'show-interest-btn' + (showInterestList ? ' active' : '')} onClick={() => setShowInterestList(!showInterestList)}>
-                        {showInterestList ? <IoPeopleCircle className='icon active'/> : <IoMdInformationCircle className='icon'/>}
+                    <div className='show-interest-btn' onClick={() => setShowInterestList(!showInterestList)}>
+                        {!showInterestList ? <IoPeopleCircle className='icon active'/> : <IoMdInformationCircle className='icon'/>}
                     </div>
                     : ''}
                 </div>
@@ -354,7 +404,7 @@ const Events = ({ netID, isAdmin }) => {
                 </div>
                 
                 <div className="body-container">
-                    {showInterestList ? 
+                    {!showInterestList ? 
                         <p className='description'>{detailedEvent.description}</p>
                     : 
                         <div className='roster-container'>

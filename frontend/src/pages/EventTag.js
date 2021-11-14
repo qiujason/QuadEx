@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { GiRoundStar } from 'react-icons/gi'
 import { MdDeleteForever, MdEdit } from 'react-icons/md'
 
-const EventTag = ({ isAdmin, highlight, title, startDate, endDate, startTime, endTime, location, description, picture, initialFavoriteState, onClick, onFavBtnClick, onDelBtnClick }) => {
+const EventTag = ({ isAdmin, highlight, title, startDate, endDate, startTime, endTime, location, description, picture, initialFavoriteState, onClick, onFavBtnClick, onDelBtnClick, onEditBtnClick }) => {
     const [ hovering, setHovering ] = useState(false);
     const [ exitHovering, setExitHovering ] = useState(false);
     const [ isFavorited, setIsFavorited ] = useState(initialFavoriteState);
@@ -29,7 +29,7 @@ const EventTag = ({ isAdmin, highlight, title, startDate, endDate, startTime, en
             {isAdmin ?
             <>
                 <MdDeleteForever className={'btn delete-btn' + (hovering ? ' btn-visible' : '')} onClick={onDelBtnClick}/> 
-                <MdEdit className={'btn edit-btn' + (hovering ? ' btn-visible' : '')}/> 
+                <MdEdit className={'btn edit-btn' + (hovering ? ' btn-visible' : '')} onClick={onEditBtnClick}/> 
             </>
             : ''}
         </div>
