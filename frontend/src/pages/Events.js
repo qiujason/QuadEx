@@ -433,11 +433,16 @@ const Events = ({ netID, isAdmin }) => {
                     setDetailedUserObj(emptyDetailedUserObj);
                 }}/>
                 <div className={"user-details-info-container" + (detailedUserObj.net_id !== null ? ' active' : '')}>
+                    <div className="user-details-title-container">
+                        <h1>{capitalize(detailedUserObj['first_name'] + ' ' + detailedUserObj['last_name'])}</h1>
+                    </div>
                     <div className="profile-pic"></div>
+                    <div className="info-box isBio">
+                        <p>"{detailedUserObj['bio'] ?? 'No bio found'}"</p>
+                    </div>
                     <div className="info-box">
                         <p className='title'>ABOUT</p>
                         <p><strong>Net ID :</strong> {detailedUserObj.net_id}</p>
-                        <p><strong>Name :</strong> {capitalize(detailedUserObj['first_name'] + ' ' + detailedUserObj['last_name'])}</p>
                         <p><strong>Quad Affiliation :</strong> {capitalize(detailedUserObj['quad'] ?? '?')}</p>
                         <p><strong>Birthday :</strong> {detailedUserObj['bday_cal'] ? convertDate(detailedUserObj['birthday']) : 'Private'}</p>
                         <p><strong>Year :</strong> {detailedUserObj['year'] ?? '?'}</p>

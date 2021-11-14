@@ -702,8 +702,13 @@
 
     pointer-events: none;
     width: 100vw;
-    height: calc(100vh - #{$navbar-height});
+    height: 100vh;
+    top: 0;
     position: absolute;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    padding-top: $navbar-height;
 
     * { transition: all $transition-duration; }
 
@@ -725,11 +730,11 @@
 
     .user-details-info-container {
       pointer-events: all;
-      position: absolute;
       transition: all $transition-duration;
       z-index: 5;
-      left: 3rem;
-      transform: translateX(-24rem);
+      right: 2rem;
+      position: absolute;
+      transform: translateX(26rem);
       &.active {
         transform: translateX(0);
       }
@@ -741,16 +746,38 @@
       width: 18rem;
       height: auto;
 
+      .user-details-title-container {
+        width: 100%;
+        height: 3.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        h1 {
+          font-size: 1.4rem;
+          color: $hover-color;
+        }
+      }
+
       .profile-pic {
-        width: 16rem;
-        height: 16rem;
-        margin: 1rem;
+        width: 14rem;
+        height: 14rem;
+        margin: 2rem;
+        margin-top: 0;
         border-radius: 20px;
         background-color: $primary-color;
         box-shadow: 0 1px 5px 0px $shadow-color;
       }
 
       .info-box {
+        &.isBio {
+          margin-top: -3rem;
+          font-style: italic;
+          background-color: $primary-color;
+          box-shadow: 0 1px 5px 0px $shadow-color;
+          text-align: center;
+        }
+
         .title {
           color: $primary-text-color;
           font-size: 1.4rem;
