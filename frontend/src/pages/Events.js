@@ -226,6 +226,9 @@ const Events = ({ netID, isAdmin }) => {
         }
     }
 
+    const emptyDetailedUserObj = { net_id: null };
+    const [ detailedUserObj, setDetailedUserObj ] = useState(emptyDetailedUserObj);
+
     return (
         <div className='events-page'>
             {isAdmin ? 
@@ -382,7 +385,6 @@ const Events = ({ netID, isAdmin }) => {
             </div>
 
             <div className='event-details-container'>
-                
                 <div className='title-container'>
                     <h1>EVENT DETAILS</h1>
                     {detailedEvent.id !== null ?
@@ -408,7 +410,15 @@ const Events = ({ netID, isAdmin }) => {
                         <p className='description'>{detailedEvent.description}</p>
                     : 
                         <div className='roster-container'>
-                            {detailedEvent.members.map(userObj => <UserTag key={userObj.net_id} name={capitalize(userObj.first_name + ' ' + userObj.last_name)} netID={userObj.net_id} quad={userObj.quad}/>)}
+                            {detailedEvent.members.map(userObj => 
+                                <UserTag 
+                                    key={userObj.net_id} 
+                                    name={capitalize(userObj.first_name + ' ' + userObj.last_name)} 
+                                    netID={userObj.net_id} 
+                                    quad={userObj.quad}
+                                    onClick={() => setDetailedUserObj(userObj)}
+                                />
+                            )}
                         </div>
                     }
                 </div>
@@ -416,6 +426,30 @@ const Events = ({ netID, isAdmin }) => {
                 : 
                     <p className='unselected-indicator'>No event selected</p>
                 }
+            </div>
+
+            <div className={"user-details-container" + (detailedUserObj.net_id !== null ? ' active' : '')}>
+                <div className={'background' + (detailedUserObj.net_id !== null ? ' active' : '')} onClick={() => {
+                    setDetailedUserObj(emptyDetailedUserObj);
+                }}/>
+                <div className={"user-details-info-container" + (detailedUserObj.net_id !== null ? ' active' : '')}>
+                    <div className="profile-pic"></div>
+                    <div className="info-box">
+                        <p className='title'>ABOUT</p>
+                        <p><strong>Net ID :</strong> {detailedUserObj.net_id}</p>
+                        <p><strong>Name :</strong> {capitalize(detailedUserObj['first_name'] + ' ' + detailedUserObj['last_name'])}</p>
+                        <p><strong>Quad Affiliation :</strong> {capitalize(detailedUserObj['quad'] ?? '?')}</p>
+                        <p><strong>Birthday :</strong> {detailedUserObj['bday_cal'] ? convertDate(detailedUserObj['birthday']) : 'Private'}</p>
+                        <p><strong>Year :</strong> {detailedUserObj['year'] ?? '?'}</p>
+                        <p><strong>Degree Program :</strong> {capitalize(detailedUserObj['degree'] ?? '?')}</p>
+                    </div>
+
+                    <div className="info-box">
+                        <p className='title'>CONTACT</p>
+                        <p><strong>Instagram :</strong> {detailedUserObj['insta'] && detailedUserObj['insta'][0] !== '@' ? '@' : ''}{detailedUserObj['insta'] ?? '?'}</p>
+                        <p><strong>Hometown :</strong> {detailedUserObj['hometown'] ?? '?'}</p>
+                    </div>
+                </div>
             </div>
         </div>
     )

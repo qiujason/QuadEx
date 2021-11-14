@@ -1,9 +1,9 @@
 import React from 'react'
 import { capitalize } from '../helpers/Helpers'
 
-const UserTag = ({ name, netID, quad }) => {
+const UserTag = ({ name, netID, quad, onClick }) => {
     return (
-        <div className='user-tag-container'>
+        <div className='user-tag-container' onClick={onClick}>
             <div className="picture-container">
 
             </div>

@@ -653,8 +653,14 @@
           box-shadow: 0 1px 5px 0px $shadow-color;
           border-radius: 20px;
           display: flex;
+          align-items: center;
           cursor: pointer;
           height: 4rem;
+          border: 2px solid $primary-color;
+
+          &:hover {
+            border-color: $hover-color;
+          }
   
           .picture-container {
             width: 3rem;
@@ -666,8 +672,7 @@
   
           .info-container {
             width: calc(100% - 8rem);
-            height: calc(100% - 2rem);
-            margin-top: 0.7rem;
+            height: 2.5rem;
 
             p { 
               font-size: 0.8rem;
@@ -685,6 +690,85 @@
             }          
           }
         }
+      }
+    }
+  }
+
+  .user-details-container {
+    visibility: hidden;
+    &.active {
+      visibility: visible;
+    }
+
+    pointer-events: none;
+    width: 100vw;
+    height: calc(100vh - #{$navbar-height});
+    position: absolute;
+
+    * { transition: all $transition-duration; }
+
+    .background {
+      &.active {
+        opacity: 0.5;
+        pointer-events: all;
+      }
+
+      position: absolute;
+      background-color: #000000;
+      width: 100%;
+      height: calc(100% + #{$navbar-height});
+      margin-top: calc(-1 * #{$navbar-height});
+      opacity: 0;
+      z-index: 5;
+      pointer-events: none;
+    }
+
+    .user-details-info-container {
+      pointer-events: all;
+      position: absolute;
+      transition: all $transition-duration;
+      z-index: 5;
+      left: 3rem;
+      transform: translateX(-24rem);
+      &.active {
+        transform: translateX(0);
+      }
+
+      background-color: $primary-color;
+      box-shadow: 0 1px 5px 0px $shadow-color;
+      border-radius: 30px;
+
+      width: 18rem;
+      height: auto;
+
+      .profile-pic {
+        width: 16rem;
+        height: 16rem;
+        margin: 1rem;
+        border-radius: 20px;
+        background-color: $primary-color;
+        box-shadow: 0 1px 5px 0px $shadow-color;
+      }
+
+      .info-box {
+        .title {
+          color: $primary-text-color;
+          font-size: 1.4rem;
+          font-weight: bold;
+          margin-bottom: 0.4rem;
+        }
+
+        p {
+          font-size: 0.8rem;
+          color: $secondary-text-color;
+        }
+
+        margin: 1rem;
+        padding: 0.5rem 1rem 0.6rem 1rem;
+        background-color: $input-color;
+        width: calc(100% - 2rem);
+        height: auto;
+        border-radius: 20px;
       }
     }
   }
