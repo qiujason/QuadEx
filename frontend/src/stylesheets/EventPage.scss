@@ -508,6 +508,13 @@
     padding: 1rem;
     padding-top: 0;
 
+    .unselected-indicator {
+      font-size: 0.8rem;
+      color: $secondary-text-color;
+      text-align: center;
+      margin-top: 2rem;
+    }
+
     .title-container {
       width: 100%;
       grid-row: 1 / span 1;

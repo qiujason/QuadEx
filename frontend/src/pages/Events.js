@@ -170,6 +170,7 @@ const Events = ({ netID, isAdmin }) => {
             }
             await fetchEvents();
             setIsAddEventOn(false);
+            setIsInterquad(false);
             setAddEventValues(emptyAddEventValues);
         }
     }
@@ -180,6 +181,7 @@ const Events = ({ netID, isAdmin }) => {
                 <div className="admin-main-container">
                     <div className={'background' + (isAddEventOn ? ' active' : '')} onClick={() => {
                         setIsAddEventOn(false);
+                        setIsInterquad(false);
                         setAddEventValues(emptyAddEventValues);
                     }}/>
                     <div className="admin-container">
@@ -262,6 +264,7 @@ const Events = ({ netID, isAdmin }) => {
                                     }}/>
                                     <IoMdCloseCircle className='btn cancel' onClick={() => {
                                         setIsAddEventOn(false);
+                                        setIsInterquad(false);
                                         setAddEventValues(emptyAddEventValues);
                                     }}/>
                                 </div>
@@ -322,13 +325,18 @@ const Events = ({ netID, isAdmin }) => {
             </div>
 
             <div className='event-details-container'>
+                
                 <div className='title-container'>
                     <h1>EVENT DETAILS</h1>
+                    {detailedEvent.id !== null ?
                     <div className={'show-interest-btn' + (showInterestList ? ' active' : '')} onClick={() => setShowInterestList(!showInterestList)}>
                         {showInterestList ? <IoPeopleCircle className='icon active'/> : <IoMdInformationCircle className='icon'/>}
                     </div>
+                    : ''}
                 </div>
-                
+
+                {detailedEvent.id !== null ?
+                <>
                 <div className='details-container'>
                     <h1 className='title'>{detailedEvent.title}</h1>
                     <p className='subheader'>{detailedEvent.subtext}</p>
@@ -347,6 +355,10 @@ const Events = ({ netID, isAdmin }) => {
                         </div>
                     }
                 </div>
+                </>
+                : 
+                    <p className='unselected-indicator'>No event selected</p>
+                }
             </div>
         </div>
     )
