@@ -1,13 +1,25 @@
 const db = require('../db')
 
 const getAdmin = (req, res) => {
-    db.query('SELECT * FROM admin WHERE username = $1', [req.query.id], (error, results) => {
-        if (error) {
-            res.status(500).send("Error executing query: " + error)
-        } else {
-            res.status(200).json(results.rows)
-        }
-    })
+    if (req.query.id != null) {
+        db.query('SELECT * FROM admin WHERE username = $1', [req.query.id], (error, results) => {
+            if (error) {
+                res.status(500).send("Error executing query: " + error)
+            } else {
+                res.status(200).json(results.rows)
+            }
+        })
+    } else if (req.query.quad != null) {
+        db.query('SELECT * FROM users, admin WHERE users.quad = $1 AND users.net_id = admin.username', [req.query.quad], (error, results) => {
+            if (error) {
+                res.status(500).send("Error executing query: " + error)
+            } else {
+                res.status(200).json(results.rows)
+            }
+        })
+    } else {
+        res.status(500).send("No parameter provided")
+    }
 }
 
 

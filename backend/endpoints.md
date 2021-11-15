@@ -2,6 +2,8 @@
 
 ## Users
 * Get user - http://localhost:3001/users/?id=_____
+* Get user by birthday - http://localhost:3001/users/birthday/________ (put birthday there)
+* Get users by quad name - http://localhost:3001/users/?quad=_____
 * Post new user - http://localhost:3001/users (with request body)
 * Put user - http://localhost:3001/users/?id=____ (with request body)
 * Delete user - http://localhost:3001/users/?id=______
@@ -31,8 +33,10 @@
                     "Swift"
                 ]
             }
+* Post quad event - http://localhost:3001/quads/event/?quad_name=______&event_id=_______
 * Put quad - http://localhost:3001/quads/?id=_______ (with request body)
 * Delete quad - http://localhost:3001/quads/?id=_______
+* Delete quad event - http://
 
 ## Points
 * Get points by user id - http://localhost:3001/points/user/?id=_____
@@ -51,11 +55,12 @@
 
 ## Images
 * Get image by filename - http://localhost:3001/images/_(filename)__
-* Upload image - http://localhost:3001/images (multipart form)
+* Upload image - http://localhost:3001/images (multipart form: key - "image" (without quotes), value - add the file)
 * Delete image by filename - http://localhost:3001/images/_(filename)__
 
 ## Admin
 * Get admin - http://localhost:3001/admins/?id=_____
+* Get admins by quad name - http://localhost:3001/admins/?quad=_________
 * Post new admin - http://localhost:3001/admins (with request body)
 * Put admin - http://localhost:3001/admins/?id=____ (with request body)
 * Delete admin - http://localhost:3001/admins/?id=______
