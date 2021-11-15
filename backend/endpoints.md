@@ -2,6 +2,7 @@
 
 ## Users
 * Get user - http://localhost:3001/users/?id=_____
+* Get user by birthday - http://localhost:3001/users/birthday/________ (put birthday there)
 * Get users by quad name - http://localhost:3001/users/?quad=_____
 * Post new user - http://localhost:3001/users (with request body)
 * Put user - http://localhost:3001/users/?id=____ (with request body)

@@ -23,7 +23,7 @@ const getUsers = (req, res) => {
 }
 
 const getUsersByBirthday = (req, res) => {
-    db.query('', (error, results) => {
+    db.query('SELECT * FROM users WHERE birthday = $1', [req.params.birthday], (error, results) => {
         if (error) {
             res.status(500).send("Error executing query: " + error)
         } else {
