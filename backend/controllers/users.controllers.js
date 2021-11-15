@@ -22,6 +22,16 @@ const getUsers = (req, res) => {
     }
 }
 
+const getUsersByBirthday = (req, res) => {
+    db.query('', (error, results) => {
+        if (error) {
+            res.status(500).send("Error executing query: " + error)
+        } else {
+            res.status(200).json(results.rows)
+        }
+    })
+}
+
 const postUsers = (req, res) => {
     const {
         net_id,
@@ -117,6 +127,7 @@ const deleteUsers = (req, res) => {
 
 module.exports = {
     getUsers,
+    getUsersByBirthday,
     postUsers,
     putUsers,
     deleteUsers
