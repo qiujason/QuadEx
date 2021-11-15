@@ -11,6 +11,7 @@ import { FaPlusCircle } from 'react-icons/fa'
 import * as db from '../helpers/Database'
 import InputBox from '../components/InputBox'
 import * as errorHandler from '../helpers/ErrorHandler'
+import ScrollViewport from 'react-scroll-viewport';
 
 const Events = ({ netID, isAdmin }) => {
     const [ allEvents, setAllEvents ] = useState([]);
@@ -229,6 +230,7 @@ const Events = ({ netID, isAdmin }) => {
     const emptyDetailedUserObj = { net_id: null };
     const [ detailedUserObj, setDetailedUserObj ] = useState(emptyDetailedUserObj);
 
+
     return (
         <div className='events-page'>
             {isAdmin ? 
@@ -347,34 +349,34 @@ const Events = ({ netID, isAdmin }) => {
                 {/* { title, startDate, endDate, startTime, endTime, location, description, picture } */}
                 {favoritedEventIDs !== null ? 
                     <div className='list-container'>
-                        {
-                            renderedEvents.map((eventObj) => 
-                                <EventTag 
-                                    key={eventObj.id}
-                                    isAdmin={isAdmin}
-                                    highlight={eventObj.id === detailedEvent.id}
-                                    title={eventObj.title} 
-                                    startDate={eventObj.date} 
-                                    endDate={eventObj.end_date} 
-                                    startTime={eventObj.time} 
-                                    endTime={eventObj.end_time} 
-                                    location={eventObj.location}
-                                    description={eventObj.description} 
-                                    initialFavoriteState={favoritedEventIDs.has(eventObj.id) ? true : false}
-                                    onClick={() => updateDetailedEvent(eventObj)}
-                                    onFavBtnClick={async (isFavorite) => {
-                                        if(isFavorite){
-                                            await favoriteEvent(eventObj);
-                                        } else {
-                                            await unfavoriteEvent(eventObj);
-                                        }
-                                        await updateDetailedEvent(eventObj);
-                                    }}
-                                    onDelBtnClick={() => deleteEvent(eventObj.id)}
-                                    onEditBtnClick={() => editEvent(eventObj)}
-                                />
-                            )
-                        }
+                            <ScrollViewport rowHeight={266}>
+                                {renderedEvents.map((eventObj) => 
+                                    <EventTag 
+                                        key={eventObj.id}
+                                        isAdmin={isAdmin}
+                                        highlight={eventObj.id === detailedEvent.id}
+                                        title={eventObj.title} 
+                                        startDate={eventObj.date} 
+                                        endDate={eventObj.end_date} 
+                                        startTime={eventObj.time} 
+                                        endTime={eventObj.end_time} 
+                                        location={eventObj.location}
+                                        description={eventObj.description} 
+                                        initialFavoriteState={favoritedEventIDs.has(eventObj.id) ? true : false}
+                                        onClick={() => updateDetailedEvent(eventObj)}
+                                        onFavBtnClick={async (isFavorite) => {
+                                            if(isFavorite){
+                                                await favoriteEvent(eventObj);
+                                            } else {
+                                                await unfavoriteEvent(eventObj);
+                                            }
+                                            await updateDetailedEvent(eventObj);
+                                        }}
+                                        onDelBtnClick={() => deleteEvent(eventObj.id)}
+                                        onEditBtnClick={() => editEvent(eventObj)}
+                                    />
+                                )}
+                            </ScrollViewport>
                         {
                             renderedEvents.length < 1 ?
                                 <p className='no-events-indicator'>No favorited events found</p>

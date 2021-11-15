@@ -3,11 +3,23 @@ import { convertDate, convertTime, capitalize } from '../helpers/Helpers'
 import { useState } from 'react'
 import { GiRoundStar } from 'react-icons/gi'
 import { MdDeleteForever, MdEdit } from 'react-icons/md'
+import { useEffect } from 'react'
+import { getImage } from '../helpers/Database'
 
 const EventTag = ({ isAdmin, highlight, title, startDate, endDate, startTime, endTime, location, description, picture, initialFavoriteState, onClick, onFavBtnClick, onDelBtnClick, onEditBtnClick }) => {
     const [ hovering, setHovering ] = useState(false);
     const [ exitHovering, setExitHovering ] = useState(false);
     const [ isFavorited, setIsFavorited ] = useState(initialFavoriteState);
+    
+    const [ imgSrc, setImgSrc ] = useState(null);
+    useEffect(() => {
+        async function fetchImage(){
+            const newSrc = await getImage('http://localhost:3001/images/dp239_profile_pic');
+            setImgSrc(newSrc);
+        }
+        fetchImage();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     var subText = convertDate(startDate) + ', ' + convertTime(startTime) + ' - ';
     subText += (startDate !== endDate ? convertDate(endDate) + ', ' : '');
@@ -15,7 +27,7 @@ const EventTag = ({ isAdmin, highlight, title, startDate, endDate, startTime, en
 
     return (
         <div className={"event-tag" + (highlight ? ' highlight' : '')} onClick={onClick} onMouseMove={() => setHovering(true)} onMouseLeave={() => setHovering(false)}>
-            <div className="picture"/>
+            <img className="picture" src={imgSrc} alt='event'/>
             <div className="info-container">
                 <h1 className={hovering ? 'hovering' : ''}>{title.toUpperCase()}</h1>
                 <p className={'subtitle' + (hovering ? ' hovering' : '')}>{subText}</p>
