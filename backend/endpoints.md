@@ -57,6 +57,7 @@
 
 ## Admin
 * Get admin - http://localhost:3001/admins/?id=_____
+* Get admins by quad name - http://localhost:3001/admins/?quad=_________
 * Post new admin - http://localhost:3001/admins (with request body)
 * Put admin - http://localhost:3001/admins/?id=____ (with request body)
 * Delete admin - http://localhost:3001/admins/?id=______
