@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { GiRoundStar } from 'react-icons/gi'
 import { MdDeleteForever, MdEdit } from 'react-icons/md'
 import { useEffect } from 'react'
-import { getImage } from '../helpers/Database'
+//import { getImage } from '../helpers/Database'
 
 const EventTag = ({ isAdmin, highlight, title, startDate, endDate, startTime, endTime, location, description, picture, initialFavoriteState, onClick, onFavBtnClick, onDelBtnClick, onEditBtnClick }) => {
     const [ hovering, setHovering ] = useState(false);
@@ -14,8 +14,9 @@ const EventTag = ({ isAdmin, highlight, title, startDate, endDate, startTime, en
     const [ imgSrc, setImgSrc ] = useState(null);
     useEffect(() => {
         async function fetchImage(){
-            const newSrc = await getImage('user_dp239'); // temporary event image
-            setImgSrc(newSrc);
+            //const newSrc = await getImage('user_dp239'); // temporary event image
+            //setImgSrc(newSrc);
+            setImgSrc('https://ih1.redbubble.net/image.1297785969.6887/st,small,507x507-pad,600x600,f8f8f8.u1.jpg');
         }
         fetchImage();
         // eslint-disable-next-line react-hooks/exhaustive-deps
