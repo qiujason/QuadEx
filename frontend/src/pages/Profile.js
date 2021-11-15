@@ -64,8 +64,8 @@ const Profile = ({ netID, isAdmin }) => {
         prevUserInfo.points = totalPoints;
         setUserInfo(prevUserInfo);
 
-        const imageRes = await db.getImage('http://localhost:3001/images/' + netID + '_profile_pic');
-        setProfilePic(imageRes !== null ? URL.createObjectURL(imageRes) : 'https://ih1.redbubble.net/image.1297785969.6887/st,small,507x507-pad,600x600,f8f8f8.u1.jpg');
+        const imgSrc = await db.getImage('http://localhost:3001/images/' + netID + '_profile_pic');
+        setProfilePic(imgSrc);
     }
 
     useEffect(() => {

@@ -24,15 +24,18 @@ async function insertRequest(type, url, obj){
     return feedback;
 }
 
+
+// returns image src or empty string
 export async function getImage(url){
     return await fetch(url, {
         method: 'GET',
         headers: {
             'Content-Type': 'image/jpeg'
         }
-    }).then(response => {
-        if(!response.ok) return null;
-        return response.blob();
+    }).then(async response => {
+        if(!response.ok) return 'https://ih1.redbubble.net/image.1297785969.6887/st,small,507x507-pad,600x600,f8f8f8.u1.jpg';
+        const blob = await response.blob();
+        return URL.createObjectURL(blob);
     });
 }
 
