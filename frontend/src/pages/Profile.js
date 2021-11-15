@@ -47,6 +47,8 @@ const Profile = ({ netID, isAdmin }) => {
         ]
     });
 
+    const [ profilePic, setProfilePic ] = useState(null);
+
     async function fetchUserInfo() {
         const userObj = await db.getUser(netID);
         const favEventObjs = await db.getFavEventsByUser(netID);
@@ -61,6 +63,20 @@ const Profile = ({ netID, isAdmin }) => {
         prevUserInfo.events = favEventObjs;
         prevUserInfo.points = totalPoints;
         setUserInfo(prevUserInfo);
+
+        try{
+            const imageRes = await fetch('http://localhost:3001/images/' + netID + '_profile_pic', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'image/jpeg'
+                }
+            });
+            const blob = await imageRes.blob();
+            setProfilePic(URL.createObjectURL(blob));
+        } catch (error){
+            console.log('yolo');
+            setProfilePic(null);
+        }
     }
 
     useEffect(() => {
@@ -232,8 +248,31 @@ const Profile = ({ netID, isAdmin }) => {
         fetchUserInfo();
     }
 
+    async function uploadImage(fileObj){
+        const formData = new FormData();
+        formData.append("image", fileObj, netID + '_profile_pic');
+
+        await fetch('http://localhost:3001/images', 
+            {
+                method: 'POST',
+                body: formData,
+            }
+        );
+        console.log('image upload: ' + formData);
+    }
+
     return (
         <div className='profile-page'>
+
+            {profilePic !== null ?
+            <img src={profilePic} alt='yeet'/>
+            : ''}
+            
+            <input type="file" className='filechooser' formEncType='multipart/form-data' onChange={async e => {
+                e.preventDefault();
+                await uploadImage(e.target.files[0]);
+            }}/>
+
             {isAdmin ? 
                 <div className="admin-main-container">
                     <div className={'background' + (isPointsOn ? ' active' : '')} onClick={() => {
