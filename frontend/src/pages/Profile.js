@@ -64,7 +64,7 @@ const Profile = ({ netID, isAdmin }) => {
         prevUserInfo.points = totalPoints;
         setUserInfo(prevUserInfo);
 
-        const imgSrc = await db.getImage('http://localhost:3001/images/' + netID + '_profile_pic');
+        const imgSrc = await db.getImage(`user_${netID}`);
         setProfilePic(imgSrc);
     }
 
@@ -238,7 +238,7 @@ const Profile = ({ netID, isAdmin }) => {
     }
 
     async function uploadImage(fileObj){
-        await fetch('http://localhost:3001/images/' + netID + '_profile_pic', 
+        await fetch(`http://localhost:3001/images/user_${netID}`, 
             { 
                 method: 'DELETE', 
                 headers: {
@@ -249,7 +249,7 @@ const Profile = ({ netID, isAdmin }) => {
         );
 
         const formData = new FormData();
-        formData.append("image", fileObj, netID + '_profile_pic');
+        formData.append("image", fileObj, `user_${netID}`);
 
         await fetch('http://localhost:3001/images', 
             {

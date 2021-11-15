@@ -14,7 +14,7 @@ const EventTag = ({ isAdmin, highlight, title, startDate, endDate, startTime, en
     const [ imgSrc, setImgSrc ] = useState(null);
     useEffect(() => {
         async function fetchImage(){
-            const newSrc = await getImage('http://localhost:3001/images/dp239_profile_pic');
+            const newSrc = await getImage('user_dp239'); // temporary event image
             setImgSrc(newSrc);
         }
         fetchImage();

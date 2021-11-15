@@ -26,8 +26,8 @@ async function insertRequest(type, url, obj){
 
 
 // returns image src or empty string
-export async function getImage(url){
-    return await fetch(url, {
+export async function getImage(filename){
+    return await fetch(`http://localhost:3001/images/${filename}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'image/jpeg'

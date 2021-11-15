@@ -8,7 +8,7 @@ const UserTag = ({ name, netID, quad, onClick }) => {
 
     useEffect(() => {
         async function fetchImageSrc(){
-            const imgSrc = await getImage('http://localhost:3001/images/' + netID + '_profile_pic');
+            const imgSrc = await getImage(`user_${netID}`);
             setImageSrc(imgSrc);
         }
         fetchImageSrc();

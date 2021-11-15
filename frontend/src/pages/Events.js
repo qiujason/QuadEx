@@ -229,6 +229,7 @@ const Events = ({ netID, isAdmin }) => {
 
     const emptyDetailedUserObj = { net_id: null };
     const [ detailedUserObj, setDetailedUserObj ] = useState(emptyDetailedUserObj);
+    const [ detailedUserProfilePic, setDetailedUserProfilePic ] = useState(null);
 
 
     return (
@@ -337,6 +338,7 @@ const Events = ({ netID, isAdmin }) => {
                 <div className='title-container'>
                     <h1>QUAD EVENTS<p>{renderedEvents.length}</p></h1>
                 </div>
+
                 <div className='filter-container'>
                     <SearchField placeholder='Search for events by title' onChange={filterTitle}/>
                     <div className='time-container'>
@@ -346,42 +348,40 @@ const Events = ({ netID, isAdmin }) => {
                         <p>Include past events</p>
                     </div>
                 </div>
-                {/* { title, startDate, endDate, startTime, endTime, location, description, picture } */}
+
                 {favoritedEventIDs !== null ? 
                     <div className='list-container'>
-                            <ScrollViewport rowHeight={266}>
-                                {renderedEvents.map((eventObj) => 
-                                    <EventTag 
-                                        key={eventObj.id}
-                                        isAdmin={isAdmin}
-                                        highlight={eventObj.id === detailedEvent.id}
-                                        title={eventObj.title} 
-                                        startDate={eventObj.date} 
-                                        endDate={eventObj.end_date} 
-                                        startTime={eventObj.time} 
-                                        endTime={eventObj.end_time} 
-                                        location={eventObj.location}
-                                        description={eventObj.description} 
-                                        initialFavoriteState={favoritedEventIDs.has(eventObj.id) ? true : false}
-                                        onClick={() => updateDetailedEvent(eventObj)}
-                                        onFavBtnClick={async (isFavorite) => {
-                                            if(isFavorite){
-                                                await favoriteEvent(eventObj);
-                                            } else {
-                                                await unfavoriteEvent(eventObj);
-                                            }
-                                            await updateDetailedEvent(eventObj);
-                                        }}
-                                        onDelBtnClick={() => deleteEvent(eventObj.id)}
-                                        onEditBtnClick={() => editEvent(eventObj)}
-                                    />
-                                )}
-                            </ScrollViewport>
-                        {
-                            renderedEvents.length < 1 ?
-                                <p className='no-events-indicator'>No favorited events found</p>
-                            : ''
-                        }
+                        <ScrollViewport rowHeight={266}>
+                            {renderedEvents.map((eventObj) => 
+                                <EventTag 
+                                    key={eventObj.id}
+                                    isAdmin={isAdmin}
+                                    highlight={eventObj.id === detailedEvent.id}
+                                    title={eventObj.title} 
+                                    startDate={eventObj.date} 
+                                    endDate={eventObj.end_date} 
+                                    startTime={eventObj.time} 
+                                    endTime={eventObj.end_time} 
+                                    location={eventObj.location}
+                                    description={eventObj.description} 
+                                    initialFavoriteState={favoritedEventIDs.has(eventObj.id) ? true : false}
+                                    onClick={() => updateDetailedEvent(eventObj)}
+                                    onFavBtnClick={async (isFavorite) => {
+                                        if(isFavorite){
+                                            await favoriteEvent(eventObj);
+                                        } else {
+                                            await unfavoriteEvent(eventObj);
+                                        }
+                                        await updateDetailedEvent(eventObj);
+                                    }}
+                                    onDelBtnClick={() => deleteEvent(eventObj.id)}
+                                    onEditBtnClick={() => editEvent(eventObj)}
+                                />
+                            )}
+                        </ScrollViewport>
+                        { renderedEvents.length < 1 ?
+                            <p className='no-events-indicator'>No favorited events found</p>
+                        : '' }
                     </div>
                 : ''}
             </div>
@@ -418,7 +418,11 @@ const Events = ({ netID, isAdmin }) => {
                                     name={capitalize(userObj.first_name + ' ' + userObj.last_name)} 
                                     netID={userObj.net_id} 
                                     quad={userObj.quad}
-                                    onClick={() => setDetailedUserObj(userObj)}
+                                    onClick={async () => {
+                                        setDetailedUserObj(userObj);
+                                        const imgSrc = await db.getImage(`user_${userObj.net_id}`);
+                                        setDetailedUserProfilePic(imgSrc);
+                                    }}
                                 />
                             )}
                         </div>
@@ -438,7 +442,7 @@ const Events = ({ netID, isAdmin }) => {
                     <div className="user-details-title-container">
                         <h1>{capitalize(detailedUserObj['first_name'] + ' ' + detailedUserObj['last_name'])}</h1>
                     </div>
-                    <div className="profile-pic"></div>
+                    <img className="profile-pic" src={detailedUserProfilePic} alt='profile'/>
                     <div className="info-box isBio">
                         <p>"{detailedUserObj['bio'] ?? 'No bio found'}"</p>
                     </div>
