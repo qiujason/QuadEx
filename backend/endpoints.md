@@ -51,7 +51,7 @@
 
 ## Images
 * Get image by filename - http://localhost:3001/images/_(filename)__
-* Upload image - http://localhost:3001/images (multipart form)
+* Upload image - http://localhost:3001/images (multipart form: key - "image" (without quotes), value - add the file)
 * Delete image by filename - http://localhost:3001/images/_(filename)__
 
 ## Admin
