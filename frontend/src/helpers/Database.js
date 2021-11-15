@@ -24,6 +24,18 @@ async function insertRequest(type, url, obj){
     return feedback;
 }
 
+export async function getImage(url){
+    return await fetch(url, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'image/jpeg'
+        }
+    }).then(response => {
+        if(!response.ok) return null;
+        return response.blob();
+    });
+}
+
 async function deleteRequest(url){
     await fetch(url, 
         { 

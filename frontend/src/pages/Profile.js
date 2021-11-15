@@ -64,19 +64,8 @@ const Profile = ({ netID, isAdmin }) => {
         prevUserInfo.points = totalPoints;
         setUserInfo(prevUserInfo);
 
-        try{
-            const imageRes = await fetch('http://localhost:3001/images/' + netID + '_profile_pic', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'image/jpeg'
-                }
-            });
-            const blob = await imageRes.blob();
-            setProfilePic(URL.createObjectURL(blob));
-        } catch (error){
-            console.log('yolo');
-            setProfilePic(null);
-        }
+        const imageRes = await db.getImage('http://localhost:3001/images/' + netID + '_profile_pic');
+        setProfilePic(imageRes !== null ? URL.createObjectURL(imageRes) : 'https://ih1.redbubble.net/image.1297785969.6887/st,small,507x507-pad,600x600,f8f8f8.u1.jpg');
     }
 
     useEffect(() => {
@@ -249,6 +238,16 @@ const Profile = ({ netID, isAdmin }) => {
     }
 
     async function uploadImage(fileObj){
+        await fetch('http://localhost:3001/images/' + netID + '_profile_pic', 
+            { 
+                method: 'DELETE', 
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: null
+            } 
+        );
+
         const formData = new FormData();
         formData.append("image", fileObj, netID + '_profile_pic');
 
@@ -258,16 +257,12 @@ const Profile = ({ netID, isAdmin }) => {
                 body: formData,
             }
         );
-        console.log('image upload: ' + formData);
+
+        await fetchUserInfo();
     }
 
     return (
-        <div className='profile-page'>
-
-            {profilePic !== null ?
-            <img src={profilePic} alt='yeet'/>
-            : ''}
-            
+        <div className='profile-page'>            
             <input type="file" className='filechooser' formEncType='multipart/form-data' onChange={async e => {
                 e.preventDefault();
                 await uploadImage(e.target.files[0]);
@@ -326,7 +321,7 @@ const Profile = ({ netID, isAdmin }) => {
             <div className='info-page-container'>
                 <div className='picture-container'>
                     <div className='profile-picture-container'>
-                        <div className='profile-picture'/>
+                        <img className='profile-picture' src={profilePic} alt='profile'/>
                     </div>
                     <div className='title-container'>
                         <div className="title">

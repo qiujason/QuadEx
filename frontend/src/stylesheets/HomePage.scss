@@ -145,17 +145,6 @@
   position: relative;
   background-color: $secondary-color;
 
-  img {
-    position: absolute;
-    height: 100px;
-    width: 100px;
-    top: 10px;
-    left: 200px;
-    border: 1px dashed red;
-    z-index: 10;
-    background-color: $input-color;
-  }
-
   .filechooser {
     position: absolute;
     z-index: 10;
@@ -355,6 +344,7 @@
       .profile-picture-container {
         .profile-picture {
           background-color: $primary-color;
+          position: absolute;
           height: calc(100% - #{$profile-picture-border-length});
           width: calc(100% - #{$profile-picture-border-length});
           border-radius: $profile-picture-border-radius;
@@ -364,6 +354,8 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        overflow: hidden;
+        position: relative;
         border-radius: $profile-picture-border-radius + 10px;
         background-color: $secondary-color;
         box-shadow: 0 0 5px 1px $secondary-color;
