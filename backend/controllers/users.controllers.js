@@ -1,13 +1,25 @@
 const db = require('../db')
 
 const getUsers = (req, res) => {
-    db.query('SELECT * FROM users WHERE net_id = $1', [req.query.id], (error, results) => {
-        if (error) {
-            res.status(500).send("Error executing query: " + error)
-        } else {
-            res.status(200).json(results.rows)
-        }
-    })
+    if (req.query.quad != null) {
+        db.query('SELECT * FROM users WHERE quad = $1', [req.query.quad], (error, results) => {
+            if (error) {
+                res.status(500).send("Error executing query: " + error)
+            } else {
+                res.status(200).json(results.rows)
+            }
+        })
+    } else if (req.query.id != null) {
+        db.query('SELECT * FROM users WHERE net_id = $1', [req.query.id], (error, results) => {
+            if (error) {
+                res.status(500).send("Error executing query: " + error)
+            } else {
+                res.status(200).json(results.rows)
+            }
+        })
+    } else {
+        res.status(500).send("No parameter provided")
+    }
 }
 
 const postUsers = (req, res) => {

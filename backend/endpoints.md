@@ -2,6 +2,7 @@
 
 ## Users
 * Get user - http://localhost:3001/users/?id=_____
+* Get users by quad name - http://localhost:3001/users/?quad=_____
 * Post new user - http://localhost:3001/users (with request body)
 * Put user - http://localhost:3001/users/?id=____ (with request body)
 * Delete user - http://localhost:3001/users/?id=______
