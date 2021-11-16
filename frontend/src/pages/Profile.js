@@ -151,9 +151,24 @@ const Profile = ({ netID, isAdmin }) => {
         setSettingsValues(prevObj);
     }
 
+    async function uploadImage(fileObj){
+        await db.deleteImage(`user_${netID}`);
+        await db.postImage(fileObj, `user_${netID}`);
+    }
+
     async function updateUserInfo() {
         const requiredKeys = ['first_name', 'last_name', 'quad', 'birthday_M', 'birthday_D', 'birthday_Y'];
         if(await hasInputError(requiredKeys, settingsValues, setSettingsValues)) return;
+
+        console.log('changed at least');
+
+        // update profile picture
+        if(settingsValues['pic'][0] !== null){
+            const fileObj = settingsValues['pic'][0];
+            console.log(fileObj);
+            await uploadImage(settingsValues['pic'][0]);
+            console.log('pic should be updated')
+        } 
 
         // update userInfo object
         const prevUserInfo = { ...userInfo };
@@ -166,7 +181,10 @@ const Profile = ({ netID, isAdmin }) => {
 
         // update database
         const putRes = await db.putUser(prevUserInfo);
-        if(putRes) setIsSettingsOn(false);
+        if(putRes){
+            setIsSettingsOn(false);
+            fetchUserInfo();
+        }
         //console.log('put request: ' + putRes);
     }
 
@@ -186,6 +204,7 @@ const Profile = ({ netID, isAdmin }) => {
             hometown: [userInfo.hometown, false],
             bday_cal: [userInfo.bday_cal, false],
             bio: [userInfo.bio, false],
+            pic: [null, false]
         });
     }
 
@@ -237,37 +256,8 @@ const Profile = ({ netID, isAdmin }) => {
         fetchUserInfo();
     }
 
-    async function uploadImage(fileObj){
-        await fetch(`http://localhost:3001/images/user_${netID}`, 
-            { 
-                method: 'DELETE', 
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: null
-            } 
-        );
-
-        const formData = new FormData();
-        formData.append("image", fileObj, `user_${netID}`);
-
-        await fetch('http://localhost:3001/images', 
-            {
-                method: 'POST',
-                body: formData,
-            }
-        );
-
-        await fetchUserInfo();
-    }
-
     return (
         <div className='profile-page'>            
-            <input type="file" className='filechooser' formEncType='multipart/form-data' onChange={async e => {
-                e.preventDefault();
-                await uploadImage(e.target.files[0]);
-            }}/>
-
             {isAdmin ? 
                 <div className="admin-main-container">
                     <div className={'background' + (isPointsOn ? ' active' : '')} onClick={() => {
@@ -404,6 +394,12 @@ const Profile = ({ netID, isAdmin }) => {
                     {userInfo.net_id !== 'net_id' ? 
                         <div className='list-container'>
                             <p className='header'>BASIC INFORMATION</p>
+
+                            <p className='subheader'>Profile Picture</p>
+                            <input type="file" className='filechooser' formEncType='multipart/form-data' onChange={async e => {
+                                e.preventDefault();
+                                updateSettingsValues('pic', e.target.files[0]);
+                            }}/>
 
                             <p className='subheader'>Name</p>
                             <div className='inputs-container'>
