@@ -28,12 +28,13 @@ const Events = ({ netID, isAdmin }) => {
     });
 
     async function fetchEvents() {
+        // Events list should default to showing only quad events
+
         const userObj = await db.getUser(netID);
         const userQuad = userObj.quad;
-
         const quadEvents = await db.getEventsByQuad(userQuad);
         setAllEvents(quadEvents);
-        
+
         const data = await db.getFavEventsByUser(netID);
 
         const idSet = new Set();
@@ -181,8 +182,6 @@ const Events = ({ netID, isAdmin }) => {
 
         // if it's a put, delete from quad_events by event ID first
         // then for both, post to quad_events
-
-        // then, events list should default to showing only quad events
         
         if(fetchRes){
             if(type === 'PUT'){
