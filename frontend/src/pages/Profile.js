@@ -160,14 +160,9 @@ const Profile = ({ netID, isAdmin }) => {
         const requiredKeys = ['first_name', 'last_name', 'quad', 'birthday_M', 'birthday_D', 'birthday_Y'];
         if(await hasInputError(requiredKeys, settingsValues, setSettingsValues)) return;
 
-        console.log('changed at least');
-
         // update profile picture
         if(settingsValues['pic'][0] !== null){
-            const fileObj = settingsValues['pic'][0];
-            console.log(fileObj);
             await uploadImage(settingsValues['pic'][0]);
-            console.log('pic should be updated')
         } 
 
         // update userInfo object

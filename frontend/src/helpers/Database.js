@@ -43,7 +43,7 @@ export async function postImage(fileObj, filename){
     if(fileObj.type.substring(0, 5) !== 'image') return;
 
     const formData = new FormData();
-    formData.append("image", fileObj, filename);
+    formData.append('image', fileObj, filename);
 
     await fetch('http://localhost:3001/images', 
         {
