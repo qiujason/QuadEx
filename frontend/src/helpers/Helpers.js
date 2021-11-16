@@ -18,7 +18,7 @@ export function convertTime(num){
 }
 
 export function capitalize(str){
-    if(str === null) return;
+    if(str === null || str === '') return;
 
     const words = str.split(' ');
     return words.map((word) => {

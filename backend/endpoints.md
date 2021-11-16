@@ -36,7 +36,7 @@
 * Post quad event - http://localhost:3001/quads/event/?quad_name=______&event_id=_______
 * Put quad - http://localhost:3001/quads/?id=_______ (with request body)
 * Delete quad - http://localhost:3001/quads/?id=_______
-* Delete quad event - http://
+* Delete quad event - http://localhost:3001/quads/event/?event_id=__
 
 ## Points
 * Get points by user id - http://localhost:3001/points/user/?id=_____

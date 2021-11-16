@@ -24,6 +24,44 @@ async function insertRequest(type, url, obj){
     return feedback;
 }
 
+
+// returns image src or empty string
+export async function getImage(filename){
+    return await fetch(`http://localhost:3001/images/${filename}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'image/jpeg'
+        }
+    }).then(async response => {
+        if(!response.ok) return 'https://ih1.redbubble.net/image.1297785969.6887/st,small,507x507-pad,600x600,f8f8f8.u1.jpg';
+        const blob = await response.blob();
+        return URL.createObjectURL(blob);
+    });
+}
+
+export async function postImage(fileObj, filename){
+    if(fileObj.type.substring(0, 5) !== 'image') return;
+
+    const formData = new FormData();
+    formData.append('image', fileObj, filename);
+
+    await fetch('http://localhost:3001/images', 
+        {
+            method: 'POST',
+            body: formData,
+        }
+    );
+}
+
+export async function deleteImage(filename){
+    await fetch(`http://localhost:3001/images/${filename}`, 
+        { 
+            method: 'DELETE',
+            body: null
+        } 
+    );
+}
+
 async function deleteRequest(url){
     await fetch(url, 
         { 
@@ -55,6 +93,10 @@ export async function getEvents(){
     return await getRequest('http://localhost:3001/events');
 }
 
+export async function putEvent(eventID, eventObj){
+    return await insertRequest('PUT', 'http://localhost:3001/events/?id=' + eventID, eventObj);
+}
+
 // returns array of event objects
 export async function getFavEventsByUser(netID){
     return await getRequest('http://localhost:3001/events/favoriteByUser/?id=' + netID);
@@ -65,6 +107,43 @@ export async function getFavedUsersByEvent(eventID){
     return await getRequest('http://localhost:3001/events/listUsers/?id=' + eventID);
 }
 
+export async function postEvent(obj){
+    var feedback;
+    await fetch('http://localhost:3001/events', 
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(obj)
+        }
+    ).then(handlePostError).then(data => feedback = data.text()).catch(() => feedback = false);
+    return feedback;
+}
+
+export async function postQuadEvent(quadName, eventID){
+    var feedback;
+    await fetch(`http://localhost:3001/quads/event/?quad_name=${quadName}&event_id=${eventID}`, 
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: null,
+        }
+    ).then(handlePostError).then(data => feedback = data.text()).catch(() => feedback = false);
+    return feedback;
+}
+
+export async function getEventsByQuad(quad){
+    return await getRequest(`http://localhost:3001/events/?quad=${quad}`);
+}
+
+export async function getAffiliatedQuadsByEvent(eventID){
+    return await getRequest(`http://localhost:3001/quads/?event=${eventID}`);
+}
+
+
 // returns true or false
 export async function postFavEvent(netID, eventID){
     const obj = {
@@ -72,6 +151,14 @@ export async function postFavEvent(netID, eventID){
         event_id: eventID,
     };
     return await insertRequest('POST', 'http://localhost:3001/events/favoriteForUser/?net_id=' + netID + '&event_id=' + eventID, obj);
+}
+
+export async function deleteEvent(eventID){
+    await deleteRequest('http://localhost:3001/events/?id=' + eventID);
+}
+
+export async function deleteQuadEvent(eventID){
+    await deleteRequest(`http://localhost:3001/quads/event/?event_id=${eventID}`);
 }
 
 export async function deleteFavEvent(netID, eventID){
