@@ -7,8 +7,7 @@ CREATE TABLE images(
 
 CREATE TABLE quads(
     name VARCHAR(30) PRIMARY KEY,
-    dorms VARCHAR(30) [] UNIQUE,
-    pic VARCHAR(30) REFERENCES images(filename)
+    dorms VARCHAR(30) [] UNIQUE
 );
 
 CREATE TABLE users(
@@ -23,8 +22,7 @@ CREATE TABLE users(
     degree TEXT,
     bio TEXT,
     insta TEXT,
-    bday_cal BOOLEAN DEFAULT TRUE NOT NULL,
-    prof_pic VARCHAR(30) REFERENCES images(filename)
+    bday_cal BOOLEAN DEFAULT TRUE NOT NULL
 );
 
 CREATE TABLE admin(
@@ -50,8 +48,7 @@ CREATE TABLE events(
     end_date VARCHAR(8) NOT NULL,
     description TEXT,
     location VARCHAR(30),
-    tags VARCHAR(30) [],
-    pic VARCHAR(30) REFERENCES images(filename)
+    tags VARCHAR(30) []
 );
 
 CREATE TABLE favorited_events(
