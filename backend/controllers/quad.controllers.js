@@ -91,16 +91,15 @@ const deleteQuad = (req, res) => {
 }
 
 const deleteQuadEvent = (req, res) => {
-    db.query('DELETE FROM quad_events WHERE quad_name = $1 AND event_id = $2',
+    db.query('DELETE FROM quad_events WHERE event_id = $1',
         [
-            req.query.quad_name,
             req.query.event_id
         ],
         (error, results) => {
             if (error) {
                 res.status(500).send("Error executing query: " + error)
             } else {
-                res.status(201).send(`Event ${req.query.event_id} deleted from quad ${req.query.quad_name}`)
+                res.status(201).send(`Event ${req.query.event_id} deleted from quad_events`)
             }
         })
 }

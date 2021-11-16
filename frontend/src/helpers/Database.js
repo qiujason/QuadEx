@@ -121,6 +121,29 @@ export async function postEvent(obj){
     return feedback;
 }
 
+export async function postQuadEvent(quadName, eventID){
+    var feedback;
+    await fetch(`http://localhost:3001/quads/event/?quad_name=${quadName}&event_id=${eventID}`, 
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: null,
+        }
+    ).then(handlePostError).then(data => feedback = data.text()).catch(() => feedback = false);
+    return feedback;
+}
+
+export async function getEventsByQuad(quad){
+    return await getRequest(`http://localhost:3001/events/?quad=${quad}`);
+}
+
+export async function getAffiliatedQuadsByEvent(eventID){
+    return await getRequest(`http://localhost:3001/quads/?event=${eventID}`);
+}
+
+
 // returns true or false
 export async function postFavEvent(netID, eventID){
     const obj = {
@@ -132,6 +155,10 @@ export async function postFavEvent(netID, eventID){
 
 export async function deleteEvent(eventID){
     await deleteRequest('http://localhost:3001/events/?id=' + eventID);
+}
+
+export async function deleteQuadEvent(eventID){
+    await deleteRequest(`http://localhost:3001/quads/event/?event_id=${eventID}`);
 }
 
 export async function deleteFavEvent(netID, eventID){

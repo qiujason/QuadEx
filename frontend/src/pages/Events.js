@@ -28,7 +28,12 @@ const Events = ({ netID, isAdmin }) => {
     });
 
     async function fetchEvents() {
-        setAllEvents(await db.getEvents());
+        const userObj = await db.getUser(netID);
+        const userQuad = userObj.quad;
+
+        const quadEvents = await db.getEventsByQuad(userQuad);
+        setAllEvents(quadEvents);
+        
         const data = await db.getFavEventsByUser(netID);
 
         const idSet = new Set();
@@ -149,8 +154,6 @@ const Events = ({ netID, isAdmin }) => {
         if(!isInterquad) requiredKeys.push('affiliatedQuad');
         if(await hasInputError(requiredKeys, addEventValues, setAddEventValues)) return null;
 
-        // ^^ add checks in error handler
-
         const returnObj = {
             title: addEventValues['title'][0],
             time: addEventValues['time_H'][0] + addEventValues['time_M'][0],
@@ -165,18 +168,42 @@ const Events = ({ netID, isAdmin }) => {
         return returnObj;
     }
 
-    async function postEvent(){
-        const postObj = await getInsertEventObj();
-        if(postObj === null) return;
+    async function updateEvent(type){
+        const objToUpdate = await getInsertEventObj();
+        if(objToUpdate === null) return;
+
+        var fetchRes;
+        if(type === 'PUT'){
+            fetchRes = await db.putEvent(editingEventID, objToUpdate);
+        } else if (type === 'POST'){
+            fetchRes = await db.postEvent(objToUpdate);
+        }
+
+        // if it's a put, delete from quad_events by event ID first
+        // then for both, post to quad_events
+
+        // then, events list should default to showing only quad events
         
-        const postRes = await db.postEvent(postObj);
-        if(postRes){
-            if(!isInterquad){
-                console.log('quad: ' + addEventValues['affiliatedQuad'][0] + ', eventID: ' + postRes);
-            } else {
-                console.log('interquad, eventID: ' + postRes);
+        if(fetchRes){
+            if(type === 'PUT'){
+                await db.deleteQuadEvent(editingEventID);
             }
+
+            var affiliatedQuads;
+            if(!isInterquad){
+                console.log('quad: ' + addEventValues['affiliatedQuad'][0] + ', eventID: ' + fetchRes);
+                affiliatedQuads = [String(addEventValues['affiliatedQuad'][0]).replace(' ', '%20')];
+            } else {
+                console.log('interquad, eventID: ' + fetchRes);
+                affiliatedQuads = ['raven', 'cardinal', 'eagle', 'robin', 'blue%20jay', 'owl', 'dove'];
+            }
+
+            affiliatedQuads.forEach(async quad => {
+                await db.postQuadEvent(quad, (typeof fetchRes !== 'boolean' ? fetchRes : editingEventID));
+            })
+
             await fetchEvents();
+            setEditingEventID(null);
             setIsAddEventOn(false);
             setIsInterquad(false);
             setAddEventValues(emptyAddEventValues);
@@ -191,8 +218,11 @@ const Events = ({ netID, isAdmin }) => {
 
     const [ editingEventID, setEditingEventID ] = useState(null);
 
-    function editEvent(eventObj){
+    async function editEvent(eventObj){
         setEditingEventID(eventObj.id);
+        const affilQuads = await db.getAffiliatedQuadsByEvent(eventObj.id);
+        if(affilQuads.length > 1) setIsInterquad(true);
+
         const newValues = {
             title: [eventObj.title, false],
             date_M: [eventObj.date.substring(0, 2), false],
@@ -208,24 +238,10 @@ const Events = ({ netID, isAdmin }) => {
             description: [eventObj.description ?? '', false],
             location: [eventObj.location ?? '', false],
             tags: ['', false], // implement later
-            affiliatedQuad: ['', false], // implement later
+            affiliatedQuad: [affilQuads.length === 1 ? affilQuads[0].name : '', false],
         };
         setAddEventValues(newValues);
         setIsAddEventOn(true);
-    }
-
-    async function updateEvent(){
-        const putObj = await getInsertEventObj();
-        if(putObj === null) return;
-
-        const putRes = await db.putEvent(editingEventID, putObj);
-        if(putRes){
-            setEditingEventID(null);
-            await fetchEvents();
-            setIsAddEventOn(false);
-            setIsInterquad(false);
-            setAddEventValues(emptyAddEventValues);
-        }
     }
 
     const emptyDetailedUserObj = { net_id: null };
@@ -318,9 +334,9 @@ const Events = ({ netID, isAdmin }) => {
                                 <div className='btns-container'>
                                     <IoMdCheckmarkCircle className='btn apply' onClick={() => {
                                         if(editingEventID === null){
-                                            postEvent();
+                                            updateEvent('POST');
                                         } else {
-                                            updateEvent();
+                                            updateEvent('PUT');
                                         }
                                     }}/>
                                     <IoMdCloseCircle className='btn cancel' onClick={() => {
@@ -376,7 +392,7 @@ const Events = ({ netID, isAdmin }) => {
                                         await updateDetailedEvent(eventObj);
                                     }}
                                     onDelBtnClick={() => deleteEvent(eventObj.id)}
-                                    onEditBtnClick={() => editEvent(eventObj)}
+                                    onEditBtnClick={async () => editEvent(eventObj)}
                                 />
                             )}
                         </ScrollViewport>

@@ -166,16 +166,17 @@ const Profile = ({ netID, isAdmin }) => {
         } 
 
         // update userInfo object
-        const prevUserInfo = { ...userInfo };
+        const newUserInfo = { ...userInfo };
         Object.keys(settingsValues).forEach(key => {
-            if(key in prevUserInfo) prevUserInfo[key] = (settingsValues[key][0] === '' ? null : settingsValues[key][0]);
+            if(key in newUserInfo) newUserInfo[key] = (settingsValues[key][0] === '' ? null : settingsValues[key][0]);
         });
-        if(settingsValues['password'][0] === '') prevUserInfo['password'] = userInfo.password;
-        prevUserInfo['birthday'] = settingsValues['birthday_M'][0] + settingsValues['birthday_D'][0] + settingsValues['birthday_Y'][0];
-        setUserInfo(prevUserInfo);
+        if(settingsValues['password'][0] === '') newUserInfo['password'] = userInfo.password;
+        newUserInfo['quad'] = newUserInfo['quad'].toLowerCase();
+        newUserInfo['birthday'] = settingsValues['birthday_M'][0] + settingsValues['birthday_D'][0] + settingsValues['birthday_Y'][0];
+        setUserInfo(newUserInfo);
 
         // update database
-        const putRes = await db.putUser(prevUserInfo);
+        const putRes = await db.putUser(newUserInfo);
         if(putRes){
             setIsSettingsOn(false);
             fetchUserInfo();
