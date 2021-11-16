@@ -40,15 +40,17 @@ export async function getImage(filename){
 }
 
 export async function postImage(fileObj, filename){
-    const formData = new FormData();
-        formData.append("image", fileObj, filename);
+    if(fileObj.type.substring(0, 5) !== 'image') return;
 
-        await fetch('http://localhost:3001/images', 
-            {
-                method: 'POST',
-                body: formData,
-            }
-        );
+    const formData = new FormData();
+    formData.append("image", fileObj, filename);
+
+    await fetch('http://localhost:3001/images', 
+        {
+            method: 'POST',
+            body: formData,
+        }
+    );
 }
 
 export async function deleteImage(filename){

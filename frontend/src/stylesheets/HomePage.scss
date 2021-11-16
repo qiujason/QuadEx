@@ -761,13 +761,15 @@
           color: $secondary-text-color;
       
           &::file-selector-button {
+            height: 2rem;
             background-color: $input-color;
-            outline: none;
-            border: none;
-            color: $secondary-text-color;
-            border: 1px solid $secondary-text-color;
+            border: 2px solid $input-color;
+            color: $primary-text-color;
+            border-radius: 10px;
+            padding: 0 0.5rem;
+            margin-right: 0.5rem;
             &:hover {
-              border: 1px dashed black;
+              border-color: $shadow-color;
             }
           }
         }
@@ -777,7 +779,7 @@
           font-size: 0.8rem;
           height: 8rem;
           position: relative;
-          margin-bottom: 3rem;
+          margin-bottom: 2rem;
 
           .char-count-indicator {
             color: $secondary-text-color;
