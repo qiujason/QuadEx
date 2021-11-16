@@ -185,6 +185,7 @@ const Events = ({ netID, isAdmin }) => {
 
     async function deleteEvent(eventID){
         await db.deleteEvent(eventID);
+        setDetailedEvent({ id: null });
         await fetchEvents();
     }
 
