@@ -71,3 +71,16 @@ CREATE TABLE quad_admins(
     admin VARCHAR(30) REFERENCES admin(username),
     PRIMARY KEY(quad_name, admin)
 );
+
+CREATE FUNCTION TF_DeleteEvents() RETURNS TRIGGER AS $$
+BEGIN
+  DELETE FROM favorited_events WHERE OLD.id = favorited_events.event_id;
+  DELETE FROM quad_events WHERE OLD.id = quad_events.event_id;
+  RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER TG_DeleteEvents
+  BEFORE DELETE ON events
+  FOR EACH ROW
+  EXECUTE PROCEDURE TF_DeleteEvents();
