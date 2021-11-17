@@ -97,6 +97,12 @@ export async function putEvent(eventID, eventObj){
     return await insertRequest('PUT', 'http://localhost:3001/events/?id=' + eventID, eventObj);
 }
 
+export async function getEvent(eventID){
+    const data = await getRequest(`http://localhost:3001/events/?id=${eventID}`);
+    if(data.length <= 0) return null;
+    return data[0];
+}
+
 // returns array of event objects
 export async function getFavEventsByUser(netID){
     return await getRequest('http://localhost:3001/events/favoriteByUser/?id=' + netID);

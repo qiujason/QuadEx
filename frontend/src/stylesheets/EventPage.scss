@@ -533,7 +533,7 @@
     box-shadow: 0 1px 5px 0px $shadow-color;
 
     display: grid;
-    grid-template-rows: 5rem 1rem auto minmax(0, 1fr);
+    grid-template-rows: 5rem auto minmax(0, 1fr);
     grid-template-columns: 100%;
     padding: 1rem;
     padding-top: 0;
@@ -552,7 +552,6 @@
       align-items: center;
       justify-content: space-between;
       padding-left: 0.5rem;
-      border-bottom: 2px solid $shadow-color;
 
       h1 {
         font-size: 2rem;
@@ -581,9 +580,11 @@
     }
 
     .details-container {
-      grid-row: 3 / span 1;
+      grid-row: 2 / span 1;
       overflow: hidden;
-      padding: 0 0.5rem;
+      padding: 0.5rem 0.5rem 0.8rem 0.5rem;
+      border-top: 2px solid $shadow-color;
+      border-bottom: 2px solid $shadow-color;
       
       h1 {
         font-size: 1.4rem;
@@ -619,15 +620,19 @@
         margin-bottom: 0.5rem;
       }
 
+      .tags-subheader {
+        margin-bottom: 0.7rem;
+      }
+
       .description {
         margin: 1.2rem 0;
       }
     }
 
     .body-container {
-      grid-row: 4 / span 1;
+      grid-row: 3 / span 1;
       overflow: overlay;
-      margin-top: 1rem;
+      margin-top: 0.8rem;
 
       .description {
         padding: 0 0.5rem;
