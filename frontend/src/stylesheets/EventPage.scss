@@ -552,6 +552,7 @@
       align-items: center;
       justify-content: space-between;
       padding-left: 0.5rem;
+      border-bottom: 2px solid $shadow-color;
 
       h1 {
         font-size: 2rem;
@@ -583,7 +584,6 @@
       grid-row: 2 / span 1;
       overflow: hidden;
       padding: 0.5rem 0.5rem 0.8rem 0.5rem;
-      border-top: 2px solid $shadow-color;
       border-bottom: 2px solid $shadow-color;
       
       h1 {
