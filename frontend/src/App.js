@@ -25,17 +25,17 @@ function App() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [netID]);
 
+    function isNetIDFound(){
+        return netID !== null && netID.length > 0;
+    }
+
     return (
         <div className="App">
             <Router>
-                {netID !== null && netID.length > 0 ? <Navbar netID={netID} setNetID={setNetID} isAdmin={isAdmin}/> : ''}
+                { isNetIDFound() ? <Navbar netID={netID} setNetID={setNetID} isAdmin={isAdmin}/> : null }
                 <Switch>
-                    <Route path="/" exact render={props => netID !== null && netID.length > 0 ? 
-                        <Profile {...props} netID={netID} isAdmin={isAdmin}/> 
-                    : 
-                        <Login {...props} setNetID={setNetID}/>
-                    }/>
-                    <Route path='/events' render={props => netID !== null && netID.length > 0 ? <Events {...props} netID={netID} isAdmin={isAdmin}/> : ''}/>
+                    <Route path="/" exact render={ props => isNetIDFound() ? <Profile {...props} netID={netID} isAdmin={isAdmin}/> : <Login {...props} setNetID={setNetID}/> }/>
+                    <Route path='/events' render={ props => isNetIDFound() ? <Events {...props} netID={netID} isAdmin={isAdmin}/> : null }/>
                 </Switch>
             </Router>
         </div>

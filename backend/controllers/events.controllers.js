@@ -59,7 +59,7 @@ const postEvents = (req, res) => {
             if (error) {
                 res.status(500).send("Error executing query: " + error)
             } else {
-                res.status(201).send(`Event added with ID: ${results.rows[0].id}`)
+                res.status(201).send(`${results.rows[0].id}`)
             }
         })
 }

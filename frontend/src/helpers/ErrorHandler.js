@@ -13,6 +13,18 @@ export async function checkInputs(prevObj, requiredKeys) {
         obj[key][1] = true;
         isError = true;
     }
+    
+    function checkMonth(key){
+        if(key in obj && (Number(obj[key][0]) < 1 || Number(obj[key][0]) > 12)) makeError(key);
+    }
+    
+    function checkDay(key){
+        if(key in obj && (Number(obj[key][0]) < 1 || Number(obj[key][0]) > 31)) makeError(key);
+    }
+    
+    function checkYear(key){
+        if(key in obj && (Number(obj[key][0]) > new Date().getFullYear())) makeError(key);
+    }
 
     requiredKeys.forEach(key => {
         if(obj[key][0] === '') makeError(key);
@@ -24,17 +36,16 @@ export async function checkInputs(prevObj, requiredKeys) {
     if('password' in obj && 'confirm_password' in obj && obj['password'][0] !== obj['confirm_password'][0]) {
         makeError('confirm_password');
     }
-    if('birthday_M' in obj && (Number(obj['birthday_M'][0]) < 1 || Number(obj['birthday_M'][0]) > 12)) {
-        makeError('birthday_M');
-    }
-    if('birthday_D' in obj && (Number(obj['birthday_D'][0]) < 1 || Number(obj['birthday_D'][0]) > 31)) {
-        makeError('birthday_D');
-    }
-    if('birthday_Y' in obj && (Number(obj['birthday_Y'][0]) > new Date().getFullYear())) {
-        makeError('birthday_Y');
-    }
+    
+    checkMonth('birthday_M');
+    checkDay('birthday_D');
+    checkYear('birthday_Y');
+
     if('quad' in obj && !quadNames.includes(String(obj['quad'][0]).toLowerCase())) {
         makeError('quad');
+    }
+    if('affiliatedQuad' in obj && requiredKeys.includes('affiliatedQuad') && !quadNames.includes(String(obj['affiliatedQuad'][0]).toLowerCase())) {
+        makeError('affiliatedQuad');
     }
 
     if('net_id' in obj && await getUser(obj['net_id'][0]) === null) {

@@ -10,6 +10,8 @@ import { convertDate, convertTime, capitalize } from '../helpers/Helpers'
 import { FaPlusCircle } from 'react-icons/fa'
 import * as db from '../helpers/Database'
 import InputBox from '../components/InputBox'
+import * as errorHandler from '../helpers/ErrorHandler'
+import ScrollViewport from 'react-scroll-viewport';
 
 const Events = ({ netID, isAdmin }) => {
     const [ allEvents, setAllEvents ] = useState([]);
@@ -26,7 +28,13 @@ const Events = ({ netID, isAdmin }) => {
     });
 
     async function fetchEvents() {
-        setAllEvents(await db.getEvents());
+        // Events list should default to showing only quad events
+
+        const userObj = await db.getUser(netID);
+        const userQuad = userObj.quad;
+        const quadEvents = await db.getEventsByQuad(userQuad);
+        setAllEvents(quadEvents);
+
         const data = await db.getFavEventsByUser(netID);
 
         const idSet = new Set();
@@ -92,6 +100,7 @@ const Events = ({ netID, isAdmin }) => {
         newObj.members = await db.getFavedUsersByEvent(newObj.id);
 
         setDetailedEvent(newObj);
+        setShowInterestList(false);
     }
 
     async function favoriteEvent(eventObj){
@@ -119,7 +128,9 @@ const Events = ({ netID, isAdmin }) => {
         description: ['', false],
         location: ['', false],
         tags: ['', false],
+        affiliatedQuad: ['', false],
     };
+    const [ isInterquad, setIsInterquad ] = useState(false);
     const [ addEventValues, setAddEventValues ] = useState(emptyAddEventValues);
     const updateAddEventValues = (key, value) => {
         const prevObj = { ...addEventValues };
@@ -127,7 +138,115 @@ const Events = ({ netID, isAdmin }) => {
         prevObj[key][typeof value === 'boolean' ? 1 : 0] = value;
         if(typeof value !== 'boolean') prevObj[key][1] = false;
         setAddEventValues(prevObj);
+        document.getElementById("event-desc-textarea").scrollTop = document.getElementById("event-desc-textarea").scrollHeight;
     }
+
+    async function hasInputError(requiredKeys, state, setFunc){
+        const errorObj = await errorHandler.checkInputs(state, requiredKeys);
+        if(errorObj !== null){
+            setFunc(errorObj);
+            return true;
+        }
+        return false;
+    }
+
+    async function getInsertEventObj(){
+        var requiredKeys = ['title', 'date_M', 'date_D', 'date_Y', 'end_date_M', 'end_date_D', 'end_date_Y', 'time_H', 'time_M', 'end_time_H', 'end_time_M', 'description'];
+        if(!isInterquad) requiredKeys.push('affiliatedQuad');
+        if(await hasInputError(requiredKeys, addEventValues, setAddEventValues)) return null;
+
+        const returnObj = {
+            title: addEventValues['title'][0],
+            time: addEventValues['time_H'][0] + addEventValues['time_M'][0],
+            end_time: addEventValues['end_time_H'][0] + addEventValues['end_time_M'][0],
+            date: addEventValues['date_M'][0] + addEventValues['date_D'][0] + addEventValues['date_Y'][0],
+            end_date: addEventValues['end_date_M'][0] + addEventValues['end_date_D'][0] + addEventValues['end_date_Y'][0],
+            description: addEventValues['description'][0] === '' ? null : addEventValues['description'][0],
+            location: addEventValues['location'][0] === '' ? null : addEventValues['location'][0],
+            tags: null, //must be array or null (fix later),
+            pic: null
+        };
+        return returnObj;
+    }
+
+    async function updateEvent(type){
+        const objToUpdate = await getInsertEventObj();
+        if(objToUpdate === null) return;
+
+        var fetchRes;
+        if(type === 'PUT'){
+            fetchRes = await db.putEvent(editingEventID, objToUpdate);
+        } else if (type === 'POST'){
+            fetchRes = await db.postEvent(objToUpdate);
+        }
+
+        // if it's a put, delete from quad_events by event ID first
+        // then for both, post to quad_events
+        
+        if(fetchRes){
+            if(type === 'PUT'){
+                await db.deleteQuadEvent(editingEventID);
+            }
+
+            var affiliatedQuads;
+            if(!isInterquad){
+                console.log('quad: ' + addEventValues['affiliatedQuad'][0] + ', eventID: ' + fetchRes);
+                affiliatedQuads = [String(addEventValues['affiliatedQuad'][0]).replace(' ', '%20')];
+            } else {
+                console.log('interquad, eventID: ' + fetchRes);
+                affiliatedQuads = ['raven', 'cardinal', 'eagle', 'robin', 'blue%20jay', 'owl', 'dove'];
+            }
+
+            affiliatedQuads.forEach(async quad => {
+                await db.postQuadEvent(quad, (typeof fetchRes !== 'boolean' ? fetchRes : editingEventID));
+            })
+
+            await fetchEvents();
+            setEditingEventID(null);
+            setIsAddEventOn(false);
+            setIsInterquad(false);
+            setAddEventValues(emptyAddEventValues);
+        }
+    }
+
+    async function deleteEvent(eventID){
+        await db.deleteEvent(eventID);
+        setDetailedEvent({ id: null });
+        await fetchEvents();
+    }
+
+    const [ editingEventID, setEditingEventID ] = useState(null);
+
+    async function editEvent(eventObj){
+        setEditingEventID(eventObj.id);
+        const affilQuads = await db.getAffiliatedQuadsByEvent(eventObj.id);
+        if(affilQuads.length > 1) setIsInterquad(true);
+
+        const newValues = {
+            title: [eventObj.title, false],
+            date_M: [eventObj.date.substring(0, 2), false],
+            date_D: [eventObj.date.substring(2, 4), false],
+            date_Y: [eventObj.date.substring(4), false],
+            end_date_M: [eventObj.end_date.substring(0, 2), false],
+            end_date_D: [eventObj.end_date.substring(2, 4), false],
+            end_date_Y: [eventObj.end_date.substring(4), false],
+            time_H: [eventObj.time.substring(0, 2), false],
+            time_M: [eventObj.time.substring(2), false],
+            end_time_H: [eventObj.end_time.substring(0, 2), false],
+            end_time_M: [eventObj.end_time.substring(2), false],
+            description: [eventObj.description ?? '', false],
+            location: [eventObj.location ?? '', false],
+            tags: ['', false], // implement later
+            affiliatedQuad: [affilQuads.length === 1 ? affilQuads[0].name : '', false],
+        };
+        setAddEventValues(newValues);
+        setIsAddEventOn(true);
+    }
+
+    const emptyDetailedUserObj = { net_id: null };
+    const [ detailedUserObj, setDetailedUserObj ] = useState(emptyDetailedUserObj);
+    const [ detailedUserProfilePic, setDetailedUserProfilePic ] = useState(null);
+
 
     return (
         <div className='events-page'>
@@ -135,7 +254,8 @@ const Events = ({ netID, isAdmin }) => {
                 <div className="admin-main-container">
                     <div className={'background' + (isAddEventOn ? ' active' : '')} onClick={() => {
                         setIsAddEventOn(false);
-                        //setPointsValues(emptyPointsValues);
+                        setIsInterquad(false);
+                        setAddEventValues(emptyAddEventValues);
                     }}/>
                     <div className="admin-container">
                         <div className={'title-container' + (isAddEventOn ? ' active' : '')}>
@@ -144,58 +264,84 @@ const Events = ({ netID, isAdmin }) => {
                         </div>
                         {isAddEventOn ? 
                             <div className='body-container'>
-                                <p className='subheader'>Title</p>
-                                <InputBox placeholder={'Event title'} value={addEventValues['title'][0] ?? ''} error={addEventValues['title'][1] ? 'Invalid' : ''} width='18rem' onChange={val => updateAddEventValues('title', val)}/>
+                                <div className="column-1">
+                                    <p className='subheader'>Title</p>
+                                    <InputBox placeholder={'Event title'} value={addEventValues['title'][0] ?? ''} error={addEventValues['title'][1] ? 'Invalid' : ''} width='18rem' onChange={val => updateAddEventValues('title', val)}/>
+                                                                        
+                                    <p className='subheader'>Location</p>
+                                    <InputBox placeholder={'e.g. BC Plaza'} value={addEventValues['location'][0] ?? ''} error={addEventValues['location'][1] ? 'Invalid' : ''} width='18rem' onChange={val => updateAddEventValues('location', val)}/>
+
+                                    <p className='subheader'>Tags</p>
+                                    <InputBox placeholder={'e.g. social, sports, etc.'} value={addEventValues['tags'][0] ?? ''} error={addEventValues['tags'][1] ? 'Invalid' : ''} width='18rem' onChange={val => updateAddEventValues('tags', val)}/>
                                 
-                                <p className='subheader'>Start Time &amp; Date</p>
-                                <div className="inputs-container">
-                                    <InputBox placeholder={'HH'} value={addEventValues['time_H'][0] ?? ''} isNumeric={true} limit={2} error={addEventValues['time_H'][1] ? 'Invalid' : ''} width='2.5rem' onChange={val => updateAddEventValues('time_H', val)}/>
-                                    <p>:</p>
-                                    <InputBox placeholder={'MM'} value={addEventValues['time_M'][0] ?? ''} isNumeric={true} limit={2}  error={addEventValues['time_M'][1] ? 'Invalid' : ''} width='2.5rem' onChange={val => updateAddEventValues('time_M', val)}/>
-                                    <InputBox placeholder={'MM'} value={addEventValues['date_M'][0] ?? ''} isNumeric={true} limit={2}  error={addEventValues['date_M'][1] ? 'Invalid' : ''} width='2.5rem' onChange={val => updateAddEventValues('date_M', val)}/>
-                                    <p>/</p>
-                                    <InputBox placeholder={'DD'} value={addEventValues['date_D'][0] ?? ''} isNumeric={true} limit={2}  error={addEventValues['date_D'][1] ? 'Invalid' : ''} width='2.5rem' onChange={val => updateAddEventValues('date_D', val)}/>
-                                    <p>/</p>
-                                    <InputBox placeholder={'YYYY'} value={addEventValues['date_Y'][0] ?? ''} isNumeric={true} limit={4}  error={addEventValues['date_Y'][1] ? 'Invalid' : ''} width='3rem' onChange={val => updateAddEventValues('date_Y', val)}/>
+                                    <p className='subheader'>Quad Preference</p>
+                                    <div className="checkbox">
+                                        <div className={'icon-container' + (isInterquad ? ' active' : '')} onClick={() => setIsInterquad(!isInterquad)}>
+                                            {isInterquad ? <IoMdCheckmarkCircle className='icon active'/> : <IoMdCloseCircle className='icon'/>}
+                                        </div>
+                                        <p>Make event inter-quad</p>
                                     </div>
 
-                                <p className='subheader'>End Time &amp; Date</p>
-                                <div className="inputs-container">
-                                    <InputBox placeholder={'HH'} value={addEventValues['end_time_H'][0] ?? ''} isNumeric={true} limit={2}  error={addEventValues['end_time_H'][1] ? 'Invalid' : ''} width='2.5rem' onChange={val => updateAddEventValues('end_time_H', val)}/>
-                                    <p>:</p>
-                                    <InputBox placeholder={'MM'} value={addEventValues['end_time_M'][0] ?? ''} isNumeric={true} limit={2}  error={addEventValues['end_time_M'][1] ? 'Invalid' : ''} width='2.5rem' onChange={val => updateAddEventValues('end_time_M', val)}/>
-                                    <InputBox placeholder={'MM'} value={addEventValues['end_date_M'][0] ?? ''} isNumeric={true} limit={2}  error={addEventValues['end_date_M'][1] ? 'Invalid' : ''} width='2.5rem' onChange={val => updateAddEventValues('end_date_M', val)}/>
-                                    <p>/</p>
-                                    <InputBox placeholder={'DD'} value={addEventValues['end_date_D'][0] ?? ''} isNumeric={true} limit={2}  error={addEventValues['end_date_D'][1] ? 'Invalid' : ''} width='2.5rem' onChange={val => updateAddEventValues('end_date_D', val)}/>
-                                    <p>/</p>
-                                    <InputBox placeholder={'YYYY'} value={addEventValues['end_date_Y'][0] ?? ''} isNumeric={true} limit={4}  error={addEventValues['end_date_Y'][1] ? 'Invalid' : ''} width='3rem' onChange={val => updateAddEventValues('end_date_Y', val)}/>
+                                    {!isInterquad ?
+                                    <>
+                                        <p className='subheader'>Afilliated Quad</p>
+                                        <InputBox placeholder={'e.g. Cardinal'} value={addEventValues['affiliatedQuad'][0] ?? ''} error={addEventValues['affiliatedQuad'][1] ? 'Invalid quad name' : ''} width='18rem' onChange={val => updateAddEventValues('affiliatedQuad', val)}/>
+                                    </>
+                                    : '' }
                                 </div>
+                                
+                                <div className="column-2">
+                                    <div className="inputs-container sub">
+                                        <p className='subheader'>Start Time</p>
+                                        <p className='subheader'>Start Date</p>
+                                    </div>
+                                    
+                                    <div className="inputs-container">
+                                        <InputBox placeholder={'HH'} value={addEventValues['time_H'][0] ?? ''} isNumeric={true} limit={2} error={addEventValues['time_H'][1] ? 'Invalid' : ''} width='4rem' onChange={val => updateAddEventValues('time_H', val)}/>
+                                        <InputBox placeholder={'MM'} value={addEventValues['time_M'][0] ?? ''} isNumeric={true} limit={2}  error={addEventValues['time_M'][1] ? 'Invalid' : ''} width='4rem' onChange={val => updateAddEventValues('time_M', val)}/>
+                                        <div className="spacer"/>
+                                        <InputBox placeholder={'MM'} value={addEventValues['date_M'][0] ?? ''} isNumeric={true} limit={2}  error={addEventValues['date_M'][1] ? 'Invalid' : ''} width='5rem' onChange={val => updateAddEventValues('date_M', val)}/>
+                                        <InputBox placeholder={'DD'} value={addEventValues['date_D'][0] ?? ''} isNumeric={true} limit={2}  error={addEventValues['date_D'][1] ? 'Invalid' : ''} width='5rem' onChange={val => updateAddEventValues('date_D', val)}/>
+                                        <InputBox placeholder={'YYYY'} value={addEventValues['date_Y'][0] ?? ''} isNumeric={true} limit={4}  error={addEventValues['date_Y'][1] ? 'Invalid' : ''} width='6rem' onChange={val => updateAddEventValues('date_Y', val)}/>
+                                    </div>
 
-                                <p className='subheader'>Description</p>
-                                {addEventValues.description[1] ? <p className='error-display'>* Required</p> : ''}
-                                <div className="textarea-container">
-                                    <textarea placeholder='Write description...' value={addEventValues['description'][0] ?? ''} onChange={e => {
-                                        if(e.target.value.length <= 250){
-                                            updateAddEventValues('description', e.target.value);
-                                        }
-                                    }}/>
-                                    <p className='char-count-indicator'>{String(addEventValues['description'][0] ?? '').length}/250</p>
+                                    <div className="inputs-container sub">
+                                        <p className='subheader'>End Time</p>
+                                        <p className='subheader'>End Date</p>
+                                    </div>
+                                    <div className="inputs-container">
+                                        <InputBox placeholder={'HH'} value={addEventValues['end_time_H'][0] ?? ''} isNumeric={true} limit={2}  error={addEventValues['end_time_H'][1] ? 'Invalid' : ''} width='4rem' onChange={val => updateAddEventValues('end_time_H', val)}/>
+                                        <InputBox placeholder={'MM'} value={addEventValues['end_time_M'][0] ?? ''} isNumeric={true} limit={2}  error={addEventValues['end_time_M'][1] ? 'Invalid' : ''} width='4rem' onChange={val => updateAddEventValues('end_time_M', val)}/>
+                                        <div className="spacer"/>
+                                        <InputBox placeholder={'MM'} value={addEventValues['end_date_M'][0] ?? ''} isNumeric={true} limit={2}  error={addEventValues['end_date_M'][1] ? 'Invalid' : ''} width='5rem' onChange={val => updateAddEventValues('end_date_M', val)}/>
+                                        <InputBox placeholder={'DD'} value={addEventValues['end_date_D'][0] ?? ''} isNumeric={true} limit={2}  error={addEventValues['end_date_D'][1] ? 'Invalid' : ''} width='5rem' onChange={val => updateAddEventValues('end_date_D', val)}/>
+                                        <InputBox placeholder={'YYYY'} value={addEventValues['end_date_Y'][0] ?? ''} isNumeric={true} limit={4}  error={addEventValues['end_date_Y'][1] ? 'Invalid' : ''} width='6rem' onChange={val => updateAddEventValues('end_date_Y', val)}/>
+                                    </div>
+
+                                    <p className='subheader'>Description</p>
+                                    {addEventValues.description[1] ? <p className='error-display'>* Required</p> : ''}
+                                    <div className="textarea-container">
+                                        <textarea id='event-desc-textarea' placeholder='Write description...' value={addEventValues['description'][0] ?? ''} onChange={e => {
+                                            if(e.target.value.length <= 1000){
+                                                updateAddEventValues('description', e.target.value);
+                                            }
+                                        }}/>
+                                        <p className='char-count-indicator'>{String(addEventValues['description'][0] ?? '').length}/1000</p>
+                                    </div>
                                 </div>
-
-                                <p className='subheader'>Location</p>
-                                <InputBox placeholder={'e.g. BC Plaza'} value={addEventValues['location'][0] ?? ''} error={addEventValues['location'][1] ? 'Invalid' : ''} width='18rem' onChange={val => updateAddEventValues('location', val)}/>
-                                
-                                <p className='subheader'>Tags</p>
-                                <InputBox placeholder={'e.g. social, sports, etc.'} value={addEventValues['tags'][0] ?? ''} error={addEventValues['tags'][1] ? 'Invalid' : ''} width='18rem' onChange={val => updateAddEventValues('tags', val)}/>
-                                
 
                                 <div className='btns-container'>
                                     <IoMdCheckmarkCircle className='btn apply' onClick={() => {
-                                        //postPoints();
+                                        if(editingEventID === null){
+                                            updateEvent('POST');
+                                        } else {
+                                            updateEvent('PUT');
+                                        }
                                     }}/>
                                     <IoMdCloseCircle className='btn cancel' onClick={() => {
-                                        //setIsAddEventOn(false);
-                                        //setPointsValues(emptyPointsValues);
+                                        setIsAddEventOn(false);
+                                        setIsInterquad(false);
+                                        setAddEventValues(emptyAddEventValues);
                                     }}/>
                                 </div>
                             </div>
@@ -208,6 +354,7 @@ const Events = ({ netID, isAdmin }) => {
                 <div className='title-container'>
                     <h1>QUAD EVENTS<p>{renderedEvents.length}</p></h1>
                 </div>
+
                 <div className='filter-container'>
                     <SearchField placeholder='Search for events by title' onChange={filterTitle}/>
                     <div className='time-container'>
@@ -217,13 +364,14 @@ const Events = ({ netID, isAdmin }) => {
                         <p>Include past events</p>
                     </div>
                 </div>
-                {/* { title, startDate, endDate, startTime, endTime, location, description, picture } */}
+
                 {favoritedEventIDs !== null ? 
                     <div className='list-container'>
-                        {
-                            renderedEvents.map((eventObj) => 
+                        <ScrollViewport rowHeight={266}>
+                            {renderedEvents.map((eventObj) => 
                                 <EventTag 
                                     key={eventObj.id}
+                                    isAdmin={isAdmin}
                                     highlight={eventObj.id === detailedEvent.id}
                                     title={eventObj.title} 
                                     startDate={eventObj.date} 
@@ -234,7 +382,7 @@ const Events = ({ netID, isAdmin }) => {
                                     description={eventObj.description} 
                                     initialFavoriteState={favoritedEventIDs.has(eventObj.id) ? true : false}
                                     onClick={() => updateDetailedEvent(eventObj)}
-                                    onBtnClick={async (isFavorite) => {
+                                    onFavBtnClick={async (isFavorite) => {
                                         if(isFavorite){
                                             await favoriteEvent(eventObj);
                                         } else {
@@ -242,41 +390,93 @@ const Events = ({ netID, isAdmin }) => {
                                         }
                                         await updateDetailedEvent(eventObj);
                                     }}
+                                    onDelBtnClick={() => deleteEvent(eventObj.id)}
+                                    onEditBtnClick={async () => editEvent(eventObj)}
                                 />
-                            )
-                        }
-                        {
-                            renderedEvents.length < 1 ?
-                                <p className='no-events-indicator'>No favorited events found</p>
-                            : ''
-                        }
+                            )}
+                        </ScrollViewport>
+                        { renderedEvents.length < 1 ?
+                            <p className='no-events-indicator'>No favorited events found</p>
+                        : '' }
                     </div>
                 : ''}
             </div>
+
             <div className='event-details-container'>
                 <div className='title-container'>
                     <h1>EVENT DETAILS</h1>
-                    <div className={'show-interest-btn' + (showInterestList ? ' active' : '')} onClick={() => setShowInterestList(!showInterestList)}>
-                        {showInterestList ? <IoMdInformationCircle className='icon active'/> : <IoPeopleCircle className='icon'/>}
+                    {detailedEvent.id !== null ?
+                    <div className='show-interest-btn' onClick={() => setShowInterestList(!showInterestList)}>
+                        {!showInterestList ? <IoPeopleCircle className='icon active'/> : <IoMdInformationCircle className='icon'/>}
+                    </div>
+                    : ''}
+                </div>
+
+                {detailedEvent.id !== null ?
+                <>
+                <div className='details-container'>
+                    <h1 className='title'>{detailedEvent.title}</h1>
+                    <p className='subheader'>{detailedEvent.subtext}</p>
+                    <div className="interested-container">
+                        <p className='indicator'>{detailedEvent.members.length}</p>
+                        <p>{(detailedEvent.members.length === 1 ? ' member has' : ' members have')} favorited this event</p>
                     </div>
                 </div>
-                {showInterestList ?
-                    <div className='details-container'>
-                        <h1 className='title'>{detailedEvent.title}</h1>
-                        <p className='subheader'>{detailedEvent.subtext}</p>
+                
+                <div className="body-container">
+                    {!showInterestList ? 
                         <p className='description'>{detailedEvent.description}</p>
-                    </div>
-                :
-                    <>
-                    <div className="roster-title">
-                        <h1>{detailedEvent.members.length}</h1>
-                        <p>members have favorited this event</p>
-                    </div>
-                    <div className='roster-container'>
-                        {detailedEvent.members.map(userObj => <UserTag key={userObj.net_id} name={capitalize(userObj.first_name + ' ' + userObj.last_name)} netID={userObj.net_id}/>)}
-                    </div>
-                    </>
+                    : 
+                        <div className='roster-container'>
+                            {detailedEvent.members.map(userObj => 
+                                <UserTag 
+                                    key={userObj.net_id} 
+                                    name={capitalize(userObj.first_name + ' ' + userObj.last_name)} 
+                                    netID={userObj.net_id} 
+                                    quad={userObj.quad}
+                                    onClick={async () => {
+                                        setDetailedUserObj(userObj);
+                                        const imgSrc = await db.getImage(`user_${userObj.net_id}`);
+                                        setDetailedUserProfilePic(imgSrc);
+                                    }}
+                                />
+                            )}
+                        </div>
+                    }
+                </div>
+                </>
+                : 
+                    <p className='unselected-indicator'>No event selected</p>
                 }
+            </div>
+
+            <div className={"user-details-container" + (detailedUserObj.net_id !== null ? ' active' : '')}>
+                <div className={'background' + (detailedUserObj.net_id !== null ? ' active' : '')} onClick={() => {
+                    setDetailedUserObj(emptyDetailedUserObj);
+                }}/>
+                <div className={"user-details-info-container" + (detailedUserObj.net_id !== null ? ' active' : '')}>
+                    <div className="user-details-title-container">
+                        <h1>{capitalize(detailedUserObj['first_name'] + ' ' + detailedUserObj['last_name'])}</h1>
+                    </div>
+                    <img className="profile-pic" src={detailedUserProfilePic} alt='profile'/>
+                    <div className="info-box isBio">
+                        <p>"{detailedUserObj['bio'] ?? 'No bio found'}"</p>
+                    </div>
+                    <div className="info-box">
+                        <p className='title'>ABOUT</p>
+                        <p><strong>Net ID :</strong> {detailedUserObj.net_id}</p>
+                        <p><strong>Quad Affiliation :</strong> {capitalize(detailedUserObj['quad'] ?? '?')}</p>
+                        <p><strong>Birthday :</strong> {detailedUserObj['bday_cal'] ? convertDate(detailedUserObj['birthday']) : 'Private'}</p>
+                        <p><strong>Year :</strong> {detailedUserObj['year'] ?? '?'}</p>
+                        <p><strong>Degree Program :</strong> {capitalize(detailedUserObj['degree'] ?? '?')}</p>
+                    </div>
+
+                    <div className="info-box">
+                        <p className='title'>CONTACT</p>
+                        <p><strong>Instagram :</strong> {detailedUserObj['insta'] && detailedUserObj['insta'][0] !== '@' ? '@' : ''}{detailedUserObj['insta'] ?? '?'}</p>
+                        <p><strong>Hometown :</strong> {detailedUserObj['hometown'] ?? '?'}</p>
+                    </div>
+                </div>
             </div>
         </div>
     )

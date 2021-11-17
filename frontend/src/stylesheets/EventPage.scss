@@ -34,16 +34,18 @@
 
     .admin-container {
       pointer-events: all;
+      position: absolute;
       transition: all $transition-duration;
       z-index: 5;
-      width: auto;
-      height: auto;
-      position: absolute;
       top: 2rem;
       right: 4rem;
+
       background-color: $primary-color;
       box-shadow: 0 1px 5px 0px $shadow-color;
       border-radius: 20px;
+
+      width: auto;
+      height: auto;
       padding: 1rem;
   
       .title-container {
@@ -74,9 +76,26 @@
       }
   
       .body-container {
-        overflow: overlay;
+        display: grid;
+        margin-top: 0.5rem;
+        grid-template-columns: 18rem 1rem 29rem;
+        $column-height: auto;
+        grid-template-rows: $column-height 4rem;
+        
+        .column-1 {
+          grid-column: 1 / span 1;
+          grid-row: 1 / span 1;
+          width: 100%;
+          height: $column-height;
+        }
 
-        max-height: 70vh;
+        .column-2 {
+          grid-column: 3 / span 1;
+          grid-row: 1 / span 1;
+          width: 100%;
+          height: $column-height;
+        }
+        
         .subheader {
           font-weight: bold;
           color: $secondary-text-color;
@@ -90,15 +109,11 @@
           width: 100%;
           gap: 1rem;
 
-          p {
-            font-size: 0.8rem;
-            align-self: center;
-            margin: 0 calc(-1 * 0.5rem);
+          &.sub {
+            p {
+              width: 9.7rem;
+            }
           }
-        }
-
-        .spacer {
-          margin: 0 calc(-1 * 1rem + 1rem);
         }
 
         .error-display {
@@ -109,11 +124,11 @@
         }
   
         .textarea-container {
-          width: 18rem;
+          width: 29rem;
           font-size: 0.8rem;
-          height: 10rem;
+          height: 11.25rem;
           position: relative;
-  
+
           .char-count-indicator {
             color: $secondary-text-color;
             position: absolute;
@@ -124,13 +139,16 @@
           textarea {
             width: 100%;
             height: 100%;
+            font-size: 0.8rem;
             border: 2px solid $input-color;
             background-color: $input-color;
             outline: none;
             padding: 0.5rem;
+            padding-bottom: 1.8rem;
             border-radius: 10px;
             transition: all $transition-duration;
             resize: none;
+            white-space: pre-wrap;
   
             &:hover {
               border-color: $shadow-color;
@@ -141,9 +159,49 @@
             }
           } 
         }
+
+        .checkbox {
+          width: 100%;
+          height: 2rem;
+          display: flex;
+          align-items: center;
+          margin-top: 0.5rem;
+
+          p {
+            color: $secondary-text-color;
+            font-size: 0.8rem;
+          }
+
+          .icon-container {
+            transition: all $transition-duration;
+            user-select: none;
+            color: $secondary-text-color;
+            cursor: pointer;
+            margin-right: 0.3rem;
+            height: 2rem;
+            width: 2rem;
+            transform: rotate(-90deg);
+
+            &.active {
+              color: $hover-color;
+              transform: rotate(0deg);
+            }
+
+            .icon {
+              transition: all $transition-duration;
+              height: 100%;
+              width: 100%;
+
+              &:hover {
+                transform: scale(1.1, 1.1);
+              }
+            }
+          }          
+        }
   
         .btns-container {
-          grid-row: 3 / span 1;
+          grid-row: 2 / span 1;
+          grid-column: 1 / span 3;
           display: flex;
           justify-content: flex-end;
           align-items: center;
@@ -381,6 +439,9 @@
             }
             color: $secondary-text-color;
             font-size: 0.8rem;
+            overflow: hidden;
+            white-space: pre-wrap;
+            max-height: 6.8rem;
           }
         }
 
@@ -427,6 +488,36 @@
             transform: scale(1.1, 1.1);
           }
         }
+
+        .btn {
+          visibility: hidden;
+          &.btn-visible {
+            visibility: visible;
+          }
+
+          transition-property: color, transform;
+          transition-duration: $transition-duration;
+          position: absolute;
+          color: $secondary-text-color;
+          right: 15px;
+
+          &:hover {
+            transform: scale(1.1, 1.1);
+            color: #000000;
+          }
+        }
+
+        .delete-btn {
+          width: 30px;
+          height: 30px;
+          top: 55px;
+        }
+
+        .edit-btn {
+          width: 26px;
+          height: 24px;
+          top: 95px;
+        }
       }
     }
   }
@@ -442,10 +533,17 @@
     box-shadow: 0 1px 5px 0px $shadow-color;
 
     display: grid;
-    grid-template-rows: 5rem 1rem auto;
+    grid-template-rows: 5rem 1rem auto minmax(0, 1fr);
     grid-template-columns: 100%;
     padding: 1rem;
     padding-top: 0;
+
+    .unselected-indicator {
+      font-size: 0.8rem;
+      color: $secondary-text-color;
+      text-align: center;
+      margin-top: 2rem;
+    }
 
     .title-container {
       width: 100%;
@@ -484,7 +582,7 @@
 
     .details-container {
       grid-row: 3 / span 1;
-      overflow: overlay;
+      overflow: hidden;
       padding: 0 0.5rem;
       
       h1 {
@@ -496,6 +594,24 @@
       p {
         font-size: 0.8rem;
         color: $primary-text-color;
+        overflow-wrap: break-word;
+        white-space: pre-wrap;
+      }
+
+      .interested-container {
+        display: flex;
+        align-items: flex-end;
+        height: 1.4rem;
+        font-style: italic;
+
+        .indicator {
+          font-style: normal;
+          height: 1.8rem;
+          font-size: 1.4rem;
+          color: $hover-color;
+          font-weight: bold;
+          margin-right: 0.2rem;
+        }
       }
 
       .subheader {
@@ -508,64 +624,180 @@
       }
     }
 
-    .roster-title {
-      font-size: 0.8rem;
-      color: $secondary-text-color;
-      margin: 1.4rem 0;
-      padding-left: 0.5rem;
-      display: flex;
-      height: 100%;
+    .body-container {
+      grid-row: 4 / span 1;
+      overflow: overlay;
+      margin-top: 1rem;
 
-      h1 {
-        margin: -0.6rem 0.5rem 0 0;
-        font-weight: bold;
-        color: $hover-color;
-        font-size: 1.4rem;
+      .description {
+        padding: 0 0.5rem;
+        font-size: 0.8rem;
+        color: $primary-text-color;
+        overflow-wrap: break-word;
+        white-space: pre-wrap;
+      }
+
+      .roster-container {
+        width: 100%;
+        height: 100%;
+        background-color: $secondary-color;
+        border: 4px solid $secondary-color;
+        border-radius: 30px;
+        overflow: overlay;
+        padding: 1rem;
+        padding-bottom: 0;
+  
+        .user-tag-container {
+          margin-bottom: 1rem;
+          background-color: $primary-color;
+          box-shadow: 0 1px 5px 0px $shadow-color;
+          border-radius: 20px;
+          display: flex;
+          align-items: center;
+          cursor: pointer;
+          height: 4rem;
+          border: 2px solid $primary-color;
+
+          &:hover {
+            border-color: $hover-color;
+          }
+  
+          .profile-container {
+            width: 3rem;
+            height: 3rem;
+            background-color: $input-color;
+            border-radius: 15px;
+            margin: 0.5rem;
+          }
+  
+          .info-container {
+            width: calc(100% - 8rem);
+            height: 2.5rem;
+
+            p { 
+              font-size: 0.8rem;
+              color: $secondary-text-color;
+            }
+
+            .user-tag-title-container {
+              display: flex;
+
+              h1 {
+                font-size: 0.8rem;
+                color: $primary-text-color;
+                margin-bottom: 0.3rem;
+              }
+            }          
+          }
+        }
       }
     }
+  }
 
-    .roster-container {
-      margin-top: 2.5rem;
-      grid-row: 3 / span 1;
-      background-color: $secondary-color;
-      border: 4px solid $secondary-color;
+  .user-details-container {
+    visibility: hidden;
+    &.active {
+      visibility: visible;
+    }
+
+    pointer-events: none;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    padding-top: $navbar-height;
+
+    * { transition: all $transition-duration; }
+
+    .background {
+      &.active {
+        opacity: 0.5;
+        pointer-events: all;
+      }
+
+      position: absolute;
+      background-color: #000000;
+      width: 100%;
+      height: calc(100% + #{$navbar-height});
+      margin-top: calc(-1 * #{$navbar-height});
+      opacity: 0;
+      z-index: 5;
+      pointer-events: none;
+    }
+
+    .user-details-info-container {
+      pointer-events: all;
+      transition: all $transition-duration;
+      z-index: 5;
+      right: 3rem;
+      position: absolute;
+      transform: translateX(26rem);
+      &.active {
+        transform: translateX(0);
+      }
+
+      background-color: $primary-color;
+      box-shadow: 0 1px 5px 0px $shadow-color;
       border-radius: 30px;
-      overflow: overlay;
-      padding: 1rem;
-      padding-bottom: 0;
 
-      .user-tag-container {
-        margin-bottom: 1rem;
+      width: 18rem;
+      height: auto;
+
+      .user-details-title-container {
+        width: 100%;
+        height: 3.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        h1 {
+          font-size: 1.4rem;
+          color: $hover-color;
+        }
+      }
+
+      .profile-pic {
+        width: 14rem;
+        height: 14rem;
+        margin: 2rem;
+        margin-top: 0;
+        border-radius: 20px;
         background-color: $primary-color;
         box-shadow: 0 1px 5px 0px $shadow-color;
+      }
+
+      .info-box {
+        &.isBio {
+          margin-top: -3rem;
+          font-style: italic;
+          background-color: $primary-color;
+          box-shadow: 0 1px 5px 0px $shadow-color;
+          text-align: center;
+          position: relative;
+          z-index: 1;
+        }
+
+        .title {
+          color: $primary-text-color;
+          font-size: 1.4rem;
+          font-weight: bold;
+          margin-bottom: 0.4rem;
+        }
+
+        p {
+          font-size: 0.8rem;
+          color: $secondary-text-color;
+        }
+
+        margin: 1rem;
+        padding: 0.5rem 1rem 0.6rem 1rem;
+        background-color: $input-color;
+        width: calc(100% - 2rem);
+        height: auto;
         border-radius: 20px;
-        display: flex;
-        cursor: pointer;
-
-        .picture-container {
-          width: 6rem;
-          height: 6rem;
-          background-color: $input-color;
-          border-radius: 15px;
-          margin: 1rem;
-        }
-
-        .info-container {
-          width: calc(100% - 8rem);
-          height: calc(100% - 2rem);
-          margin: 1rem 0;
-
-          h1 {
-            font-size: 1.4rem;
-            color: $primary-text-color;
-            margin-bottom: 0.5rem;
-          }
-
-          p { 
-            font-size: 0.8rem;
-            color: $secondary-text-color;
-          }
-        }
       }
     }
   }
