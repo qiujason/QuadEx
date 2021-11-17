@@ -7,7 +7,6 @@ import { useState, useEffect } from 'react'
 import { convertDate, capitalize } from '../helpers/Helpers'
 import { IoSettingsSharp } from 'react-icons/io5'
 import { IoMdCheckmarkCircle, IoMdCloseCircle } from 'react-icons/io'
-// import { MdAdminPanelSettings } from 'react-icons/md'
 import { FaPlusCircle } from 'react-icons/fa'
 
 import * as db from '../helpers/Database'
