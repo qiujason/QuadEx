@@ -64,6 +64,7 @@ const Profile = ({ netID, isAdmin }) => {
         setUserInfo(prevUserInfo);
 
         const imgSrc = await db.getImage(`user_${netID}`);
+        //console.log(imgSrc);
         setProfilePic(imgSrc);
     }
 
@@ -252,7 +253,7 @@ const Profile = ({ netID, isAdmin }) => {
     }
 
     return (
-        <div className='profile-page'>            
+        <div className='profile-page'>     
             {isAdmin ? 
                 <div className="admin-main-container">
                     <div className={'background' + (isPointsOn ? ' active' : '')} onClick={() => {

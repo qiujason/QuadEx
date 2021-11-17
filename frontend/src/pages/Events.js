@@ -190,10 +190,8 @@ const Events = ({ netID, isAdmin }) => {
 
             var affiliatedQuads;
             if(!isInterquad){
-                //console.log('quad: ' + addEventValues['affiliatedQuad'][0] + ', eventID: ' + newEventID);
                 affiliatedQuads = [String(addEventValues['affiliatedQuad'][0]).replace(' ', '%20')];
             } else {
-                //console.log('interquad, eventID: ' + newEventID);
                 affiliatedQuads = ['raven', 'cardinal', 'eagle', 'robin', 'blue%20jay', 'owl', 'dove'];
             }
 
@@ -283,7 +281,7 @@ const Events = ({ netID, isAdmin }) => {
                                         <div className={'icon-container' + (isInterquad ? ' active' : '')} onClick={() => setIsInterquad(!isInterquad)}>
                                             {isInterquad ? <IoMdCheckmarkCircle className='icon active'/> : <IoMdCloseCircle className='icon'/>}
                                         </div>
-                                        <p>Make event inter-quad</p>
+                                        <p>Make event school-wide</p>
                                     </div>
 
                                     {!isInterquad ?
