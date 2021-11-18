@@ -8,6 +8,7 @@ from random import randrange
 from datetime import datetime
 import numpy as np
 import psycopg2
+from sqlalchemy import create_engine
 
 event_org_list = ['Basketball', 'Soccer', 'Spikeball', 'Computer Science', 'Statistical Science', 'AIV', 'DIIG', 'Simple Charity', 'DML']
 event_type = ['Mixer', 'Rager', 'Party', 'Tournament', 'Kickback', 'Hackathon', 'Large Group', 'GBM', 'Interest Meeting']
@@ -90,7 +91,6 @@ for i in range(num_events):
 
 print(df)
 
-#from sqlalchemy import create_engine
 #i'm guessing username: me, password: cs316, mydatabase: postgres
 #engine = create_engine('postgresql://username:password@localhost:5432/mydatabase')
 #engine = create_engine('postgresql://me:cs316@localhost:5432/postgres')

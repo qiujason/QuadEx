@@ -1,10 +1,10 @@
 INSERT INTO quads VALUES
 ('raven', '{Craven, Bassett, Pegram}'),
-('cardinal', '{Crowell, Alspaugh, Brown}'),
+('cardinal', '{Crowell, Giles, Wilson}'),
 ('eagle', '{Edens, Bell Tower, Trinity}'),
 ('robin', '{Few, Gilbert-Addoms, Southgate}'),
 ('blue jay', '{Keohane, Blackwell, Randolph}'),
-('owl', '{Kilgo, Giles, Wilson}'),
+('owl', '{Kilgo, Alspaugh, Brown}'),
 ('dove', '{Wannamaker, East House, West House}');
 
 INSERT INTO users VALUES
