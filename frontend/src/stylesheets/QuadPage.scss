@@ -24,6 +24,13 @@
       grid-column: 1 / span 7;
       grid-row: 1 / span 1;
       border: 1px dashed red;
+      display: flex;
+      gap: 1rem;
+
+      .next-btn, .prev-btn, .today-btn {
+        cursor: pointer;
+        user-select: none;
+      }
     }
 
     .column {
