@@ -30,7 +30,7 @@ const Quad = () => {
 
             newColumns.push(
                 <div className='column' key={i}>
-                    <h1>{dayNames[i]}</h1>
+                    <h1>{dayNames[i].toUpperCase()}</h1>
                     <p>{newMonth + '/' + newFirst}</p>
                 </div>
             )
@@ -42,7 +42,7 @@ const Quad = () => {
         <div className='quad-page'>
             <div className="calendar-container">
                 <div className="title-container">
-                    <h1>TITLE</h1>
+                    <h1>BIRTHDAY CALENDAR</h1>
                     <p className='prev-btn' onClick={() => changeWeek(-1)}>prev</p>
                     <p className='next-btn' onClick={() => changeWeek(1)}>next</p>
                     
