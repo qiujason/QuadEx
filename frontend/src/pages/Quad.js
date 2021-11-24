@@ -3,9 +3,11 @@ import { useState, useEffect } from 'react'
 import '../stylesheets/QuadPage.scss'
 import { BiCalendarEvent } from 'react-icons/bi'
 import { MdNavigateBefore, MdNavigateNext } from 'react-icons/md'
+import { IoMdCloseCircle } from 'react-icons/io'
 import * as db from '../helpers/Database'
 import UserTag from './UserTag'
 import { capitalize, convertDate } from '../helpers/Helpers'
+import { getCurrDateObj } from '../helpers/CurrDate'
 
 const Quad = () => {
     const [ columns, setColumns ] = useState([]);
@@ -34,20 +36,19 @@ const Quad = () => {
             const date = new Date();
             const currFirst = date.getDate() - date.getDay() + 7 * weekIncrement;
             const newDate = new Date(date.setDate(currFirst + i));
-            const day = newDate.getDate();
-            const month = newDate.getMonth() + 1;
-            const year = newDate.getFullYear();
+            const day = String(newDate.getDate()).padStart(2, '0');
+            const month = String(newDate.getMonth() + 1).padStart(2, '0');
+            const year = String(newDate.getFullYear()).padStart(4, '0');
 
-            console.log(String(month) + String(day));
-            const users = await db.getUsersByBirthday(String(month) + String(day) + String(year)) ?? [];
+            const users = await db.getUsersByBirthday(month + day) ?? [];
 
-            const isToday = day === new Date().getDate() && month === new Date().getMonth() + 1 && year === new Date().getFullYear();
+            const isToday = day === getCurrDateObj().day && month === getCurrDateObj().month && year === getCurrDateObj().year;
 
             newColumns.push(
                 <div className={`column ${dayNames[i].toLowerCase()}` + (isToday ? ' today' : '')} key={i}>
                     <div className="title-container">
                         <h1>{dayNames[i].toUpperCase()}</h1>
-                        <p>{month + '/' + day + '/' + year}</p>
+                        <p>{month + '/' + day + '/' + year.substring(2)}</p>
                     </div>
                     <div className="list-container">
                         {users.map(userObj => 
@@ -79,6 +80,7 @@ const Quad = () => {
                     <MdNavigateBefore className='icon-btn arrow' onClick={() => changeWeek(-1)}/>
                     <BiCalendarEvent className='icon-btn' onClick={() => resetWeek()}/>
                     <MdNavigateNext className='icon-btn arrow' onClick={() => changeWeek(1)}/>
+                    <IoMdCloseCircle className='close-btn'/>
                 </div>
                 {columns}
             </div>
