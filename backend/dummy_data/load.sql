@@ -1,10 +1,10 @@
 INSERT INTO quads VALUES
 ('raven', '{Craven, Bassett, Pegram}'),
-('cardinal', '{Crowell, Alspaugh, Brown}'),
+('cardinal', '{Crowell, Giles, Wilson}'),
 ('eagle', '{Edens, Bell Tower, Trinity}'),
 ('robin', '{Few, Gilbert-Addoms, Southgate}'),
 ('blue jay', '{Keohane, Blackwell, Randolph}'),
-('owl', '{Kilgo, Giles, Wilson}'),
+('owl', '{Kilgo, Alspaugh, Brown}'),
 ('dove', '{Wannamaker, East House, West House}');
 
 INSERT INTO users VALUES
@@ -14,6 +14,7 @@ INSERT INTO users VALUES
 ('dp239', 'yeet', 'Donghan', 'park', '03092001', 3, 'palisades park, NJ', 'eagle', 'ECE/CS', NULL, 'dongimon', DEFAULT);
 
 INSERT INTO admin VALUES
+('rz97', 'RA', 'rz97@duke.edu'),
 ('dp239', 'RA', 'dp239@duke.edu');
 
 INSERT INTO points (net_id, date, point_value, reason) VALUES

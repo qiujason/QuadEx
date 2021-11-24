@@ -2,7 +2,7 @@
 
 We recognize that many Duke students are worried about the changes coming with the new QuadEx residential system. Some are concerned about feeling “stuck” in their randomly assigned dorms, choosing new roommates, or maintaining vibrant social life. The QuadEx webpage strives to create a platform that facilitates within-quad community and excites students about growing residential connections. We envision a more connected campus community.
 
-QuadEx is essentially an integrated web platform that enhances the experience of the QuadEx residential system that will be put into effect at Duke next year. On the platform, users will be able to make an account with their net IDs and affiliated quad, where they will essentially be able to meet fellow quad-mates and browse through quad events, mixers, competitions, and etc.
+The QuadEx web platform allows students and administrators to engage within their quad and across quads. Students can create an account with their NetID and affiliated quad to see their fellow quad-mates, browse through within-quad and inter-quad events, and check quad standings on the points leaderboard. Faculty, residential staff (RCs, RAs, GRs) and student quad council members can navigate the platform as administrators to make important changes such as adding events or updating point tallies.
 
 ## The Team
 - Isaac Fan

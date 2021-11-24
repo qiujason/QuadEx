@@ -7,7 +7,6 @@ import { useState, useEffect } from 'react'
 import { convertDate, capitalize } from '../helpers/Helpers'
 import { IoSettingsSharp } from 'react-icons/io5'
 import { IoMdCheckmarkCircle, IoMdCloseCircle } from 'react-icons/io'
-// import { MdAdminPanelSettings } from 'react-icons/md'
 import { FaPlusCircle } from 'react-icons/fa'
 
 import * as db from '../helpers/Database'
@@ -65,6 +64,7 @@ const Profile = ({ netID, isAdmin }) => {
         setUserInfo(prevUserInfo);
 
         const imgSrc = await db.getImage(`user_${netID}`);
+        //console.log(imgSrc);
         setProfilePic(imgSrc);
     }
 
@@ -253,7 +253,7 @@ const Profile = ({ netID, isAdmin }) => {
     }
 
     return (
-        <div className='profile-page'>            
+        <div className='profile-page'>     
             {isAdmin ? 
                 <div className="admin-main-container">
                     <div className={'background' + (isPointsOn ? ' active' : '')} onClick={() => {

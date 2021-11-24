@@ -1,6 +1,6 @@
 import React from 'react'
 import '../stylesheets/EventPage.scss'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import SearchField from './SearchField'
 import EventTag from './EventTag'
 import UserTag from './UserTag'
@@ -24,12 +24,11 @@ const Events = ({ netID, isAdmin }) => {
         title: '',
         subtext: '',
         description: '',
+        tags: [],
         members: [],
     });
 
-    async function fetchEvents() {
-        // Events list should default to showing only quad events
-
+    const fetchEvents = useCallback(async () => {
         const userObj = await db.getUser(netID);
         const userQuad = userObj.quad;
         const quadEvents = await db.getEventsByQuad(userQuad);
@@ -42,12 +41,11 @@ const Events = ({ netID, isAdmin }) => {
             idSet.add(eventObj.id);
         });
         setFavoritedEventIDs(idSet);
-    }
+    }, [netID]);
 
     useEffect(() => {
         fetchEvents();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [fetchEvents]);
 
     useEffect(() => {
         if(showPastEvents){
@@ -97,6 +95,7 @@ const Events = ({ netID, isAdmin }) => {
         newObj.title = eventObj.title.toUpperCase();
         newObj.subtext =  subText;
         newObj.description = eventObj.description;
+        newObj.tags = eventObj.tags;
         newObj.members = await db.getFavedUsersByEvent(newObj.id);
 
         setDetailedEvent(newObj);
@@ -163,7 +162,7 @@ const Events = ({ netID, isAdmin }) => {
             end_date: addEventValues['end_date_M'][0] + addEventValues['end_date_D'][0] + addEventValues['end_date_Y'][0],
             description: addEventValues['description'][0] === '' ? null : addEventValues['description'][0],
             location: addEventValues['location'][0] === '' ? null : addEventValues['location'][0],
-            tags: null, //must be array or null (fix later),
+            tags: addEventValues['tags'][0] === '' ? null : String(addEventValues['tags'][0]).split(', '),
             pic: null
         };
         return returnObj;
@@ -184,28 +183,30 @@ const Events = ({ netID, isAdmin }) => {
         // then for both, post to quad_events
         
         if(fetchRes){
+            const newEventID = typeof fetchRes !== 'boolean' ? fetchRes : editingEventID;
             if(type === 'PUT'){
                 await db.deleteQuadEvent(editingEventID);
             }
 
             var affiliatedQuads;
             if(!isInterquad){
-                console.log('quad: ' + addEventValues['affiliatedQuad'][0] + ', eventID: ' + fetchRes);
                 affiliatedQuads = [String(addEventValues['affiliatedQuad'][0]).replace(' ', '%20')];
             } else {
-                console.log('interquad, eventID: ' + fetchRes);
                 affiliatedQuads = ['raven', 'cardinal', 'eagle', 'robin', 'blue%20jay', 'owl', 'dove'];
             }
 
-            affiliatedQuads.forEach(async quad => {
-                await db.postQuadEvent(quad, (typeof fetchRes !== 'boolean' ? fetchRes : editingEventID));
-            })
-
-            await fetchEvents();
+            for(const quad of affiliatedQuads){
+                await db.postQuadEvent(quad, newEventID);
+            }
+            
+            const newDetailedEventObj = await db.getEvent(newEventID);
+            updateDetailedEvent(newDetailedEventObj);
             setEditingEventID(null);
             setIsAddEventOn(false);
             setIsInterquad(false);
             setAddEventValues(emptyAddEventValues);
+            
+            await fetchEvents();
         }
     }
 
@@ -236,11 +237,12 @@ const Events = ({ netID, isAdmin }) => {
             end_time_M: [eventObj.end_time.substring(2), false],
             description: [eventObj.description ?? '', false],
             location: [eventObj.location ?? '', false],
-            tags: ['', false], // implement later
+            tags: [(eventObj.tags ?? []).join(', '), false],
             affiliatedQuad: [affilQuads.length === 1 ? affilQuads[0].name : '', false],
         };
         setAddEventValues(newValues);
         setIsAddEventOn(true);
+        await fetchEvents();
     }
 
     const emptyDetailedUserObj = { net_id: null };
@@ -279,7 +281,7 @@ const Events = ({ netID, isAdmin }) => {
                                         <div className={'icon-container' + (isInterquad ? ' active' : '')} onClick={() => setIsInterquad(!isInterquad)}>
                                             {isInterquad ? <IoMdCheckmarkCircle className='icon active'/> : <IoMdCloseCircle className='icon'/>}
                                         </div>
-                                        <p>Make event inter-quad</p>
+                                        <p>Make event school-wide</p>
                                     </div>
 
                                     {!isInterquad ?
@@ -414,36 +416,37 @@ const Events = ({ netID, isAdmin }) => {
 
                 {detailedEvent.id !== null ?
                 <>
-                <div className='details-container'>
-                    <h1 className='title'>{detailedEvent.title}</h1>
-                    <p className='subheader'>{detailedEvent.subtext}</p>
-                    <div className="interested-container">
-                        <p className='indicator'>{detailedEvent.members.length}</p>
-                        <p>{(detailedEvent.members.length === 1 ? ' member has' : ' members have')} favorited this event</p>
-                    </div>
-                </div>
-                
-                <div className="body-container">
-                    {!showInterestList ? 
-                        <p className='description'>{detailedEvent.description}</p>
-                    : 
-                        <div className='roster-container'>
-                            {detailedEvent.members.map(userObj => 
-                                <UserTag 
-                                    key={userObj.net_id} 
-                                    name={capitalize(userObj.first_name + ' ' + userObj.last_name)} 
-                                    netID={userObj.net_id} 
-                                    quad={userObj.quad}
-                                    onClick={async () => {
-                                        setDetailedUserObj(userObj);
-                                        const imgSrc = await db.getImage(`user_${userObj.net_id}`);
-                                        setDetailedUserProfilePic(imgSrc);
-                                    }}
-                                />
-                            )}
+                    <div className='details-container'>
+                        <h1 className='title'>{detailedEvent.title}</h1>
+                        <p className='subheader'>{detailedEvent.subtext}</p>
+                        <p className='tags-subheader'><strong>Tags : </strong>{detailedEvent.tags !== null ? capitalize(detailedEvent.tags.join(', ')) : 'None'}</p>
+                        <div className="interested-container">
+                            <p className='indicator'>{detailedEvent.members.length}</p>
+                            <p>{(detailedEvent.members.length === 1 ? ' member has' : ' members have')} favorited this event</p>
                         </div>
-                    }
-                </div>
+                    </div>
+                    
+                    <div className="body-container">
+                        {!showInterestList ? 
+                            <p className='description'>{detailedEvent.description}</p>
+                        : 
+                            <div className='roster-container'>
+                                {detailedEvent.members.map(userObj => 
+                                    <UserTag 
+                                        key={userObj.net_id} 
+                                        name={capitalize(userObj.first_name + ' ' + userObj.last_name)} 
+                                        netID={userObj.net_id} 
+                                        quad={userObj.quad}
+                                        onClick={async () => {
+                                            setDetailedUserObj(userObj);
+                                            const imgSrc = await db.getImage(`user_${userObj.net_id}`);
+                                            setDetailedUserProfilePic(imgSrc);
+                                        }}
+                                    />
+                                )}
+                            </div>
+                        }
+                    </div>
                 </>
                 : 
                     <p className='unselected-indicator'>No event selected</p>
