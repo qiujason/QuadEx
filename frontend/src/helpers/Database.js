@@ -79,8 +79,14 @@ async function deleteRequest(url){
 // returns user object or null
 export async function getUser(netID){
     const data = await getRequest('http://localhost:3001/users/?id=' + netID);
-    if(data.length <= 0) return null;
+    if(data.length === 0) return null;
     return data[0];
+}
+
+export async function getUsersByBirthday(birthday){
+    const data = await getRequest(`http://localhost:3001/users/birthday/${birthday}`);
+    if(data.length === 0) return null;
+    return data;
 }
 
 export async function putUser(userObj){
