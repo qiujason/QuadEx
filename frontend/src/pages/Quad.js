@@ -1,6 +1,8 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
 import '../stylesheets/QuadPage.scss'
+import { BiCalendarEvent } from 'react-icons/bi'
+import { MdNavigateBefore, MdNavigateNext } from 'react-icons/md'
 
 const Quad = () => {
     const [ columns, setColumns ] = useState([]);
@@ -25,13 +27,15 @@ const Quad = () => {
             const date = new Date();
             const currFirst = date.getDate() - date.getDay() + 7 * weekIncrement;
             const newDate = new Date(date.setDate(currFirst + i));
-            const newFirst = newDate.getDate();
-            const newMonth = newDate.getMonth() + 1;
+            const day = newDate.getDate();
+            const month = newDate.getMonth() + 1;
 
             newColumns.push(
-                <div className='column' key={i}>
-                    <h1>{dayNames[i].toUpperCase()}</h1>
-                    <p>{newMonth + '/' + newFirst}</p>
+                <div className={'column' + (day === new Date().getDate() && month === new Date().getMonth() + 1 ? ' today' : '')} key={i}>
+                    <div className="title-container">
+                        <h1>{dayNames[i].toUpperCase()}</h1>
+                        <p>{month + '/' + day}</p>
+                    </div>
                 </div>
             )
         }
@@ -43,10 +47,9 @@ const Quad = () => {
             <div className="calendar-container">
                 <div className="title-container">
                     <h1>BIRTHDAY CALENDAR</h1>
-                    <p className='prev-btn' onClick={() => changeWeek(-1)}>prev</p>
-                    <p className='next-btn' onClick={() => changeWeek(1)}>next</p>
-                    
-                    <p className='today-btn' onClick={() => resetWeek()}>today</p>
+                    <MdNavigateBefore className='icon-btn arrow' onClick={() => changeWeek(-1)}/>
+                    <BiCalendarEvent className='icon-btn' onClick={() => resetWeek()}/>
+                    <MdNavigateNext className='icon-btn arrow' onClick={() => changeWeek(1)}/>
                 </div>
                 {columns.length > 0 ?
                     columns
