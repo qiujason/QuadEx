@@ -14,7 +14,9 @@ const Navbar = ({ netID, setNetID, isAdmin }) => {
                 </div>
                 
                 <div className='links-container'>
-                    <li onClick={() => {alert('nope >:I')}}>QUAD</li>
+                    <Link to='/quad' style={{textDecoration: 'none'}}>
+                        <li component={Link} to={'/quad'}>QUAD</li>
+                    </Link>
                     <Link to='/events' style={{textDecoration: 'none'}}>
                         <li component={Link} to={'/events'}>EVENTS</li>
                     </Link>

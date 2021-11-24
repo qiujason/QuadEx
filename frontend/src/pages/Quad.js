@@ -29,12 +29,13 @@ const Quad = () => {
             const newDate = new Date(date.setDate(currFirst + i));
             const day = newDate.getDate();
             const month = newDate.getMonth() + 1;
+            const year = newDate.getFullYear();
 
             newColumns.push(
                 <div className={'column' + (day === new Date().getDate() && month === new Date().getMonth() + 1 ? ' today' : '')} key={i}>
                     <div className="title-container">
                         <h1>{dayNames[i].toUpperCase()}</h1>
-                        <p>{month + '/' + day}</p>
+                        <p>{month + '/' + day + '/' + year}</p>
                     </div>
                 </div>
             )
