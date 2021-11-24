@@ -9,7 +9,10 @@ import UserTag from './UserTag'
 import { capitalize, convertDate } from '../helpers/Helpers'
 import { getCurrDateObj } from '../helpers/CurrDate'
 
-const Quad = () => {
+const Quad = ({ netID }) => {
+
+    const [ quad, setQuad ] = useState(null);
+
     const [ columns, setColumns ] = useState([]);
     const [ weekIncrement, setWeekIncrement ] = useState(0);
     const dayNames = ['Sun', 'Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat'];
@@ -18,17 +21,24 @@ const Quad = () => {
     const [ detailedUserObj, setDetailedUserObj ] = useState(emptyDetailedUserObj);
     const [ detailedUserProfilePic, setDetailedUserProfilePic ] = useState(null);
 
+    async function fetchQuad(){
+        const data = await db.getUser(netID);
+        if(data !== null) setQuad(data.quad);
+    }
+
+    useEffect(() => {
+        fetchQuad();
+    }, []);
+
     useEffect(() => {
         updateColumns();
-    }, [weekIncrement]);
+    }, [quad, weekIncrement]);
 
-    const changeWeek = (increment) => {
+    function changeWeek(increment){
         setWeekIncrement(weekIncrement + increment);
     }
 
-    const resetWeek = () => {
-        setWeekIncrement(0);
-    }
+    function resetWeek(){ setWeekIncrement(0); }
 
     const updateColumns = async () => {
         var newColumns = [];
@@ -51,20 +61,25 @@ const Quad = () => {
                         <p>{month + '/' + day + '/' + year.substring(2)}</p>
                     </div>
                     <div className="list-container">
-                        {users.map(userObj => 
-                            <UserTag 
-                                key={userObj.net_id} 
-                                name={capitalize(userObj.first_name + ' ' + userObj.last_name)} 
-                                netID={userObj.net_id} 
-                                quad={userObj.quad}
-                                isNameOnly={true}
-                                onClick={async () => {
-                                    setDetailedUserObj(userObj);
-                                    const imgSrc = await db.getImage(`user_${userObj.net_id}`);
-                                    setDetailedUserProfilePic(imgSrc);
-                                }}
-                            />
-                        )}
+                        {users.map(userObj => {
+                            if(userObj.quad === quad){
+                                return <UserTag 
+                                    key={userObj.net_id} 
+                                    name={capitalize(userObj.first_name + ' ' + userObj.last_name)} 
+                                    netID={userObj.net_id} 
+                                    quad={userObj.quad}
+                                    isNameOnly={true}
+                                    onClick={async () => {
+                                        setDetailedUserObj(userObj);
+                                        const imgSrc = await db.getImage(`user_${userObj.net_id}`);
+                                        setDetailedUserProfilePic(imgSrc);
+                                    }}
+                                />
+                            }
+                            return null;
+                        })}
+                            
+                        
                     </div>
                 </div>
             )
@@ -74,16 +89,18 @@ const Quad = () => {
 
     return (
         <div className='quad-page'>
-            <div className="calendar-container">
-                <div className="title-container">
-                    <h1>BIRTHDAY CALENDAR</h1>
-                    <MdNavigateBefore className='icon-btn arrow' onClick={() => changeWeek(-1)}/>
-                    <BiCalendarEvent className='icon-btn' onClick={() => resetWeek()}/>
-                    <MdNavigateNext className='icon-btn arrow' onClick={() => changeWeek(1)}/>
-                    <IoMdCloseCircle className='close-btn'/>
+            {quad !== null ? 
+                <div className="calendar-container">
+                    <div className="title-container">
+                        <h1>BIRTHDAY CALENDAR</h1>
+                        <MdNavigateBefore className='icon-btn arrow' onClick={() => changeWeek(-1)}/>
+                        <BiCalendarEvent className='icon-btn' onClick={() => resetWeek()}/>
+                        <MdNavigateNext className='icon-btn arrow' onClick={() => changeWeek(1)}/>
+                        <IoMdCloseCircle className='close-btn'/>
+                    </div>
+                    {columns}
                 </div>
-                {columns}
-            </div>
+            : ''}
 
             <div className={'user-details-container' + (detailedUserObj.net_id !== null ? ' active' : '')}>
                 <div className={'background' + (detailedUserObj.net_id !== null ? ' active' : '')} onClick={() => {

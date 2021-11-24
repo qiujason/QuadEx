@@ -35,9 +35,9 @@ function App() {
             <Router>
                 { isNetIDFound() ? <Navbar netID={netID} setNetID={setNetID} isAdmin={isAdmin}/> : null }
                 <Switch>
-                    <Route path="/" exact render={ props => isNetIDFound() ? <Profile {...props} netID={netID} isAdmin={isAdmin}/> : <Login {...props} setNetID={setNetID}/> }/>
-                    <Route path='/events' render={ props => isNetIDFound() ? <Events {...props} netID={netID} isAdmin={isAdmin}/> : null }/>
-                    <Route path='/quad' component={Quad}/>
+                    <Route path="/" exact render={ props => isNetIDFound() ? <Profile { ...props}  netID={netID} isAdmin={isAdmin}/> : <Login {...props} setNetID={setNetID}/> }/>
+                    <Route path='/events' render={ props => isNetIDFound() ? <Events { ...props } netID={netID} isAdmin={isAdmin}/> : null }/>
+                    <Route path='/quad' render={ props => isNetIDFound() ? <Quad { ...props } netID={netID}/> : null }/>
                 </Switch>
             </Router>
         </div>
