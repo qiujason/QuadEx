@@ -10,7 +10,7 @@ const getAdmin = (req, res) => {
             }
         })
     } else if (req.query.quad != null) {
-        db.query('SELECT * FROM users, admin WHERE users.quad = $1 AND users.net_id = admin.username', [req.query.quad], (error, results) => {
+        db.query('SELECT *, title FROM users, admin WHERE users.quad = $1 AND users.net_id = admin.username', [req.query.quad], (error, results) => {
             if (error) {
                 res.status(500).send("Error executing query: " + error)
             } else {

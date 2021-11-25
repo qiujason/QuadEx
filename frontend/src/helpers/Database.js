@@ -89,6 +89,17 @@ export async function getUsersByBirthday(birthday){
     return data;
 }
 
+export async function getUsersByQuad(quad){
+    const data = await getRequest(`http://localhost:3001/users/?quad=${quad}`);
+    if(data.length === 0) return null;
+    return data;
+}
+export async function getAdminsByQuad(quad){
+    const data = await getRequest(`http://localhost:3001/admins/?quad=${quad}`);
+    if(data.length === 0) return null;
+    return data;
+}
+
 export async function putUser(userObj){
     return await insertRequest('PUT', 'http://localhost:3001/users/?id=' + userObj.net_id, userObj);
 }

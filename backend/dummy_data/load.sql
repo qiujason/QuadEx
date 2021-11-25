@@ -14,8 +14,8 @@ INSERT INTO users VALUES
 ('dp239', 'yeet', 'Donghan', 'park', '03092001', 3, 'palisades park, NJ', 'eagle', 'ECE/CS', NULL, 'dongimon', DEFAULT);
 
 INSERT INTO admin VALUES
-('rz97', 'RA', 'rz97@duke.edu'),
-('dp239', 'RA', 'dp239@duke.edu');
+('rz97', 'Resident Assistant', 'rz97@duke.edu'),
+('dp239', 'Resident Assistant', 'dp239@duke.edu');
 
 INSERT INTO points (net_id, date, point_value, reason) VALUES
 ('dp239', '09022021', 5, 'Attended open house');

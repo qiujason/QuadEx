@@ -8,10 +8,15 @@ import * as db from '../helpers/Database'
 import UserTag from './UserTag'
 import { capitalize, convertDate } from '../helpers/Helpers'
 import { getCurrDateObj } from '../helpers/CurrDate'
+import { MdAdminPanelSettings } from 'react-icons/md'
 
 const Quad = ({ netID }) => {
 
     const [ quad, setQuad ] = useState(null);
+    const [ adminObjs, setAdminObjs ] = useState([]);
+    const [ userObjs, setUserObjs ] = useState([]);
+
+    const [ showCalendar, setShowCalendar ] = useState(false);
 
     const [ columns, setColumns ] = useState([]);
     const [ weekIncrement, setWeekIncrement ] = useState(0);
@@ -26,13 +31,34 @@ const Quad = ({ netID }) => {
         if(data !== null) setQuad(data.quad);
     }
 
+    async function fetchMembers(){
+        const userData = await db.getUsersByQuad(quad);
+        const adminData = await db.getAdminsByQuad(quad);
+        if(userData !== null){
+            userData.sort(function(a, b){
+                return a.first_name.localeCompare(b.first_name);
+            })
+            setUserObjs(userData);
+        } 
+        if(adminData !== null){
+            adminData.sort(function(a, b){
+                return a.first_name.localeCompare(b.first_name);
+            })
+            setAdminObjs(adminData);
+        } 
+    }
+
     useEffect(() => {
         fetchQuad();
     }, []);
 
     useEffect(() => {
+        fetchMembers();
+    }, [quad]);
+
+    useEffect(() => {
         updateColumns();
-    }, [quad, weekIncrement]);
+    }, [quad, userObjs, weekIncrement]);
 
     function changeWeek(increment){
         setWeekIncrement(weekIncrement + increment);
@@ -56,11 +82,11 @@ const Quad = ({ netID }) => {
 
             newColumns.push(
                 <div className={`column ${dayNames[i].toLowerCase()}` + (isToday ? ' today' : '')} key={i}>
-                    <div className="title-container">
+                    <div className='title-container'>
                         <h1>{dayNames[i].toUpperCase()}</h1>
                         <p>{month + '/' + day + '/' + year.substring(2)}</p>
                     </div>
-                    <div className="list-container">
+                    <div className='list-container'>
                         {users.map(userObj => {
                             if(userObj.quad === quad){
                                 return <UserTag 
@@ -78,8 +104,6 @@ const Quad = ({ netID }) => {
                             }
                             return null;
                         })}
-                            
-                        
                     </div>
                 </div>
             )
@@ -88,19 +112,64 @@ const Quad = ({ netID }) => {
     }
 
     return (
-        <div className='quad-page'>
-            {quad !== null ? 
-                <div className="calendar-container">
-                    <div className="title-container">
+        <div className='quad-page'> 
+        {quad !== null ?
+        <>
+            <div className="roster-container">
+                <div className="title-container">
+                    <h1>MEMBERS</h1>
+                    <p className='count-indicator'>{userObjs.length}</p>
+                </div>
+                <div className='grid-spacer'/> 
+
+                <p className='subheader'>Quad Admins<MdAdminPanelSettings className='icon'/> </p>
+                <div className="admins-list-container">
+                    {adminObjs.map(userObj => 
+                        <UserTag 
+                            key={userObj.net_id} 
+                            name={capitalize(userObj.first_name + ' ' + userObj.last_name)} 
+                            netID={userObj.net_id} 
+                            quad={userObj.title}
+                            isAdmin={true}
+                            onClick={async () => {
+                                setDetailedUserObj(userObj);
+                                const imgSrc = await db.getImage(`user_${userObj.net_id}`);
+                                setDetailedUserProfilePic(imgSrc);
+                            }}
+                        />
+                    )}
+                </div>
+
+                <p className='subheader'>All Members</p>
+                <div className="list-container">
+                    {userObjs.map(userObj => 
+                        <UserTag 
+                            key={userObj.net_id} 
+                            name={capitalize(userObj.first_name + ' ' + userObj.last_name)} 
+                            netID={userObj.net_id} 
+                            quad={userObj.quad}
+                            onClick={async () => {
+                                setDetailedUserObj(userObj);
+                                const imgSrc = await db.getImage(`user_${userObj.net_id}`);
+                                setDetailedUserProfilePic(imgSrc);
+                            }}
+                        />
+                    )}       
+                </div>
+            </div>
+            
+            {showCalendar ?
+                <div className='calendar-container'>
+                    <div className='title-container'>
                         <h1>BIRTHDAY CALENDAR</h1>
                         <MdNavigateBefore className='icon-btn arrow' onClick={() => changeWeek(-1)}/>
                         <BiCalendarEvent className='icon-btn' onClick={() => resetWeek()}/>
                         <MdNavigateNext className='icon-btn arrow' onClick={() => changeWeek(1)}/>
-                        <IoMdCloseCircle className='close-btn'/>
+                        <IoMdCloseCircle className='close-btn' onClick={() => setShowCalendar(false)}/>
                     </div>
                     {columns}
                 </div>
-            : ''}
+            : null}
 
             <div className={'user-details-container' + (detailedUserObj.net_id !== null ? ' active' : '')}>
                 <div className={'background' + (detailedUserObj.net_id !== null ? ' active' : '')} onClick={() => {
@@ -130,6 +199,8 @@ const Quad = ({ netID }) => {
                     </div>
                 </div>
             </div>
+        </>
+        : ''}
         </div>
     )
 }
