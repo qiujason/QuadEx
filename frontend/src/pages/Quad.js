@@ -170,13 +170,14 @@ const Quad = ({ netID, isAdmin }) => {
                     <p className='birthday-calendar-subheader'>Show birthday calendar</p>
                     <div className="title-container">
                         <h1>DAILY BULLETIN</h1>
+                        <p>{`Today's Date : ${getCurrDateObj().month}/${getCurrDateObj().day}/${getCurrDateObj().year.substring(2)}`}</p>
                     </div>
                     <div className="daily-events-container">
                         <div className="title-container">
                             <p className="title">EVENTS</p>
                             <p className="count-indicator">30</p>
                         </div>
-                        <p className="desc">Looks like there are 5 events today! Make sure to attend them all if you can!</p>
+                        <p className="desc">ISSUE: fix when backend is fully implemented.</p>
                     </div>
                     <div className="daily-birthdays-container">
                         <div className="title-container">
@@ -184,11 +185,11 @@ const Quad = ({ netID, isAdmin }) => {
                             <p className="count-indicator">30</p>
                         </div>
                         {/* FIX ME: shows incorrect number */}
-                        <p className='desc'>{dailyUserObjs.length > 0 ? (dailyUserObjs.length === 1 ? 'Looks like there\'s 1 person with a birthday today!' : `Looks like there are ${dailyUserObjs.length} people with birthdays today!`) + ' Make sure to wish them a happy birthday!' : 'Oops, looks like no one has a birthday today.'}</p>
+                        <p className='desc'>ISSUE: fix when backend is fully implemented.<br/><br/>The following members have birthdays today!</p>
                         {
                             dailyUserObjs.map(userObj => {
                                 if(userObj.quad === quadObj.name){
-                                    return <p key={userObj.net_id}>&bull; {capitalize(userObj.first_name + ' ' + userObj.last_name)} ({userObj.net_id})</p>
+                                    return <p key={userObj.net_id}>&bull; {capitalize(userObj.first_name + ' ' + userObj.last_name)} : {userObj.net_id}</p>
                                 }
                                 return null;
                             })
