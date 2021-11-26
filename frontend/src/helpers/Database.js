@@ -83,8 +83,8 @@ export async function getUser(netID){
     return data[0];
 }
 
-export async function getUsersByBirthday(birthday){
-    const data = await getRequest(`http://localhost:3001/users/birthday/${birthday}`);
+export async function getUsersByBirthday(birthday, quad){
+    const data = await getRequest(`http://localhost:3001/users/birthday/${birthday}/?quad=${quad} `);
     if(data.length === 0) return null;
     return data;
 }
@@ -160,6 +160,12 @@ export async function postQuadEvent(quadName, eventID){
 
 export async function getEventsByQuad(quad){
     return await getRequest(`http://localhost:3001/events/?quad=${quad}`);
+}
+
+export async function getEventsByDateAndQuad(date, quad){
+    const data = await getRequest(`http://localhost:3001/events/?quad=${quad}&date=${date}`);
+    if(data.length === 0) return null;
+    return data;
 }
 
 export async function getAffiliatedQuadsByEvent(eventID){

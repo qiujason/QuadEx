@@ -7,9 +7,10 @@ import { IoMdCloseCircle } from 'react-icons/io'
 import * as db from '../helpers/Database'
 import UserTag from './UserTag'
 import { capitalize, convertDate } from '../helpers/Helpers'
-import { getCurrDateObj } from '../helpers/CurrDate'
+import { getCurrDateObj, getCurrDateMDY } from '../helpers/CurrDate'
 import { MdAdminPanelSettings } from 'react-icons/md'
 import { BiCalendar } from 'react-icons/bi'
+import { convertTime } from '../helpers/Helpers'
 
 const Quad = ({ netID, isAdmin }) => {
 
@@ -19,6 +20,7 @@ const Quad = ({ netID, isAdmin }) => {
     const [ quadPoints, setQuadPoints ] = useState(0);
     const [ imageSrc, setImageSrc ] = useState(null);
 
+    const [ dailyEventObjs, setDailyEventObjs ] = useState([]);
     const [ dailyUserObjs, setDailyUserObjs ] = useState([]);
 
     const [ showCalendar, setShowCalendar ] = useState(false);
@@ -41,32 +43,48 @@ const Quad = ({ netID, isAdmin }) => {
         }
     }
 
+    function sortByObjKey(key, a, b){
+        return a[key].localeCompare(b[key]);
+    }
+
     async function fetchMembers(){
         if(quadObj === null) return;
 
-        const [ userData, adminData, pointsData, dailyUserData, imageData ] = await Promise.all([
+        const [ imageData, pointsData, userData, adminData, dailyUserData, dailyEventsData ] = await Promise.all([
+            await db.getImage(`quad_${quadObj.name}`),
+            await db.getPointsByQuad(quadObj.name),
             await db.getUsersByQuad(quadObj.name),
             await db.getAdminsByQuad(quadObj.name),
-            await db.getPointsByQuad(quadObj.name),
-            await db.getUsersByBirthday(getCurrDateObj().month + getCurrDateObj().day),
-            await db.getImage(`quad_${quadObj.name}`)
+            await db.getUsersByBirthday(getCurrDateObj().month + getCurrDateObj().day, quadObj.name),
+            await db.getEventsByDateAndQuad(getCurrDateMDY(), quadObj.name),
         ]);
 
+        setImageSrc(imageData);
+        if(pointsData !== null) setQuadPoints(pointsData);
         if(userData !== null){
             userData.sort(function(a, b){
-                return a.first_name.localeCompare(b.first_name);
+                return sortByObjKey('first_name', a, b);
             })
             setUserObjs(userData);
         } 
         if(adminData !== null){
             adminData.sort(function(a, b){
-                return a.first_name.localeCompare(b.first_name);
+                return sortByObjKey('first_name', a, b);
             })
             setAdminObjs(adminData);
         } 
-        if(pointsData !== null) setQuadPoints(pointsData);
-        if(dailyUserData !== null) setDailyUserObjs(dailyUserData);
-        setImageSrc(imageData);
+        if(dailyUserData !== null){
+            dailyUserData.sort(function(a, b){
+                return sortByObjKey('first_name', a, b);
+            })
+            setDailyUserObjs(dailyUserData);
+        }
+        if(dailyEventsData !== null){
+            dailyEventsData.sort(function(a, b){
+                return sortByObjKey('time', a, b);
+            })
+            setDailyEventObjs(dailyEventsData);
+        }
     }
 
     async function uploadImage(fileObj){
@@ -105,7 +123,7 @@ const Quad = ({ netID, isAdmin }) => {
             const month = String(newDate.getMonth() + 1).padStart(2, '0');
             const year = String(newDate.getFullYear()).padStart(4, '0');
 
-            const users = await db.getUsersByBirthday(month + day) ?? [];
+            const users = await db.getUsersByBirthday(month + day, quadObj.name) ?? [];
 
             const isToday = day === getCurrDateObj().day && month === getCurrDateObj().month && year === getCurrDateObj().year;
 
@@ -116,23 +134,20 @@ const Quad = ({ netID, isAdmin }) => {
                         <p>{month + '/' + day + '/' + year.substring(2)}</p>
                     </div>
                     <div className='list-container'>
-                        {users.map(userObj => {
-                            if(userObj.quad === quadObj.name){
-                                return <UserTag 
-                                    key={userObj.net_id} 
-                                    name={capitalize(userObj.first_name + ' ' + userObj.last_name)} 
-                                    netID={userObj.net_id} 
-                                    quad={userObj.quad}
-                                    isNameOnly={true}
-                                    onClick={async () => {
-                                        setDetailedUserObj(userObj);
-                                        const imgSrc = await db.getImage(`user_${userObj.net_id}`);
-                                        setDetailedUserProfilePic(imgSrc);
-                                    }}
-                                />
-                            }
-                            return null;
-                        })}
+                        {users.map(userObj => 
+                            <UserTag 
+                                key={userObj.net_id} 
+                                name={capitalize(userObj.first_name + ' ' + userObj.last_name)} 
+                                netID={userObj.net_id} 
+                                quad={userObj.quad}
+                                isNameOnly={true}
+                                onClick={async () => {
+                                    setDetailedUserObj(userObj);
+                                    const imgSrc = await db.getImage(`user_${userObj.net_id}`);
+                                    setDetailedUserProfilePic(imgSrc);
+                                }}
+                            />
+                        )}
                     </div>
                 </div>
             )
@@ -175,25 +190,22 @@ const Quad = ({ netID, isAdmin }) => {
                     <div className="daily-events-container">
                         <div className="title-container">
                             <p className="title">EVENTS</p>
-                            <p className="count-indicator">30</p>
+                            <p className="count-indicator">{dailyEventObjs.length}</p>
                         </div>
-                        <p className="desc">ISSUE: fix when backend is fully implemented.</p>
+                        <p className="desc">{dailyEventObjs.length > 0 ? 'The following events are taking place today! Check them out from the events page!' : 'Looks like there are no events today!'}</p>
+                        {dailyEventObjs.map(eventObj => 
+                            <p key={eventObj.id}>&bull; "{eventObj.title.toUpperCase()}" : {convertTime(eventObj.time)} {eventObj.location !== null ? ` at ${capitalize(eventObj.location)}` : ''}</p>
+                        )}
                     </div>
                     <div className="daily-birthdays-container">
                         <div className="title-container">
                             <p className="title">BIRTHDAYS</p>
-                            <p className="count-indicator">30</p>
+                            <p className="count-indicator">{dailyUserObjs.length}</p>
                         </div>
-                        {/* FIX ME: shows incorrect number */}
-                        <p className='desc'>ISSUE: fix when backend is fully implemented.<br/><br/>The following members have birthdays today!</p>
-                        {
-                            dailyUserObjs.map(userObj => {
-                                if(userObj.quad === quadObj.name){
-                                    return <p key={userObj.net_id}>&bull; {capitalize(userObj.first_name + ' ' + userObj.last_name)} : {userObj.net_id}</p>
-                                }
-                                return null;
-                            })
-                        }
+                        <p className='desc'>{dailyUserObjs.length > 0 ? 'The following members have birthdays today. Make sure to wish them a happy birthday!' : 'Looks like no one has a birthday today!'}</p>
+                        {dailyUserObjs.map(userObj => 
+                            <p key={userObj.net_id}>&bull; {capitalize(userObj.first_name + ' ' + userObj.last_name)} : {userObj.net_id}</p>
+                        )}
                     </div>
                 </div>
             </div>

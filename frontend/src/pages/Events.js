@@ -294,7 +294,7 @@ const Events = ({ netID, isAdmin }) => {
                                 
                                 <div className='column-2'>
                                     <div className='inputs-container sub'>
-                                        <p className='subheader'>Start Time</p>
+                                        <p className='subheader'>Start Time, Military</p>
                                         <p className='subheader'>Start Date</p>
                                     </div>
                                     
@@ -308,7 +308,7 @@ const Events = ({ netID, isAdmin }) => {
                                     </div>
 
                                     <div className='inputs-container sub'>
-                                        <p className='subheader'>End Time</p>
+                                        <p className='subheader'>End Time, Military</p>
                                         <p className='subheader'>End Date</p>
                                     </div>
                                     <div className='inputs-container'>
