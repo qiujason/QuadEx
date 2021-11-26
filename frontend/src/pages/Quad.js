@@ -133,7 +133,7 @@ const Quad = ({ netID }) => {
                 </div>
                 <div className='title-container'>
                     <h1>{quadObj.name.toUpperCase()}S</h1>
-                    <p className='dorms'>{quadObj.dorms.join(', ')}</p>
+                    <p className='dorms'>Affiliated dorms : {quadObj.dorms.join(', ')}</p>
                     <p className='points'>{quadPoints} points</p>
                 </div>
                 <div className='background'>
@@ -146,7 +146,7 @@ const Quad = ({ netID }) => {
 
                     </div>
                     <div className="daily-birthdays-container">
-
+                        
                     </div>
                 </div>
             </div>
