@@ -150,11 +150,13 @@ const Quad = ({ netID }) => {
                         <h1>DAILY BULLETIN</h1>
                     </div>
                     <div className="daily-events-container">
-
+                        <p className="title">Events!</p>
+                        <p className="desc">Looks like there are 5 events today! Make sure to attend them all if you can!</p>
                     </div>
                     <div className="daily-birthdays-container">
                         <p className='title'>Birthdays!</p>
-                        <p className='desc'>Make sure to wish these people a happy birthday today!</p>
+                        {/* FIX ME: shows incorrect number */}
+                        <p className='desc'>{dailyUserObjs.length > 0 ? (dailyUserObjs.length === 1 ? 'Looks like there\'s 1 person with a birthday today!' : `Looks like there are ${dailyUserObjs.length} people with birthdays today!`) + ' Make sure to wish them a happy birthday!' : 'Oops, looks like no one has a birthday today.'}</p>
                         {
                             dailyUserObjs.map(userObj => {
                                 if(userObj.quad === quadObj.name){

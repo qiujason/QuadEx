@@ -133,19 +133,20 @@
         }
       }
 
-      & > .daily-events-container { grid-column: 1 / span 1; }
+      & > .daily-events-container { 
+        grid-column: 1 / span 1; 
+        margin-left: 1rem;
+      }
       & > .daily-birthdays-container { 
         grid-column: 2 / span 1; 
-
-        
+        margin-right: 1rem;
+        border-left: 2px solid $shadow-color;
       }
 
       & > .daily-events-container, .daily-birthdays-container {
         grid-row: 3 / span 1;
-        height: 100%;
-        width: 100%;
-        border-left: 1px dashed red;
-        border-right: 1px dashed red;
+        height: calc(100% - 1rem);
+        width: calc(100% - 1rem);
         padding: 1rem;
         padding-top: 0;
 
