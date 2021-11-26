@@ -24,7 +24,9 @@ const Navbar = ({ netID, setNetID, isAdmin }) => {
                     <div className="profile-container">
                         {isAdmin ? <MdAdminPanelSettings className='admin-icon'/> : ''}
                         <div className="name-container">
-                            <p className='header'>{netID}</p>
+                            <Link to='/' style={{textDecoration: 'none'}}>
+                                <p className='header'>{netID}</p>
+                            </Link>
                             <Link to='/' style={{textDecoration: 'none'}}>
                                 <p className='subheader' onClick={() => setNetID('')}>Sign out</p>
                             </Link>

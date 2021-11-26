@@ -69,6 +69,10 @@
             font-size: 0.8rem;
             font-weight: bold;
             color: $hover-color;
+            
+            &:hover {
+              font-weight: normal;
+            }
           }
           .subheader {
             font-size: 0.7rem;
