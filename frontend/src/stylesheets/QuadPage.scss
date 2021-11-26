@@ -117,7 +117,8 @@
         height: 100%;
         width: calc(100% - 230px - 1rem);
         display: flex;
-        align-items: center;
+        flex-direction: column;
+        justify-content: center;
         margin-left: 230px;
         padding-left: 2rem;
 
@@ -125,16 +126,45 @@
           font-size: 1.4rem;
           color: $primary-text-color;
         }
+
+        & > p {
+          font-size: 0.8rem;
+          color: $secondary-text-color;
+        }
       }
 
       & > .daily-events-container { grid-column: 1 / span 1; }
-      & > .daily-birthdays-container { grid-column: 2 / span 1; }
+      & > .daily-birthdays-container { 
+        grid-column: 2 / span 1; 
+
+        
+      }
 
       & > .daily-events-container, .daily-birthdays-container {
         grid-row: 3 / span 1;
         height: 100%;
         width: 100%;
-        border: 1px dashed red;
+        border-left: 1px dashed red;
+        border-right: 1px dashed red;
+        padding: 1rem;
+        padding-top: 0;
+
+        & > .title {
+          font-size: 0.8rem;
+          color: $secondary-text-color;
+          font-weight: bold;
+          margin-bottom: 0.5rem;
+        }
+
+        & > .desc {
+          margin-bottom: 1rem;
+        }
+
+        & > p {
+          font-size: 0.8rem;
+          color: $primary-text-color;
+          margin-bottom: 0.5rem;
+        }
       }
     }
   }

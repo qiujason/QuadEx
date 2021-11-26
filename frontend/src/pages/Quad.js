@@ -18,6 +18,8 @@ const Quad = ({ netID }) => {
     const [ userObjs, setUserObjs ] = useState([]);
     const [ quadPoints, setQuadPoints ] = useState(0);
 
+    const [ dailyUserObjs, setDailyUserObjs ] = useState([]);
+
     const [ showCalendar, setShowCalendar ] = useState(false);
 
     const [ columns, setColumns ] = useState([]);
@@ -40,8 +42,14 @@ const Quad = ({ netID }) => {
 
     async function fetchMembers(){
         if(quadObj === null) return;
-        const userData = await db.getUsersByQuad(quadObj.name);
-        const adminData = await db.getAdminsByQuad(quadObj.name);
+
+        const [ userData, adminData, pointsData, dailyUserData ] = await Promise.all([
+            await db.getUsersByQuad(quadObj.name),
+            await db.getAdminsByQuad(quadObj.name),
+            await db.getPointsByQuad(quadObj.name),
+            await db.getUsersByBirthday(getCurrDateObj().month + getCurrDateObj().day),
+        ]);
+
         if(userData !== null){
             userData.sort(function(a, b){
                 return a.first_name.localeCompare(b.first_name);
@@ -54,9 +62,8 @@ const Quad = ({ netID }) => {
             })
             setAdminObjs(adminData);
         } 
-
-        const pointsData = await db.getPointsByQuad(quadObj.name);
         if(pointsData !== null) setQuadPoints(pointsData);
+        if(dailyUserData !== null) setDailyUserObjs(dailyUserData);
     }
 
     useEffect(() => {
@@ -146,7 +153,16 @@ const Quad = ({ netID }) => {
 
                     </div>
                     <div className="daily-birthdays-container">
-                        
+                        <p className='title'>Birthdays!</p>
+                        <p className='desc'>Make sure to wish these people a happy birthday today!</p>
+                        {
+                            dailyUserObjs.map(userObj => {
+                                if(userObj.quad === quadObj.name){
+                                    return <p key={userObj.net_id}>&bull; {capitalize(userObj.first_name + ' ' + userObj.last_name)} ({userObj.net_id})</p>
+                                }
+                                return null;
+                            })
+                        }
                     </div>
                 </div>
             </div>
