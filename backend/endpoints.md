@@ -2,7 +2,7 @@
 
 ## Users
 * Get user - http://localhost:3001/users/?id=_____
-* Get user by birthday - http://localhost:3001/users/birthday/________ (put birthday there)
+* Get user by birthday and quad - http://localhost:3001/users/birthday/____(birthday)____/?quad=______ 
 * Get users by quad name - http://localhost:3001/users/?quad=_____
 * Post new user - http://localhost:3001/users (with request body)
 * Put user - http://localhost:3001/users/?id=____ (with request body)
@@ -12,6 +12,7 @@
 * Get all events - http://localhost:3001/events/
 * Get event by id - http://localhost:3001/events/?id=__
 * Get event by quad - http://localhost:3001/events/?quad=________ (use %20 as space like ?quad=blue%20jay)
+* Get event by quad and date - http://localhost:3001/events/?quad=________&date=________
 * Post event - http://localhost:3001/events (with request body); returns event ID
 * Put event - http://localhost:3001/events/?id=___ (with request body)
 * Delete event - http://localhost:3001/events/?id=____
