@@ -11,13 +11,28 @@ const getEvents = (req, res) => {
                 }
             })
         } else {
-            db.query('SELECT * FROM events WHERE id IN (SELECT event_id FROM quad_events WHERE quad_name = $1)', [req.query.quad], (error, results) => {
-                if (error) {
-                    res.status(500).send("Error executing query: " + error)
-                } else {
-                    res.status(200).json(results.rows)
-                }
-            })
+            if (req.query.date == null) {
+                db.query('SELECT * FROM events WHERE id IN (SELECT event_id FROM quad_events WHERE quad_name = $1)', [req.query.quad], (error, results) => {
+                    if (error) {
+                        res.status(500).send("Error executing query: " + error)
+                    } else {
+                        res.status(200).json(results.rows)
+                    }
+                })
+            } else {
+                db.query('SELECT * FROM events WHERE id IN (SELECT event_id FROM quad_events WHERE quad_name = $1) AND date = $2', 
+                    [
+                        req.query.quad,
+                        req.query.date
+                    ], 
+                    (error, results) => {
+                    if (error) {
+                        res.status(500).send("Error executing query: " + error)
+                    } else {
+                        res.status(200).json(results.rows)
+                    }
+                })
+            }
         }
     } else {
         db.query('SELECT * FROM events WHERE id = $1', [req.query.id], (error, results) => {
