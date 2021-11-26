@@ -137,7 +137,17 @@ const Quad = ({ netID }) => {
                     <p className='points'>{quadPoints} points</p>
                 </div>
                 <div className='background'>
+                    <BiCalendar className='birthday-btn' onClick={() => setShowCalendar(true)}/>
+                    <p className='birthday-calendar-subheader'>Show birthday calendar</p>
+                    <div className="title-container">
+                        <h1>DAILY UPDATES</h1>
+                    </div>
+                    <div className="daily-events-container">
 
+                    </div>
+                    <div className="daily-birthdays-container">
+
+                    </div>
                 </div>
             </div>
 
