@@ -9,12 +9,14 @@ import UserTag from './UserTag'
 import { capitalize, convertDate } from '../helpers/Helpers'
 import { getCurrDateObj } from '../helpers/CurrDate'
 import { MdAdminPanelSettings } from 'react-icons/md'
+import { BiCalendar } from 'react-icons/bi'
 
 const Quad = ({ netID }) => {
 
-    const [ quad, setQuad ] = useState(null);
+    const [ quadObj, setQuadObj ] = useState(null);
     const [ adminObjs, setAdminObjs ] = useState([]);
     const [ userObjs, setUserObjs ] = useState([]);
+    const [ quadPoints, setQuadPoints ] = useState(0);
 
     const [ showCalendar, setShowCalendar ] = useState(false);
 
@@ -27,13 +29,19 @@ const Quad = ({ netID }) => {
     const [ detailedUserProfilePic, setDetailedUserProfilePic ] = useState(null);
 
     async function fetchQuad(){
-        const data = await db.getUser(netID);
-        if(data !== null) setQuad(data.quad);
+        const userData = await db.getUser(netID);
+        if(userData !== null){
+            const quadData = await db.getQuad(userData.quad);
+            if(quadData !== null){
+                setQuadObj(quadData[0]);
+            }
+        }
     }
 
     async function fetchMembers(){
-        const userData = await db.getUsersByQuad(quad);
-        const adminData = await db.getAdminsByQuad(quad);
+        if(quadObj === null) return;
+        const userData = await db.getUsersByQuad(quadObj.name);
+        const adminData = await db.getAdminsByQuad(quadObj.name);
         if(userData !== null){
             userData.sort(function(a, b){
                 return a.first_name.localeCompare(b.first_name);
@@ -46,6 +54,9 @@ const Quad = ({ netID }) => {
             })
             setAdminObjs(adminData);
         } 
+
+        const pointsData = await db.getPointsByQuad(quadObj.name);
+        if(pointsData !== null) setQuadPoints(pointsData);
     }
 
     useEffect(() => {
@@ -54,11 +65,11 @@ const Quad = ({ netID }) => {
 
     useEffect(() => {
         fetchMembers();
-    }, [quad]);
+    }, [quadObj]);
 
     useEffect(() => {
         updateColumns();
-    }, [quad, userObjs, weekIncrement]);
+    }, [quadObj, userObjs, weekIncrement]);
 
     function changeWeek(increment){
         setWeekIncrement(weekIncrement + increment);
@@ -68,6 +79,7 @@ const Quad = ({ netID }) => {
 
     const updateColumns = async () => {
         var newColumns = [];
+        if(quadObj === null) return;
         for(let i = 0; i < 7; i++){
             const date = new Date();
             const currFirst = date.getDate() - date.getDay() + 7 * weekIncrement;
@@ -88,7 +100,7 @@ const Quad = ({ netID }) => {
                     </div>
                     <div className='list-container'>
                         {users.map(userObj => {
-                            if(userObj.quad === quad){
+                            if(userObj.quad === quadObj.name){
                                 return <UserTag 
                                     key={userObj.net_id} 
                                     name={capitalize(userObj.first_name + ' ' + userObj.last_name)} 
@@ -112,18 +124,32 @@ const Quad = ({ netID }) => {
     }
 
     return (
-        <div className='quad-page'> 
-        {quad !== null ?
+        <div className='quad-page'>
+        {quadObj !== null ?
         <>
-            <div className="roster-container">
-                <div className="title-container">
+            <div className='info-container'>
+                <div className='picture-container'>
+                    <img src='https://ih1.redbubble.net/image.1297785969.6887/st,small,507x507-pad,600x600,f8f8f8.u1.jpg' alt=''/>
+                </div>
+                <div className='title-container'>
+                    <h1>{quadObj.name.toUpperCase()}S</h1>
+                    <p className='dorms'>{quadObj.dorms.join(', ')}</p>
+                    <p className='points'>{quadPoints} points</p>
+                </div>
+                <div className='background'>
+
+                </div>
+            </div>
+
+            <div className='roster-container'>
+                <div className='title-container'>
                     <h1>MEMBERS</h1>
                     <p className='count-indicator'>{userObjs.length}</p>
                 </div>
                 <div className='grid-spacer'/> 
 
                 <p className='subheader'>Quad Admins<MdAdminPanelSettings className='icon'/> </p>
-                <div className="admins-list-container">
+                <div className='admins-list-container'>
                     {adminObjs.map(userObj => 
                         <UserTag 
                             key={userObj.net_id} 
@@ -141,7 +167,7 @@ const Quad = ({ netID }) => {
                 </div>
 
                 <p className='subheader'>All Members</p>
-                <div className="list-container">
+                <div className='list-container'>
                     {userObjs.map(userObj => 
                         <UserTag 
                             key={userObj.net_id} 

@@ -166,6 +166,17 @@ export async function getAffiliatedQuadsByEvent(eventID){
     return await getRequest(`http://localhost:3001/quads/?event=${eventID}`);
 }
 
+export async function getQuad(quad){
+    return await getRequest(`http://localhost:3001/quads/?id=${quad}`);
+}
+
+// return int or null
+export async function getPointsByQuad(quad){
+    const data = await getRequest(`http://localhost:3001/points/quad/sum/?id=${quad}`);
+    if(data.length === 0) return null;
+    return data[0].points;
+}
+
 
 // returns true or false
 export async function postFavEvent(netID, eventID){
