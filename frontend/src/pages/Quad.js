@@ -11,12 +11,13 @@ import { getCurrDateObj } from '../helpers/CurrDate'
 import { MdAdminPanelSettings } from 'react-icons/md'
 import { BiCalendar } from 'react-icons/bi'
 
-const Quad = ({ netID }) => {
+const Quad = ({ netID, isAdmin }) => {
 
     const [ quadObj, setQuadObj ] = useState(null);
     const [ adminObjs, setAdminObjs ] = useState([]);
     const [ userObjs, setUserObjs ] = useState([]);
     const [ quadPoints, setQuadPoints ] = useState(0);
+    const [ imageSrc, setImageSrc ] = useState(null);
 
     const [ dailyUserObjs, setDailyUserObjs ] = useState([]);
 
@@ -43,11 +44,12 @@ const Quad = ({ netID }) => {
     async function fetchMembers(){
         if(quadObj === null) return;
 
-        const [ userData, adminData, pointsData, dailyUserData ] = await Promise.all([
+        const [ userData, adminData, pointsData, dailyUserData, imageData ] = await Promise.all([
             await db.getUsersByQuad(quadObj.name),
             await db.getAdminsByQuad(quadObj.name),
             await db.getPointsByQuad(quadObj.name),
             await db.getUsersByBirthday(getCurrDateObj().month + getCurrDateObj().day),
+            await db.getImage(`quad_${quadObj.name}`)
         ]);
 
         if(userData !== null){
@@ -64,6 +66,14 @@ const Quad = ({ netID }) => {
         } 
         if(pointsData !== null) setQuadPoints(pointsData);
         if(dailyUserData !== null) setDailyUserObjs(dailyUserData);
+        setImageSrc(imageData);
+    }
+
+    async function uploadImage(fileObj){
+        await db.deleteImage(`quad_${quadObj.name}`);
+        await db.postImage(fileObj, `quad_${quadObj.name}`);
+        const imageData = await db.getImage(`quad_${quadObj.name}`);
+        setImageSrc(imageData);
     }
 
     useEffect(() => {
@@ -136,14 +146,26 @@ const Quad = ({ netID }) => {
         <>
             <div className='info-container'>
                 <div className='picture-container'>
-                    <img src='https://ih1.redbubble.net/image.1297785969.6887/st,small,507x507-pad,600x600,f8f8f8.u1.jpg' alt=''/>
+                    {imageSrc !== null ?
+                    <img src={imageSrc} alt=''/>
+                    : null}
                 </div>
                 <div className='title-container'>
                     <h1>{quadObj.name.toUpperCase()}S</h1>
                     <p className='dorms'>Affiliated dorms : {quadObj.dorms.join(', ')}</p>
-                    <p className='points'>{quadPoints} points</p>
+                    <p className='points'>{quadPoints} total points</p>
                 </div>
                 <div className='daily-bulletin-container'>
+                    {isAdmin ?
+                        <div className="filechooser-container">
+                            <MdAdminPanelSettings className='icon'/>
+                            <input type="file" className='filechooser' formEncType='multipart/form-data' onChange={async e => {
+                                e.preventDefault();
+                                uploadImage(e.target.files[0]);
+                            }}/>
+                        </div>
+                    : null}
+                    
                     <BiCalendar className='birthday-btn' onClick={() => setShowCalendar(true)}/>
                     <p className='birthday-calendar-subheader'>Show birthday calendar</p>
                     <div className="title-container">

@@ -40,7 +40,7 @@ export async function getImage(filename){
 }
 
 export async function postImage(fileObj, filename){
-    if(fileObj.type.substring(0, 5) !== 'image') return;
+    if(fileObj === null || fileObj.type.substring(0, 5) !== 'image') return;
 
     const formData = new FormData();
     formData.append('image', fileObj, filename);
