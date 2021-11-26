@@ -3,6 +3,7 @@ import Login from './pages/Login'
 import Profile from './pages/Profile'
 import Events from './pages/Events'
 import Navbar from './components/Navbar'
+import Quad from './pages/Quad'
 import { useState, useEffect } from 'react'
 
 function App() {
@@ -34,8 +35,9 @@ function App() {
             <Router>
                 { isNetIDFound() ? <Navbar netID={netID} setNetID={setNetID} isAdmin={isAdmin}/> : null }
                 <Switch>
-                    <Route path="/" exact render={ props => isNetIDFound() ? <Profile {...props} netID={netID} isAdmin={isAdmin}/> : <Login {...props} setNetID={setNetID}/> }/>
-                    <Route path='/events' render={ props => isNetIDFound() ? <Events {...props} netID={netID} isAdmin={isAdmin}/> : null }/>
+                    <Route path="/" exact render={ props => isNetIDFound() ? <Profile { ...props}  netID={netID} isAdmin={isAdmin}/> : <Login {...props} setNetID={setNetID}/> }/>
+                    <Route path='/events' render={ props => isNetIDFound() ? <Events { ...props } netID={netID} isAdmin={isAdmin}/> : null }/>
+                    <Route path='/quad' render={ props => isNetIDFound() ? <Quad { ...props } netID={netID} isAdmin={isAdmin}/> : null }/>
                 </Switch>
             </Router>
         </div>

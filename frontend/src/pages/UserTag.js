@@ -3,7 +3,7 @@ import { capitalize } from '../helpers/Helpers'
 import { useState, useEffect } from 'react';
 import { getImage } from '../helpers/Database';
 
-const UserTag = ({ name, netID, quad, onClick }) => {
+const UserTag = ({ name, netID, quad, onClick, isNameOnly, isAdmin }) => {
     const [ imageSrc, setImageSrc ] = useState(null);
 
     useEffect(() => {
@@ -23,9 +23,9 @@ const UserTag = ({ name, netID, quad, onClick }) => {
             <div className="info-container">
                 <div className="user-tag-title-container">
                     <h1>{name}</h1>
-                    <p>&nbsp;: {netID}</p>
-                </div>
-                <p>{capitalize(quad)}</p>
+                    {!isNameOnly ? <p>&nbsp;: {isAdmin ? `${netID}@duke.edu` : netID}</p> : null}
+                </div> 
+                {!isNameOnly ? <p>{capitalize(quad)}</p> : null}
             </div>
         </div>
     )

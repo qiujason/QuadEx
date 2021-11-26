@@ -40,7 +40,7 @@ export async function getImage(filename){
 }
 
 export async function postImage(fileObj, filename){
-    if(fileObj.type.substring(0, 5) !== 'image') return;
+    if(fileObj === null || fileObj.type.substring(0, 5) !== 'image') return;
 
     const formData = new FormData();
     formData.append('image', fileObj, filename);
@@ -79,8 +79,25 @@ async function deleteRequest(url){
 // returns user object or null
 export async function getUser(netID){
     const data = await getRequest('http://localhost:3001/users/?id=' + netID);
-    if(data.length <= 0) return null;
+    if(data.length === 0) return null;
     return data[0];
+}
+
+export async function getUsersByBirthday(birthday, quad){
+    const data = await getRequest(`http://localhost:3001/users/birthday/${birthday}/?quad=${quad} `);
+    if(data.length === 0) return null;
+    return data;
+}
+
+export async function getUsersByQuad(quad){
+    const data = await getRequest(`http://localhost:3001/users/?quad=${quad}`);
+    if(data.length === 0) return null;
+    return data;
+}
+export async function getAdminsByQuad(quad){
+    const data = await getRequest(`http://localhost:3001/admins/?quad=${quad}`);
+    if(data.length === 0) return null;
+    return data;
 }
 
 export async function putUser(userObj){
@@ -145,8 +162,25 @@ export async function getEventsByQuad(quad){
     return await getRequest(`http://localhost:3001/events/?quad=${quad}`);
 }
 
+export async function getEventsByDateAndQuad(date, quad){
+    const data = await getRequest(`http://localhost:3001/events/?quad=${quad}&date=${date}`);
+    if(data.length === 0) return null;
+    return data;
+}
+
 export async function getAffiliatedQuadsByEvent(eventID){
     return await getRequest(`http://localhost:3001/quads/?event=${eventID}`);
+}
+
+export async function getQuad(quad){
+    return await getRequest(`http://localhost:3001/quads/?id=${quad}`);
+}
+
+// return int or null
+export async function getPointsByQuad(quad){
+    const data = await getRequest(`http://localhost:3001/points/quad/sum/?id=${quad}`);
+    if(data.length === 0) return null;
+    return data[0].points;
 }
 
 

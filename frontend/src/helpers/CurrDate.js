@@ -7,6 +7,10 @@ const currDateObj = {
     minute: String(date.getMinutes()).padStart(2, '0')
 };
 
+export function getCurrDateObj(){
+    return currDateObj;
+}
+
 export function getCurrDateMDY(){
     const currDate = currDateObj.month + currDateObj.day + currDateObj.year;
     return currDate.toString();

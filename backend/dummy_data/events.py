@@ -8,11 +8,10 @@ from random import randrange
 from datetime import datetime
 import numpy as np
 import psycopg2
-from sqlalchemy import create_engine
 
 event_org_list = ['Basketball', 'Soccer', 'Spikeball', 'Computer Science', 'Statistical Science', 'AIV', 'DIIG', 'Simple Charity', 'DML']
 event_type = ['Mixer', 'Rager', 'Party', 'Tournament', 'Kickback', 'Hackathon', 'Large Group', 'GBM', 'Interest Meeting']
-num_events = 100
+num_events = 10
 fake = Faker()
 dict = {
     'title':[],

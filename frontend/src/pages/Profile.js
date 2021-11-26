@@ -20,9 +20,9 @@ const Profile = ({ netID, isAdmin }) => {
     const [ userInfo, setUserInfo ] = useState({
         net_id:'net_id', 
         password:'password',
-        first_name: 'first_name',
-        last_name: 'last_name',
-        birthday: '00000000',
+        first_name: '',
+        last_name: '',
+        birthday: '',
         year: null,
         hometown: null,
         quad: null,
@@ -364,7 +364,7 @@ const Profile = ({ netID, isAdmin }) => {
                                     location={eventObj.location}
                                     description={eventObj.description} 
                                     initialFavoriteState={true}
-                                    onBtnClick={() => unfavoriteEvent(eventObj.id)}
+                                    onFavBtnClick={() => unfavoriteEvent(eventObj.id)}
                                 />
                             )
                         }

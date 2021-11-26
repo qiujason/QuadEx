@@ -14,11 +14,12 @@ export function convertTime(num){
     const isPM = num >= 1200;
     var hour = Number(num.substring(0, 2)) === 12 ? 12 : Number(num.substring(0, 2)) % 12;
     var minute = num.substring(2);
+    if(hour === 0 && !isPM) hour = 12; 
     return hour + ':' + minute + ' ' + (isPM ? 'PM' : 'AM');
 }
 
 export function capitalize(str){
-    if(str === null || str === '') return;
+    if(str === null || str === '' || str === ' ') return;
 
     const words = str.split(' ');
     return words.map((word) => {
