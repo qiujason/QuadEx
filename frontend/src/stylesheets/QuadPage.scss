@@ -61,7 +61,7 @@
       }
     }
 
-    & > .background {
+    & > .daily-bulletin-container {
       width: calc(100% - 5rem - 50px);
       height: calc(100% - 8rem - 200px);
       margin: calc(4rem + 200px) 1rem 4rem calc(4rem + 50px);
@@ -120,10 +120,10 @@
         flex-direction: column;
         justify-content: center;
         margin-left: 230px;
-        padding-left: 2rem;
+        padding-left: 1.5rem;
 
         & > h1 {
-          font-size: 1.4rem;
+          font-size: 2rem;
           color: $primary-text-color;
         }
 
@@ -150,11 +150,24 @@
         padding: 1rem;
         padding-top: 0;
 
-        & > .title {
-          font-size: 0.8rem;
-          color: $secondary-text-color;
-          font-weight: bold;
+        & > .title-container {
+          display: flex;
+          align-content: center;
+          gap: 0.3rem;
           margin-bottom: 0.5rem;
+
+          & > .title {
+            font-size: 1.4rem;
+            color: $primary-text-color;
+            font-weight: bold;
+          }
+
+          & > .count-indicator {
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: $hover-color;
+            margin-top: 10px;
+          }
         }
 
         & > .desc {
