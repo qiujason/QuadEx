@@ -14,7 +14,7 @@ const getImage = (req, res) => {
                     .type(results.rows[0].mimetype)
                     .sendFile(fullfilepath)
             } else {
-                return res.status(500).send(`Image ${filename} does not exist`)
+                return res.status(201).send(`Image ${filename} does not exist`)
             }
         }
     })
