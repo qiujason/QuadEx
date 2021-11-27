@@ -14,6 +14,7 @@ import * as currDate from '../helpers/CurrDate'
 import * as errorHandler from '../helpers/ErrorHandler'
 
 
+const defaultImgSrc = 'https://ih1.redbubble.net/image.1297785969.6887/st,small,507x507-pad,600x600,f8f8f8.u1.jpg';
 const minPasswordLength = 4;
 
 const Profile = ({ netID, isAdmin }) => {
@@ -307,7 +308,7 @@ const Profile = ({ netID, isAdmin }) => {
             <div className='info-page-container'>
                 <div className='picture-container'>
                     <div className='profile-picture-container'>
-                        <img className='profile-picture' src={profilePic} alt='profile'/>
+                        <img className='profile-picture' src={profilePic} alt='profile' onError={(e) => e.target.src=defaultImgSrc}/>
                     </div>
                     <div className='title-container'>
                         <div className="title">

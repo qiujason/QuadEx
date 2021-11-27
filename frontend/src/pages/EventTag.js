@@ -6,6 +6,8 @@ import { MdDeleteForever, MdEdit } from 'react-icons/md'
 import { useEffect } from 'react'
 //import { getImage } from '../helpers/Database'
 
+const defaultImgSrc = 'https://ih1.redbubble.net/image.1297785969.6887/st,small,507x507-pad,600x600,f8f8f8.u1.jpg';
+
 const EventTag = ({ isAdmin, highlight, title, startDate, endDate, startTime, endTime, location, description, picture, initialFavoriteState, onClick, onFavBtnClick, onDelBtnClick, onEditBtnClick }) => {
     const [ hovering, setHovering ] = useState(false);
     const [ exitHovering, setExitHovering ] = useState(false);
@@ -28,7 +30,7 @@ const EventTag = ({ isAdmin, highlight, title, startDate, endDate, startTime, en
 
     return (
         <div className={"event-tag" + (highlight ? ' highlight' : '')} onClick={onClick} onMouseMove={() => setHovering(true)} onMouseLeave={() => setHovering(false)}>
-            <img className="picture" src={imgSrc} alt='event'/>
+            <img className="picture" src={imgSrc} alt='event' onError={(e) => e.target.src=defaultImgSrc}/>
             <div className="info-container">
                 <h1 className={hovering ? 'hovering' : ''}>{title.toUpperCase()}</h1>
                 <p className={'subtitle' + (hovering ? ' hovering' : '')}>{subText}</p>
