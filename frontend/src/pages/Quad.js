@@ -96,14 +96,17 @@ const Quad = ({ netID, isAdmin }) => {
 
     useEffect(() => {
         fetchQuad();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
         fetchMembers();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [quadObj]);
 
     useEffect(() => {
         updateColumns();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [quadObj, userObjs, weekIncrement]);
 
     function changeWeek(increment){
