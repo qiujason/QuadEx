@@ -94,8 +94,9 @@ const Quad = ({ netID, isAdmin }) => {
             setAdminObjs(adminData);
         } 
         if(dailyUserData !== null){
-            sortListByKey(dailyUserData, 'first_name');
-            setDailyUserObjs(dailyUserData);
+            const filteredData = dailyUserData.filter(userObj => userObj.bday_cal === true);
+            sortListByKey(filteredData, 'first_name');
+            setDailyUserObjs(filteredData);
         }
         if(dailyEventsData !== null){
             sortListByKey(dailyEventsData, 'time');
@@ -149,6 +150,7 @@ const Quad = ({ netID, isAdmin }) => {
             const year = String(newDate.getFullYear()).padStart(4, '0');
 
             const users = await db.getUsersByBirthday(month + day, quadObj.name) ?? [];
+            const filteredUsers = users.filter(userObj => userObj.bday_cal === true);
 
             const isToday = (month + day + year === getCurrDateMDY());
 
@@ -159,7 +161,7 @@ const Quad = ({ netID, isAdmin }) => {
                         <p>{month + '/' + day + '/' + year.substring(2)}</p>
                     </div>
                     <div className='list-container'>
-                        {users.map(userObj => 
+                        {filteredUsers.map(userObj =>
                             <UserTag 
                                 key={userObj.net_id} 
                                 name={capitalize(userObj.first_name + ' ' + userObj.last_name)} 
@@ -228,7 +230,7 @@ const Quad = ({ netID, isAdmin }) => {
                             <p className="count-indicator">{dailyUserObjs.length}</p>
                         </div>
                         <p className='desc'>{dailyUserObjs.length > 0 ? 'The following members have birthdays today. Make sure to wish them a happy birthday!' : 'Looks like no one has a birthday today!'}</p>
-                        {dailyUserObjs.map(userObj => 
+                        {dailyUserObjs.map(userObj =>
                             <p key={userObj.net_id}>&bull; {capitalize(userObj.first_name + ' ' + userObj.last_name)} : {userObj.net_id}</p>
                         )}
                     </div>
