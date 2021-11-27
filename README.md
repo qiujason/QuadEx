@@ -18,4 +18,4 @@ JSON
 This is an open course project for COMPSCI 316: Introduction to Database Systems (Fall 2021) instructed by Professor Jun Yang.
 
 ## Dynamic Scaling Notice
-Note, the frontend of the project is not optimized/scaled for windows smaller than 1450 x 850 px.
+Note, the frontend of the project is not optimized/scaled for windows smaller than approximately 1450 x 850 px.
