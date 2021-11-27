@@ -12,27 +12,54 @@ import { MdAdminPanelSettings } from 'react-icons/md'
 import { BiCalendar } from 'react-icons/bi'
 import { convertTime } from '../helpers/Helpers'
 
+
+const dayNames = ['Sun', 'Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat'];
+
+function sortListByKey(list, key){
+    list.sort(function(a, b){
+        return a[key].localeCompare(b[key]);
+    })
+}
+
 const Quad = ({ netID, isAdmin }) => {
 
+    // object for specified quad information
     const [ quadObj, setQuadObj ] = useState(null);
+
+    // list of objects for users who are admins of the quad
     const [ adminObjs, setAdminObjs ] = useState([]);
+
+    // list of objects for all users of quad
     const [ userObjs, setUserObjs ] = useState([]);
+
+    // total number of points earned by quad
     const [ quadPoints, setQuadPoints ] = useState(0);
+
+    // image source link for quad picture/logo
     const [ imageSrc, setImageSrc ] = useState(null);
 
+    // list of objects for daily bulletin
     const [ dailyEventObjs, setDailyEventObjs ] = useState([]);
     const [ dailyUserObjs, setDailyUserObjs ] = useState([]);
 
+    // boolean to determine whether to show birthday calendar
     const [ showCalendar, setShowCalendar ] = useState(false);
 
+    // list of rendered column tags for birthday calendar columns
     const [ columns, setColumns ] = useState([]);
-    const [ weekIncrement, setWeekIncrement ] = useState(0);
-    const dayNames = ['Sun', 'Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat'];
 
+    // number of weeks from current date to show on birthday calendar
+    const [ weekIncrement, setWeekIncrement ] = useState(0);
+
+    // variables for condensed detailed user view (updated whenever user tag is clicked)
     const emptyDetailedUserObj = { net_id: null };
     const [ detailedUserObj, setDetailedUserObj ] = useState(emptyDetailedUserObj);
     const [ detailedUserProfilePic, setDetailedUserProfilePic ] = useState(null);
 
+
+    // HTTP request functions
+
+    // fetch user's affiliated quad
     async function fetchQuad(){
         const userData = await db.getUser(netID);
         if(userData !== null){
@@ -43,10 +70,7 @@ const Quad = ({ netID, isAdmin }) => {
         }
     }
 
-    function sortByObjKey(key, a, b){
-        return a[key].localeCompare(b[key]);
-    }
-
+    // fetch all other states dependent on quad
     async function fetchMembers(){
         if(quadObj === null) return;
 
@@ -62,31 +86,24 @@ const Quad = ({ netID, isAdmin }) => {
         setImageSrc(imageData);
         if(pointsData !== null) setQuadPoints(pointsData);
         if(userData !== null){
-            userData.sort(function(a, b){
-                return sortByObjKey('first_name', a, b);
-            })
+            sortListByKey(userData, 'first_name');
             setUserObjs(userData);
         } 
         if(adminData !== null){
-            adminData.sort(function(a, b){
-                return sortByObjKey('first_name', a, b);
-            })
+            sortListByKey(adminData, 'first_name');
             setAdminObjs(adminData);
         } 
         if(dailyUserData !== null){
-            dailyUserData.sort(function(a, b){
-                return sortByObjKey('first_name', a, b);
-            })
+            sortListByKey(dailyUserData, 'first_name');
             setDailyUserObjs(dailyUserData);
         }
         if(dailyEventsData !== null){
-            dailyEventsData.sort(function(a, b){
-                return sortByObjKey('time', a, b);
-            })
+            sortListByKey(dailyEventsData, 'time');
             setDailyEventObjs(dailyEventsData);
         }
     }
 
+    // function to update quad picture/logo
     async function uploadImage(fileObj){
         await db.deleteImage(`quad_${quadObj.name}`);
         await db.postImage(fileObj, `quad_${quadObj.name}`);
@@ -94,6 +111,7 @@ const Quad = ({ netID, isAdmin }) => {
         setImageSrc(imageData);
     }
 
+    // react hooks for when components are loaded/updated
     useEffect(() => {
         fetchQuad();
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -109,12 +127,16 @@ const Quad = ({ netID, isAdmin }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [quadObj, userObjs, weekIncrement]);
 
+
+    // other helper functions
+
+    // change week increment for birthday calendar
     function changeWeek(increment){
         setWeekIncrement(weekIncrement + increment);
     }
-
     function resetWeek(){ setWeekIncrement(0); }
 
+    // update columns in birthday calendar with birthdays of respective users
     const updateColumns = async () => {
         var newColumns = [];
         if(quadObj === null) return;
@@ -128,7 +150,7 @@ const Quad = ({ netID, isAdmin }) => {
 
             const users = await db.getUsersByBirthday(month + day, quadObj.name) ?? [];
 
-            const isToday = day === getCurrDateObj().day && month === getCurrDateObj().month && year === getCurrDateObj().year;
+            const isToday = (month + day + year === getCurrDateMDY());
 
             newColumns.push(
                 <div className={`column ${dayNames[i].toLowerCase()}` + (isToday ? ' today' : '')} key={i}>
