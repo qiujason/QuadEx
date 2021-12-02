@@ -12,7 +12,7 @@ import string
 # import names
 
 netid_initials = ['jz', 'at', 'mmm', 'jk', 'yoo', 'yee', 'nah', 'ikr', 'lol', 'dbd']
-netid_numbers = ['1', '472', '36', '27', '111', '99', '101', '124', '999', '777']
+# netid_numbers = ['1', '472', '36', '27', '111', '99', '101', '124', '999', '777']
 quads = ['cardinal', 'blue jay', 'dove', 'eagle', 'robin', 'raven', 'owl']
 fake = Faker()
 dict = {
@@ -32,9 +32,9 @@ dict = {
 df = pd.DataFrame(dict)
 
 for i in range(len(netid_initials)):
-    for j in range(len(netid_numbers)):
+    for j in range(1000):
         #generate net_ID
-        net_id = netid_initials[i] + "" + netid_numbers[j]
+        net_id = netid_initials[i] + "" + str(j+1)
         
         #generate 4-character password
         password = ''.join(random.choices(string.ascii_uppercase + string.digits, k = 4))
@@ -42,9 +42,9 @@ for i in range(len(netid_initials)):
         #generate random first name
         
         #first_name = names.get_first_name()
-        first_name = 'John'
+        first_name = 'Alex'
         #generate random last name
-        last_name = 'Smith'
+        last_name = 'Choi'
         #last_name = names.get_last_name()
         
         #generate random birthday

@@ -30,6 +30,7 @@ INSERT INTO events (title, time, date, end_time, end_date, description, location
 INSERT INTO favorited_events VALUES
 ('dp239', 4);
 
+-- run quad_events.py to generate these values instead...
 INSERT INTO quad_events VALUES
 ('raven', 1),
 ('cardinal', 1),
