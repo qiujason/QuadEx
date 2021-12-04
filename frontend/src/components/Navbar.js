@@ -20,7 +20,9 @@ const Navbar = ({ netID, setNetID, isAdmin }) => {
                     <Link to='/events' style={{textDecoration: 'none'}}>
                         <li component={Link} to={'/events'}>EVENTS</li>
                     </Link>
-                    <li onClick={() => {alert('nope >:I')}}>LEADERBOARD</li>
+                    <Link to='/leaderboard' style={{textDecoration: 'none'}}>
+                        <li component={Link} to={'/leaderboard'}>LEADERBOARD</li>
+                    </Link>
                     <div className="profile-container">
                         {isAdmin ? <MdAdminPanelSettings className='admin-icon'/> : ''}
                         <div className="name-container">

@@ -67,11 +67,11 @@
   
           .header {
             font-size: 0.8rem;
-            font-weight: normal;
+            font-weight: bold;
             color: $hover-color;
             
             &:hover {
-              font-weight: bold;
+              // line spacing
             }
           }
           .subheader {
