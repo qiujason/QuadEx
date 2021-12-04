@@ -25,6 +25,7 @@
 
 ## Quads
 * Get quad - http://localhost:3001/quads/?id=____
+* Get all quads - http://localhost:3001/quads/ (returns list of quad names, number of students, total points)
 * Get quad by event - http://localhost:3001/quads/?event=_____
 * Post quad - http://localhost:3001/quads (with request body)
     *  ex. {
