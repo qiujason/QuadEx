@@ -1,0 +1,155 @@
+@import './colors.scss';
+
+.leaderboards-page {
+  width: 100vw;
+  height: calc(100vh - #{$navbar-height});
+  background-color: $secondary-color;
+  display: grid;
+  grid-template-columns: 55% auto;
+  align-items: center;
+
+  .leaderboard-container {
+    grid-column: 1 / span 1;
+
+    border-radius: 40px;
+    width: calc(100% - 5rem);
+    margin: 0 1rem 0 4rem;
+    height: 80vh;
+    background-color: $primary-color;
+    box-shadow: 0 1px 5px 0px $shadow-color;
+
+    display: grid;
+    grid-template-rows: 5rem auto;
+
+    & > .title-container {
+      grid-row: 1 / span 1;
+      
+      display: flex;
+      align-items: center;
+      padding-left: 1.5rem;
+
+      & > .title {
+        font-size: 2.6rem;
+        color: $primary-text-color;
+      }
+    }
+
+    & > .list-container {
+      grid-row: 2 / span 1;
+      margin: 0 1rem 1rem 1rem;
+
+      background-color: $secondary-color;
+      border: 4px solid $secondary-color;
+      border-radius: 35px;
+      padding: 1rem;
+      padding-bottom: 0;
+      overflow: overlay;
+
+      .quad-tag-container {
+        $quad-tag-height: 100px;
+
+        margin-bottom: 1rem;
+        background-color: $primary-color;
+        box-shadow: 0 1px 5px 0px $shadow-color;
+        border-radius: 20px;
+        height: $quad-tag-height;
+        position: relative;
+        border: 2px solid transparent;
+        cursor: pointer;
+
+        &.highlight {
+          background-color: $input-color;
+        }
+        &:hover {
+          border: 2px solid $hover-color;
+        }
+
+        display: flex;
+        align-items: center;
+
+        & > .ranking-container {
+          height: calc(#{$quad-tag-height} - 2rem);
+          width: 4rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-right: 2px solid $shadow-color;
+
+
+          h1 {
+            font-size: 2rem;
+          }
+        }
+
+        & > .info-container {
+          display: flex;
+
+          & > img {
+            margin-left: 1rem;
+            width: calc(#{$quad-tag-height} - 1rem);
+            height: calc(#{$quad-tag-height} - 1rem);
+            border-radius: 15px;
+            border: 2px solid $primary-color;
+          }
+          
+          & > .title-container {
+            margin-left: 0.7rem;
+
+            h1 {
+              font-size: 1.4rem;
+              margin: 0.1rem 0 0.3rem 0;
+              color: $primary-text-color;
+            }
+            p {
+              font-size: 0.8rem;
+              color: $secondary-text-color;
+            }
+          }
+        }
+
+        & > .points-container {
+          position: absolute;
+          height: $quad-tag-height;
+          right: 1.5rem;
+          display: flex;
+          align-items: center;
+
+          h1 {
+            font-size: 1.4rem;
+            color: $hover-color;
+          }
+        }
+      }
+    }
+  }
+
+  .quad-details-container {
+    grid-column: 2 / span 1;
+
+    border-radius: 40px;
+    width: calc(100% - 5rem);
+    margin: 0 4rem 0 1rem;
+    height: 80vh;
+    background-color: $primary-color;
+    box-shadow: 0 1px 5px 0px $shadow-color;
+
+    display: grid;
+    grid-template-rows: 5rem auto;
+
+    & > .title-container {
+      grid-row: 1 / span 1;
+
+      display: flex;
+      align-items: center;
+      padding-left: 0.5rem;
+      margin: 0 1rem;
+      border-bottom: 2px solid $shadow-color;
+
+      & > .title {
+        font-size: 2rem;
+        font-weight: bold;
+        color: $primary-text-color;
+      }
+    }
+  }
+}

@@ -33,7 +33,7 @@ export async function getImage(filename){
             'Content-Type': 'image/jpeg'
         }
     }).then(async response => {
-        if(!response.ok) return 'https://ih1.redbubble.net/image.1297785969.6887/st,small,507x507-pad,600x600,f8f8f8.u1.jpg';
+        if(!response.ok) return null;
         const blob = await response.blob();
         return URL.createObjectURL(blob);
     });
@@ -174,6 +174,10 @@ export async function getAffiliatedQuadsByEvent(eventID){
 
 export async function getQuad(quad){
     return await getRequest(`http://localhost:3001/quads/?id=${quad}`);
+}
+
+export async function getAllQuads(){
+    return await getRequest(`http://localhost:3001/quads/`);
 }
 
 // return int or null

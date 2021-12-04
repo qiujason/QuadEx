@@ -54,10 +54,6 @@ const Profile = ({ netID, isAdmin }) => {
         const favEventObjs = await db.getFavEventsByUser(netID);
         const totalPoints = await db.getTotalPointsByUser(netID);
 
-        // for images
-        // var data = new FormData();
-        // data.append("data", imagedata);
-
         const prevUserInfo = { ...userInfo };
         Object.keys(userObj).forEach(key => prevUserInfo[key] = userObj[key]);
         prevUserInfo.events = favEventObjs;
@@ -65,7 +61,6 @@ const Profile = ({ netID, isAdmin }) => {
         setUserInfo(prevUserInfo);
 
         const imgSrc = await db.getImage(`user_${netID}`);
-        //console.log(imgSrc);
         setProfilePic(imgSrc);
     }
 

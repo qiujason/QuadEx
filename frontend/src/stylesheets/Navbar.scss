@@ -71,7 +71,7 @@
             color: $hover-color;
             
             &:hover {
-              // line spacing
+              color: $secondary-text-color;
             }
           }
           .subheader {
@@ -80,7 +80,6 @@
             cursor: pointer;
 
             &:hover {
-              color: $primary-text-color;
               font-weight: bold;
             }
           }

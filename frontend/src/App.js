@@ -39,7 +39,7 @@ function App() {
                     <Route path="/" exact render={ props => isNetIDFound() ? <Profile { ...props}  netID={netID} isAdmin={isAdmin}/> : <Login {...props} setNetID={setNetID}/> }/>
                     <Route path='/events' render={ props => isNetIDFound() ? <Events { ...props } netID={netID} isAdmin={isAdmin}/> : null }/>
                     <Route path='/quad' render={ props => isNetIDFound() ? <Quad { ...props } netID={netID} isAdmin={isAdmin}/> : null }/>
-                    <Route path='/leaderboard' render={ props => isNetIDFound() ? <Leaderboard/> : null }/>
+                    <Route path='/leaderboard' render={ props => isNetIDFound() ? <Leaderboard { ...props } /> : null }/>
                 </Switch>
             </Router>
         </div>
