@@ -18,7 +18,37 @@ const getQuad = (req, res) => {
             }
         })
     } else {
-        res.status(500).send("No parameter provided")
+        // get all quads, number of students, and total points
+        db.query(`WITH quad_counts AS (
+                    SELECT 
+                        quad, 
+                        COUNT(*) 
+                    FROM users 
+                    GROUP BY quad
+                ), 
+                total_points AS (
+                    SELECT 
+                        quad, 
+                        SUM(point_value) AS points 
+                    FROM points 
+                    LEFT JOIN users 
+                    ON points.net_id = users.net_id 
+                    GROUP BY quad
+                ) 
+                SELECT 
+                    quad_counts.quad, 
+                    count AS num_students, 
+                    COALESCE(points, 0) AS points 
+                FROM quad_counts 
+                LEFT JOIN total_points 
+                ON quad_counts.quad = total_points.quad 
+                WHERE quad_counts.quad IS NOT NULL`, (error, results) => {
+            if (error) {
+                res.status(500).send("Error executing query: " + error)
+            } else {
+                res.status(200).json(results.rows)
+            }
+        })
     }
 }
 
