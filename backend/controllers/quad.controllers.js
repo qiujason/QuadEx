@@ -19,7 +19,8 @@ const getQuad = (req, res) => {
         })
     } else {
         // get all quads, number of students, and total points
-        db.query(`WITH quad_counts AS (
+        db.query(`
+                WITH quad_counts AS (
                     SELECT 
                         quad, 
                         COUNT(*) 
@@ -34,15 +35,22 @@ const getQuad = (req, res) => {
                     LEFT JOIN users 
                     ON points.net_id = users.net_id 
                     GROUP BY quad
-                ) 
-                SELECT 
-                    quad_counts.quad, 
-                    count AS num_students, 
-                    COALESCE(points, 0) AS points 
-                FROM quad_counts 
-                LEFT JOIN total_points 
-                ON quad_counts.quad = total_points.quad 
-                WHERE quad_counts.quad IS NOT NULL`, (error, results) => {
+                ), 
+                quad_students_points AS (
+                    SELECT 
+                        quad_counts.quad, 
+                        count AS num_students, 
+                        COALESCE(points, 0) AS points 
+                    FROM quad_counts 
+                    LEFT JOIN total_points 
+                    ON quad_counts.quad = total_points.quad 
+                    WHERE quad_counts.quad IS NOT NULL
+                )
+                SELECT name, dorms, num_students, points
+                FROM quads q
+                LEFT JOIN quad_students_points qsp
+                ON q.name = qsp.quad
+                `, (error, results) => {
             if (error) {
                 res.status(500).send("Error executing query: " + error)
             } else {
