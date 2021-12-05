@@ -13,8 +13,12 @@ const Leaderboard = () => {
     const [ quadAdmins, setQuadAdmins ] = useState([]);
 
     async function updateDetailedQuad(quadObj){
-        const adminData = await db.getAdminsByQuad(quadObj.name);
-        if(adminData !== null){
+        console.log(quadObj.name.replace(/ /g, '%20'));
+        const adminData = await db.getAdminsByQuad(quadObj.name.replace(/ /g, '%20'));
+        if(adminData === null){
+            setQuadAdmins(['None found']);
+        }
+        else {
             const adminArr = [];
             for(let i = 0; i < adminData.length; i++){
                 adminArr.push(`${capitalize(`${adminData[i].first_name} ${adminData[i].last_name}`)} (${adminData[i].net_id})`);
@@ -73,7 +77,7 @@ const Leaderboard = () => {
                         <div className="title-container">
                             <h1>{detailedQuad.name.toUpperCase()}</h1>
                             <p className='dorm-desc'><span className='subheader'>Affiliated dorms :</span> {detailedQuad.dorms.join(', ')}</p>
-                            <p><span className='subheader'>Members :</span> {detailedQuad.num_students}</p>
+                            <p><span className='subheader'>Members :</span> {detailedQuad.num_students ?? 0}</p>
                             <p><span className='subheader'>Quad admins :</span> {quadAdmins.join(', ')}</p>
                         </div>
                     </div>
