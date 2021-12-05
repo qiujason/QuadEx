@@ -58,7 +58,7 @@ const Leaderboard = () => {
                                     key={quadObj.name}
                                     highlight={quadObj.name === detailedQuad.name}
                                     rank={index + 1}
-                                    name={quadObj.name + 'S'}
+                                    name={quadObj.name}
                                     dorms={quadObj.dorms}
                                     num_students={quadObj.num_students}
                                     points={quadObj.points}
@@ -84,7 +84,7 @@ const Leaderboard = () => {
 
                         </div>
                         <div className="history-container">
-                            
+
                         </div>
                     </div>
                 </div>

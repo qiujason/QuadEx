@@ -33,7 +33,7 @@ export async function getImage(filename){
             'Content-Type': 'image/jpeg'
         }
     }).then(async response => {
-        if(!response.ok) return null;
+        if(!response.ok) return 'https://ih1.redbubble.net/image.1297785969.6887/st,small,507x507-pad,600x600,f8f8f8.u1.jpg';
         const blob = await response.blob();
         return URL.createObjectURL(blob);
     });

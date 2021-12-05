@@ -27,7 +27,7 @@ const QuadTag = ({ rank, highlight, name, dorms, num_students, points, onClick }
                     <img className='picture' src={quadPicture} alt='profile' onError={(e) => e.target.src=defaultImgSrc}/>
                 : null}
                 <div className="title-container">
-                    <h1>{name.toUpperCase()}</h1>
+                    <h1>{name.toUpperCase() + 'S'}</h1>
                     <p>Affiliated dorms : {dorms.join(', ')}</p>
                     <p>Members: {num_students ?? 0}</p>
                 </div>
