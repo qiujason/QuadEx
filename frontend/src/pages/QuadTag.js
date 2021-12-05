@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 
 const defaultImgSrc = 'https://ih1.redbubble.net/image.1297785969.6887/st,small,507x507-pad,600x600,f8f8f8.u1.jpg';
 
-const QuadTag = ({ rank, name, dorms, num_students, points }) => {
+const QuadTag = ({ rank, highlight, name, dorms, num_students, points, onClick }) => {
     const [ quadPicture, setQuadPicture ] = useState(null);
 
     async function fetchPicture(){
@@ -14,10 +14,11 @@ const QuadTag = ({ rank, name, dorms, num_students, points }) => {
 
     useEffect(() => {
         fetchPicture();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
-        <div className="quad-tag-container">
+        <div className={"quad-tag-container" + (highlight ? ' highlight' : '')} onClick={onClick}>
             <div className="ranking-container">
                 <h1>{rank}</h1>
             </div>
