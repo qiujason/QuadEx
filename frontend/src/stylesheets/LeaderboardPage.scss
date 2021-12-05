@@ -158,7 +158,12 @@
     & > .body-container {
       margin: 0 1rem 1rem 1rem;
 
+      display: grid;
+      grid-template-rows: 8rem auto auto;
+
       & > .title-container {
+        border: 1px dashed red;
+        grid-row: 1 / span 1;
         padding: 0.5rem;
         h1 {
           font-size: 1.4rem;
@@ -177,6 +182,16 @@
             font-weight: bold;
           }
         }
+      }
+
+      & > .graph-container {
+        border: 1px dashed black;
+        grid-row: 2 / span 1;
+      }
+
+      & > .history-container {
+        border: 1px dashed red;
+        grid-row: 3 / span 1;
       }
     }
   }

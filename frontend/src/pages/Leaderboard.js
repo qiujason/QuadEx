@@ -80,6 +80,12 @@ const Leaderboard = () => {
                             <p><span className='subheader'>Members :</span> {detailedQuad.num_students ?? 0}</p>
                             <p><span className='subheader'>Quad admins :</span> {quadAdmins.join(', ')}</p>
                         </div>
+                        <div className="graph-container">
+
+                        </div>
+                        <div className="history-container">
+                            
+                        </div>
                     </div>
                 </div>
             </>
