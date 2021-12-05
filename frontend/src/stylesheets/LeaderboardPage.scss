@@ -5,7 +5,7 @@
   height: calc(100vh - #{$navbar-height});
   background-color: $secondary-color;
   display: grid;
-  grid-template-columns: 55% auto;
+  grid-template-columns: 60% auto;
   align-items: center;
 
   .leaderboard-container {
@@ -159,10 +159,10 @@
       margin: 0 1rem 1rem 1rem;
 
       display: grid;
-      grid-template-rows: 8rem auto auto;
+      grid-template-rows: 8rem auto;
 
       & > .title-container {
-        border: 1px dashed red;
+        // border: 1px dashed red;
         grid-row: 1 / span 1;
         padding: 0.5rem;
         h1 {
@@ -184,14 +184,9 @@
         }
       }
 
-      & > .graph-container {
-        border: 1px dashed black;
-        grid-row: 2 / span 1;
-      }
-
       & > .history-container {
         border: 1px dashed red;
-        grid-row: 3 / span 1;
+        grid-row: 2 / span 1;
       }
     }
   }

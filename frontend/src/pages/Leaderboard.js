@@ -1,16 +1,18 @@
 import React from 'react'
 import '../stylesheets/LeaderboardPage.scss'
-import QuadTag from './QuadTag';
-import { useState, useEffect } from 'react';
-import * as db from '../helpers/Database';
-import ScrollViewport from 'react-scroll-viewport';
-import { capitalize } from '../helpers/Helpers';
+import QuadTag from './QuadTag'
+import { useState, useEffect } from 'react'
+import * as db from '../helpers/Database'
+import ScrollViewport from 'react-scroll-viewport'
+import { capitalize } from '../helpers/Helpers'
 
 
 const Leaderboard = () => {
     const [ quadObjs, setQuadObjs ] = useState([]);
     const [ detailedQuad, setDetailedQuad ] = useState(null);
     const [ quadAdmins, setQuadAdmins ] = useState([]);
+    const [ historyObjs, setHistoryObjs ] = useState([]);
+    
 
     async function updateDetailedQuad(quadObj){
         const adminData = await db.getAdminsByQuad(quadObj.name.replace(/ /g, '%20'));
@@ -40,6 +42,7 @@ const Leaderboard = () => {
 
     useEffect(() => {
         fetchQuads();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
@@ -79,11 +82,8 @@ const Leaderboard = () => {
                             <p><span className='subheader'>Members :</span> {detailedQuad.num_students ?? 0}</p>
                             <p><span className='subheader'>Quad admins :</span> {quadAdmins.join(', ')}</p>
                         </div>
-                        <div className="graph-container">
-
-                        </div>
                         <div className="history-container">
-
+                            
                         </div>
                     </div>
                 </div>
