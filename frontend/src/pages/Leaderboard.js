@@ -13,7 +13,6 @@ const Leaderboard = () => {
     const [ quadAdmins, setQuadAdmins ] = useState([]);
 
     async function updateDetailedQuad(quadObj){
-        console.log(quadObj.name.replace(/ /g, '%20'));
         const adminData = await db.getAdminsByQuad(quadObj.name.replace(/ /g, '%20'));
         if(adminData === null){
             setQuadAdmins(['None found']);
