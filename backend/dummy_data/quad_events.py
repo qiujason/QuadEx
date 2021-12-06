@@ -44,7 +44,7 @@ for i in range(len(df_id)):
     id = df_id.iloc[i, 0]
     all_or_one = random.choice([0,1])
     if all_or_one == 0:
-        random_quad = random.sample(quad_list, 1)
+        random_quad = random.sample(quad_list, 1)[0]
         df.loc[len(df.index)] = [random_quad, id]
     else:
         for q in quad_list:
