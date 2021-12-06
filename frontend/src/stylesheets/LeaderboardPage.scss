@@ -162,7 +162,6 @@
       grid-template-rows: auto 1fr;
 
       & > .title-container {
-        border: 1px dashed red;
         grid-row: 1 / span 1;
         padding: 0.5rem;
         h1 {
