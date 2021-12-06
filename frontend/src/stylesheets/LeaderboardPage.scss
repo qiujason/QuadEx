@@ -159,7 +159,7 @@
       margin: 0 1rem 1rem 1rem;
 
       display: grid;
-      grid-template-rows: auto auto;
+      grid-template-rows: auto 1fr;
 
       & > .title-container {
         border: 1px dashed red;
