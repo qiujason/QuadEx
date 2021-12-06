@@ -4,6 +4,8 @@ We recognize that many Duke students are worried about the changes coming with t
 
 The QuadEx web platform allows students and administrators to engage within their quad and across quads. Students can create an account with their NetID and affiliated quad to see their fellow quad-mates, browse through quad and school-wide events, and check quad standings on the points leaderboard. Faculty, residential staff (RCs, RAs, GRs), and student quad council members can navigate the platform as administrators to make important changes, such as adding events or updating point tallies.
 
+We are excited to present our first prototype of the QuadEx website and inspire renewed campus community at Duke.
+
 ## Team Name
 JSON
 
