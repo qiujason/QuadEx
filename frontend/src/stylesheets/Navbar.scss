@@ -67,11 +67,11 @@
   
           .header {
             font-size: 0.8rem;
-            font-weight: normal;
+            font-weight: bold;
             color: $hover-color;
             
             &:hover {
-              font-weight: bold;
+              color: $secondary-text-color;
             }
           }
           .subheader {
@@ -80,7 +80,6 @@
             cursor: pointer;
 
             &:hover {
-              color: $primary-text-color;
               font-weight: bold;
             }
           }

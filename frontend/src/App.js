@@ -4,6 +4,7 @@ import Profile from './pages/Profile'
 import Events from './pages/Events'
 import Navbar from './components/Navbar'
 import Quad from './pages/Quad'
+import Leaderboard from './pages/Leaderboard'
 import { useState, useEffect } from 'react'
 
 function App() {
@@ -38,6 +39,7 @@ function App() {
                     <Route path="/" exact render={ props => isNetIDFound() ? <Profile { ...props}  netID={netID} isAdmin={isAdmin}/> : <Login {...props} setNetID={setNetID}/> }/>
                     <Route path='/events' render={ props => isNetIDFound() ? <Events { ...props } netID={netID} isAdmin={isAdmin}/> : null }/>
                     <Route path='/quad' render={ props => isNetIDFound() ? <Quad { ...props } netID={netID} isAdmin={isAdmin}/> : null }/>
+                    <Route path='/leaderboard' render={ props => isNetIDFound() ? <Leaderboard { ...props } /> : null }/>
                 </Switch>
             </Router>
         </div>

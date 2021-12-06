@@ -651,6 +651,13 @@
         overflow: overlay;
         padding: 1rem;
         padding-bottom: 0;
+
+        & > .no-members-indicator {
+          text-align: center;
+          font-size: 0.8rem;
+          color: $secondary-text-color;
+          margin-top: 1rem;
+        }
   
         .user-tag-container {
           margin-bottom: 1rem;

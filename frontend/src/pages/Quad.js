@@ -13,6 +13,7 @@ import { BiCalendar } from 'react-icons/bi'
 import { convertTime } from '../helpers/Helpers'
 
 
+const defaultImgSrc = 'https://ih1.redbubble.net/image.1297785969.6887/st,small,507x507-pad,600x600,f8f8f8.u1.jpg';
 const dayNames = ['Sun', 'Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat'];
 
 function sortListByKey(list, key){
@@ -76,7 +77,7 @@ const Quad = ({ netID, isAdmin }) => {
 
         const [ imageData, pointsData, userData, adminData, dailyUserData, dailyEventsData ] = await Promise.all([
             await db.getImage(`quad_${quadObj.name}`),
-            await db.getPointsByQuad(quadObj.name),
+            await db.getTotalPointsByQuad(quadObj.name),
             await db.getUsersByQuad(quadObj.name),
             await db.getAdminsByQuad(quadObj.name),
             await db.getUsersByBirthday(getCurrDateObj().month + getCurrDateObj().day, quadObj.name),
@@ -189,7 +190,7 @@ const Quad = ({ netID, isAdmin }) => {
             <div className='info-container'>
                 <div className='picture-container'>
                     {imageSrc !== null ?
-                    <img src={imageSrc} alt=''/>
+                    <img src={imageSrc} alt='' onError={(e) => e.target.src=defaultImgSrc}/>
                     : null}
                 </div>
                 <div className='title-container'>
@@ -301,7 +302,7 @@ const Quad = ({ netID, isAdmin }) => {
                     <div className='user-details-title-container'>
                         <h1>{capitalize(detailedUserObj['first_name'] + ' ' + detailedUserObj['last_name'])}</h1>
                     </div>
-                    <img className='profile-pic' src={detailedUserProfilePic} alt='profile'/>
+                    <img className='profile-pic' src={detailedUserProfilePic} alt='profile' onError={(e) => e.target.src=defaultImgSrc}/>
                     <div className='info-box isBio'>
                         <p>'{detailedUserObj['bio'] ?? 'No bio found'}'</p>
                     </div>

@@ -13,6 +13,8 @@ import InputBox from '../components/InputBox'
 import * as errorHandler from '../helpers/ErrorHandler'
 import ScrollViewport from 'react-scroll-viewport';
 
+const defaultImgSrc = 'https://ih1.redbubble.net/image.1297785969.6887/st,small,507x507-pad,600x600,f8f8f8.u1.jpg';
+
 const Events = ({ netID, isAdmin }) => {
     const [ allEvents, setAllEvents ] = useState([]);
     const [ favoritedEventIDs, setFavoritedEventIDs ] = useState(null);
@@ -444,6 +446,9 @@ const Events = ({ netID, isAdmin }) => {
                                         }}
                                     />
                                 )}
+                                {detailedEvent.members.length === 0 ? 
+                                    <p className='no-members-indicator'>No interested members</p>
+                                : null}
                             </div>
                         }
                     </div>
@@ -461,7 +466,7 @@ const Events = ({ netID, isAdmin }) => {
                     <div className='user-details-title-container'>
                         <h1>{capitalize(detailedUserObj['first_name'] + ' ' + detailedUserObj['last_name'])}</h1>
                     </div>
-                    <img className='profile-pic' src={detailedUserProfilePic} alt='profile'/>
+                    <img className='profile-pic' src={detailedUserProfilePic} alt='profile' onError={(e) => e.target.src=defaultImgSrc}/>
                     <div className='info-box isBio'>
                         <p>'{detailedUserObj['bio'] ?? 'No bio found'}'</p>
                     </div>
