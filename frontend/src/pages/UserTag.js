@@ -10,7 +10,7 @@ const UserTag = ({ name, netID, quad, onClick, isNameOnly, isAdmin }) => {
 
     async function fetchImageSrc(){
         const imgSrc = await getImage(`user_${netID}`);
-        setImageSrc(imgSrc);
+        if(imgSrc !== null) setImageSrc(imgSrc);
     }
 
     useEffect(() => {
