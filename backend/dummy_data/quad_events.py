@@ -1,3 +1,4 @@
+from sqlalchemy import create_engine
 import pandas as pd
 import psycopg2
 import random
@@ -41,10 +42,13 @@ df = pd.DataFrame(dict)
 #create random combos of event ids and quads
 for i in range(len(df_id)):
     id = df_id.iloc[i, 0]
-    num_quads = random.choice(range(1, len(quad_list)+1))
-    random_quads = random.sample(quad_list, num_quads)
-    for q in random_quads:
-        df.loc[len(df.index)] = [q, id]
+    all_or_one = random.choice([0,1])
+    if all_or_one == 0:
+        random_quad = random.sample(quad_list, 1)
+        df.loc[len(df.index)] = [random_quad, id]
+    else:
+        for q in quad_list:
+            df.loc[len(df.index)] = [q, id]
 
 print(df)
 
