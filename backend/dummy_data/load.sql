@@ -8,17 +8,24 @@ INSERT INTO quads VALUES
 ('dove', '{Wannamaker, East House, West House}');
 
 INSERT INTO users VALUES
-('jq39', 'password', 'Jason', 'Qiu', '12262000', 3, 'Philadelphia, PA', 'cardinal', 'computer science', NULL, 'jsonqiu', DEFAULT),
-('ajl88', 'psswrd', 'Andrew', 'Lee', '12241999', 4, 'Centreville, VA', 'blue jay', 'economics', NULL, 'andrewandylee', DEFAULT),
-('rz97', 'word', 'Ray', 'Zhang', '10102001', 3, 'Beijing, China', 'dove', 'biophysics', NULL, 'roastyraybaybay', DEFAULT),
-('dp239', 'yeet', 'Donghan', 'park', '03092001', 3, 'palisades park, NJ', 'eagle', 'ECE/CS', NULL, 'dongimon', DEFAULT);
+('jq39', 'pass', 'Jason', 'Qiu', '12262000', 3, 'Philadelphia, PA', 'cardinal', 'computer science', NULL, 'jsonqiu', DEFAULT),
+('ajl88', 'pass', 'Andrew', 'Lee', '12241999', 4, 'Centreville, VA', 'blue jay', 'economics', NULL, 'andrewandylee', DEFAULT),
+('iyf', 'pass', 'Isacc', 'Fan', '03112001', 3, 'Cary, NC', 'eagle', 'statistics', NULL, 'icemoneyfan', DEFAULT),
+('rz97', 'pass', 'Ray', 'Zhang', '10102001', 3, 'Beijing, China', 'dove', 'biophysics', NULL, 'roastyraybaybay', DEFAULT),
+('dp239', 'pass', 'Donghan', 'park', '03092001', 3, 'Palisades Park, NJ', 'eagle', 'ECE/CS', NULL, 'dongimon', DEFAULT);
 
 INSERT INTO admin VALUES
 ('rz97', 'Resident Assistant', 'rz97@duke.edu'),
 ('dp239', 'Resident Assistant', 'dp239@duke.edu');
 
 INSERT INTO points (net_id, date, point_value, reason) VALUES
-('dp239', '09022021', 5, 'Attended open house');
+('dp239', '09022021', 100, 'Attended open house'),
+('iyf', '09022021', 100, 'Attended open house'),
+('iyf', '10072021', 200, 'Won schoolwide basketball tournament'),
+('ajl88', '10122021', 200, 'Won schoolwide spikeball tournament'),
+('ajl88', '10312021', 150, 'Won best Psyduck costume for schoolwide Halloween party'),
+('rz97', '12052021', 350, 'Awarded best RA of the year'),
+('jq39', '11242021', 200, 'Project ranked top 3 for Duke Hackathon 2021');
 
 INSERT INTO events (title, time, date, end_time, end_date, description, location, tags) VALUES
 ('spikeball tournament', '1200', '09272021', '1400', '10102021', 'spikeball lit; winners get kool prizes; good good lots fun', 'Abele Quad', '{Sports}'),

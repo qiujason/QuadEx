@@ -22,7 +22,8 @@ CREATE TABLE users(
     degree TEXT,
     bio TEXT,
     insta TEXT,
-    bday_cal BOOLEAN DEFAULT TRUE NOT NULL
+    bday_cal BOOLEAN DEFAULT TRUE NOT NULL,
+    prof_pic VARCHAR(30) REFERENCES images(filename)
 );
 
 CREATE TABLE admin(
@@ -48,7 +49,8 @@ CREATE TABLE events(
     end_date VARCHAR(8) NOT NULL,
     description TEXT,
     location VARCHAR(30),
-    tags VARCHAR(30) []
+    tags VARCHAR(30) [],
+    pic VARCHAR(30) REFERENCES images(filename)
 );
 
 CREATE TABLE favorited_events(
