@@ -9,12 +9,13 @@ from datetime import datetime
 import numpy as np
 import psycopg2
 import string
-# import names
 
-netid_initials = ['jz', 'at', 'mmm', 'jk', 'yoo', 'yee', 'nah', 'ikr', 'lol', 'dbd']
+# netid_initials = ['jz', 'at', 'mmm', 'jk', 'yoo', 'yee', 'nah', 'ikr', 'lol', 'dbd']
 # netid_numbers = ['1', '472', '36', '27', '111', '99', '101', '124', '999', '777']
 quads = ['cardinal', 'blue jay', 'dove', 'eagle', 'robin', 'raven', 'owl']
 fake = Faker()
+first_names = [fake.unique.first_name() for i in range(500)]
+last_names = [fake.unique.last_name() for i in range(500)]
 dict = {
     'net_id':[],
     'password':[],
@@ -22,58 +23,66 @@ dict = {
     'last_name':[],
     'birthday':[],
     'year':[],
-    # 'hometown':[],
-    'quad':[]
-    # 'degree':[],
-    # 'bio':[],
-    # 'insta':[],
+    'hometown':[],
+    'quad':[],
+    'degree':[],
+    'bio':[],
+    'insta':[]
     #'bday_cal':[]
 } 
 df = pd.DataFrame(dict)
 
-for i in range(len(netid_initials)):
-    for j in range(1000):
-        #generate net_ID
-        net_id = netid_initials[i] + "" + str(j+1)
-        
-        #generate 4-character password
-        password = ''.join(random.choices(string.ascii_uppercase + string.digits, k = 4))
-        
-        #generate random first name
-        
-        #first_name = names.get_first_name()
-        first_name = 'Alex'
-        #generate random last name
-        last_name = 'Choi'
-        #last_name = names.get_last_name()
-        
-        #generate random birthday
-        d1 = datetime.strptime(f'1/1/1999', '%m/%d/%Y')
-        d2 = datetime.strptime(f'1/1/2004', '%m/%d/%Y')
-        date = fake.date_between(d1, d2)
-        month = date.month
-        day = date.day
-        year = date.year
-        year_str = str(year)
-        if month > 9:
-            month_str = str(month)
-        else:
-            month_str = '0' + str(month)
-        
-        if day > 9:
-            day_str = str(day)
-        else:
-            day_str = '0' + str(day)
-        birthday = month_str + day_str + year_str
-        
-        #generate random year
-        year = random.randint(1,4)
-        
-        #generate random quad
-        quad = random.choice(quads)
+for i in range(500):
+    #generate 4-character password
+    password = ''.join(random.choices(string.ascii_uppercase + string.digits, k = 4))
+    
+    #generate random first name
+    first_name = first_names[i]
+    #generate random last name
+    last_name = last_names[i]
+    
+    #generate net_ID
+    net_id = (first_name[:1] + last_name[:1] + str(i+1)).lower()
 
-        #add to df
-        df.loc[len(df.index)] = [net_id, password, first_name, last_name, birthday, year, quad]
+    #generate random birthday
+    d1 = datetime.strptime(f'1/1/1999', '%m/%d/%Y')
+    d2 = datetime.strptime(f'1/1/2004', '%m/%d/%Y')
+    date = fake.date_between(d1, d2)
+    month = date.month
+    day = date.day
+    year = date.year
+    year_str = str(year)
+    if month > 9:
+        month_str = str(month)
+    else:
+        month_str = '0' + str(month)
+    
+    if day > 9:
+        day_str = str(day)
+    else:
+        day_str = '0' + str(day)
+    birthday = month_str + day_str + year_str
+    
+    #generate random year
+    year = random.randint(1,4)
+    
+    #generate random hometown
+    hometown = fake.city() + ", " + fake.country_code()
+    
+    #generate random quad
+    quad = random.choice(quads)
+
+    #generate random degree
+    degree = "Undecided"
+
+    #generate random bio
+    bio = fake.sentence()
+
+    #generate random bio
+    insta = "@" + net_id
+
+    #add to df
+    df.loc[len(df.index)] = [net_id, password, first_name, last_name, birthday, year, hometown, quad, degree, bio, insta]
 
 print(df)
 
@@ -114,7 +123,7 @@ def execute_many(conn, df, table):
     # Comma-separated dataframe columns
     cols = ','.join(list(df.columns))
     # SQL quert to execute
-    query  = "INSERT INTO %s(%s) VALUES(%%s,%%s,%%s,%%s,%%s,%%s,%%s)" % (table, cols)
+    query  = "INSERT INTO %s(%s) VALUES(%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s)" % (table, cols)
     cursor = conn.cursor()
     try:
         cursor.executemany(query, tuples)
