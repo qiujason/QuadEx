@@ -15,7 +15,9 @@ const Leaderboard = () => {
     
 
     async function updateDetailedQuad(quadObj){
-        const adminData = await db.getAdminsByQuad(quadObj.name.replace(/ /g, '%20'));
+        const quadName = quadObj.name.replace(/ /g, '%20');
+        const adminData = await db.getAdminsByQuad(quadName);
+        const historyData = await db.getPointsByQuad(quadName);
         if(adminData === null){
             setQuadAdmins(['None found']);
         }
@@ -27,6 +29,7 @@ const Leaderboard = () => {
             setQuadAdmins(adminArr);
         }
         setDetailedQuad(quadObj);
+        setHistoryObjs(historyData.reverse());
     }
 
     async function fetchQuads(){
@@ -75,15 +78,22 @@ const Leaderboard = () => {
                     <div className='title-container'>
                         <h1 className='title'>QUAD DETAILS</h1>
                     </div>
-                    <div className="body-container">
-                        <div className="title-container">
+                    <div className='body-container'>
+                        <div className='title-container'>
                             <h1>{detailedQuad.name.toUpperCase()}</h1>
                             <p className='dorm-desc'><span className='subheader'>Affiliated dorms :</span> {detailedQuad.dorms.join(', ')}</p>
                             <p><span className='subheader'>Members :</span> {detailedQuad.num_students ?? 0}</p>
                             <p><span className='subheader'>Quad admins :</span> {quadAdmins.join(', ')}</p>
                         </div>
-                        <div className="history-container">
-                            
+                        <div className='history-container'>
+                            <ScrollViewport>
+                            {historyObjs.map(historyObj => 
+                                <div className="history-tag-container" key={historyObj.id}>
+                                    <p><span className='point-value'>{'+' + historyObj.point_value + ' points'}</span> by <span className='subheader'>{`${capitalize(historyObj.first_name + ' ' + historyObj.last_name)} (${historyObj.net_id})`}</span></p>
+                                    <p>{historyObj.reason[0].toUpperCase() + historyObj.reason.substring(1)}</p>
+                                </div>
+                            )}    
+                            </ScrollViewport>                     
                         </div>
                     </div>
                 </div>

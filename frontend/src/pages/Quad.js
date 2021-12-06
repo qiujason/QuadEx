@@ -77,7 +77,7 @@ const Quad = ({ netID, isAdmin }) => {
 
         const [ imageData, pointsData, userData, adminData, dailyUserData, dailyEventsData ] = await Promise.all([
             await db.getImage(`quad_${quadObj.name}`),
-            await db.getPointsByQuad(quadObj.name),
+            await db.getTotalPointsByQuad(quadObj.name),
             await db.getUsersByQuad(quadObj.name),
             await db.getAdminsByQuad(quadObj.name),
             await db.getUsersByBirthday(getCurrDateObj().month + getCurrDateObj().day, quadObj.name),

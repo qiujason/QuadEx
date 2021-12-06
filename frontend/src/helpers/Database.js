@@ -104,6 +104,8 @@ export async function putUser(userObj){
     return await insertRequest('PUT', 'http://localhost:3001/users/?id=' + userObj.net_id, userObj);
 }
 
+
+
 // == EVENTS == //
 
 export async function getEvents(){
@@ -181,11 +183,17 @@ export async function getAllQuads(){
 }
 
 // return int or null
-export async function getPointsByQuad(quad){
+export async function getTotalPointsByQuad(quad){
     const data = await getRequest(`http://localhost:3001/points/quad/sum/?id=${quad}`);
     if(data.length === 0) return null;
     return data[0].points;
 }
+
+export async function getPointsByQuad(quad){
+    return await getRequest(`http://localhost:3001/points/quad/?id=${quad}`);
+}
+
+
 
 
 // returns true or false

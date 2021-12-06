@@ -159,10 +159,10 @@
       margin: 0 1rem 1rem 1rem;
 
       display: grid;
-      grid-template-rows: 8rem auto;
+      grid-template-rows: auto auto;
 
       & > .title-container {
-        // border: 1px dashed red;
+        border: 1px dashed red;
         grid-row: 1 / span 1;
         padding: 0.5rem;
         h1 {
@@ -185,8 +185,45 @@
       }
 
       & > .history-container {
-        border: 1px dashed red;
         grid-row: 2 / span 1;
+
+        background-color: $secondary-color;
+        border: 4px solid $secondary-color;
+        border-radius: 35px;
+        padding: 1rem;
+        padding-bottom: 0;
+        position: relative;
+        overflow: overlay;
+
+        .history-tag-container {
+          background-color: $primary-color;
+          box-shadow: 0 1px 5px 0px $shadow-color;
+          border-radius: 20px;
+          border: 2px solid transparent;
+
+          display: flex;
+          position: relative;
+          flex-direction: column;
+          justify-content: center;
+          padding: 0.5rem 1rem 0 1rem;
+          margin-bottom: 1rem;
+
+          & > p {
+            font-size: 0.8rem;
+            color: $secondary-text-color;
+            margin-bottom: 0.5rem;
+
+            & > .point-value {
+              color: $hover-color;
+              font-weight: bold;
+            }
+
+            & > .subheader {
+              color: $primary-text-color;
+              font-weight: bold;
+            }
+          }
+        }
       }
     }
   }
