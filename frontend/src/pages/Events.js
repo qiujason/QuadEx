@@ -446,6 +446,9 @@ const Events = ({ netID, isAdmin }) => {
                                         }}
                                     />
                                 )}
+                                {detailedEvent.members.length === 0 ? 
+                                    <p className='no-members-indicator'>No interested members</p>
+                                : null}
                             </div>
                         }
                     </div>

@@ -159,15 +159,21 @@
       margin: 0 1rem 1rem 1rem;
 
       display: grid;
-      grid-template-rows: auto 1fr;
+      grid-template-rows: 9rem 3rem minmax(0, 1fr);
+      overflow: overlay;
 
       & > .title-container {
         grid-row: 1 / span 1;
         padding: 0.5rem;
+        border-bottom: 2px solid $shadow-color;
         h1 {
           font-size: 1.4rem;
           color: $hover-color;
           margin-bottom: 0.5rem;
+          & > span {
+            color: $secondary-text-color;
+            font-size: 1rem;
+          }
         }
         & > .dorm-desc {
           margin-bottom: 0.5rem;
@@ -183,16 +189,36 @@
         }
       }
 
-      & > .history-container {
+      & > .history-container-title {
         grid-row: 2 / span 1;
+        display: flex;
+        align-items: center;
+        padding-left: 0.5rem;
+        & > h1 {
+          font-size: 0.8rem;
+          color: $secondary-text-color;
+          font-weight: bold;
+        }
+      }
+
+      & > .history-container {
+        grid-row: 3 / span 1;
+        height: 100%;
 
         background-color: $secondary-color;
         border: 4px solid $secondary-color;
         border-radius: 35px;
         padding: 1rem;
         padding-bottom: 0;
-        position: relative;
         overflow: overlay;
+
+        & > .no-point-indicator {
+          width: 100%;
+          font-size: 0.8rem;
+          color: $secondary-text-color;
+          text-align: center;
+          margin-top: 1rem;
+        }
 
         .history-tag-container {
           background-color: $primary-color;

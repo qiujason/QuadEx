@@ -8,11 +8,12 @@ const defaultImgSrc = 'https://ih1.redbubble.net/image.1297785969.6887/st,small,
 const UserTag = ({ name, netID, quad, onClick, isNameOnly, isAdmin }) => {
     const [ imageSrc, setImageSrc ] = useState(null);
 
+    async function fetchImageSrc(){
+        const imgSrc = await getImage(`user_${netID}`);
+        setImageSrc(imgSrc);
+    }
+
     useEffect(() => {
-        async function fetchImageSrc(){
-            const imgSrc = await getImage(`user_${netID}`);
-            setImageSrc(imgSrc);
-        }
         fetchImageSrc();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

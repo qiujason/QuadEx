@@ -80,20 +80,24 @@ const Leaderboard = () => {
                     </div>
                     <div className='body-container'>
                         <div className='title-container'>
-                            <h1>{detailedQuad.name.toUpperCase()}</h1>
+                            <h1>{detailedQuad.name.toUpperCase()} <span>&nbsp;{detailedQuad.points ?? 0} total points</span></h1>
                             <p className='dorm-desc'><span className='subheader'>Affiliated dorms :</span> {detailedQuad.dorms.join(', ')}</p>
                             <p><span className='subheader'>Members :</span> {detailedQuad.num_students ?? 0}</p>
                             <p><span className='subheader'>Quad admins :</span> {quadAdmins.join(', ')}</p>
                         </div>
+                        <div className="history-container-title">
+                            <h1>Point History</h1>
+                        </div>
                         <div className='history-container'>
-                            <ScrollViewport>
                             {historyObjs.map(historyObj => 
                                 <div className="history-tag-container" key={historyObj.id}>
-                                    <p><span className='point-value'>{'+' + historyObj.point_value + ' points'}</span> by <span className='subheader'>{`${capitalize(historyObj.first_name + ' ' + historyObj.last_name)} (${historyObj.net_id})`}</span></p>
+                                    <p><span className='point-value'>{'+' + historyObj.point_value + ' points'}</span> by <span className='subheader'>{`${capitalize(historyObj.first_name + ' ' + historyObj.last_name)} (${historyObj.net_id})`}</span> on {`${historyObj.date.substring(0, 2)}/${historyObj.date.substring(2, 4)}/${historyObj.date.substring(4)}`}</p>
                                     <p>{historyObj.reason[0].toUpperCase() + historyObj.reason.substring(1)}</p>
                                 </div>
-                            )}    
-                            </ScrollViewport>                     
+                            )}       
+                            {historyObjs.length === 0 ?
+                                <p className='no-point-indicator'>No points awarded</p>
+                            : null}           
                         </div>
                     </div>
                 </div>
